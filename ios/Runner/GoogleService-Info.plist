@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>710264859245-f4i4seq5ecacl9j8123l6lseeqeiqvbs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.710264859245-f4i4seq5ecacl9j8123l6lseeqeiqvbs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCMqyHLwmc2ZeJHaQ8poJMjltg4dmrTdds</string>
+	<key>GCM_SENDER_ID</key>
+	<string>710264859245</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.recap.aoku</string>
+	<key>PROJECT_ID</key>
+	<string>aoku-recap</string>
+	<key>STORAGE_BUCKET</key>
+	<string>aoku-recap.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:710264859245:ios:e8d2c0a2e503bb7d456d64</string>
+</dict>
+</plist>
