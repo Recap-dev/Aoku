@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -23,26 +26,34 @@ class _HomePageState extends State<HomePage> {
       AoiSound(
         title: '足助町シェアハウスのベランダ',
         fileName: 'asukecho.m4a',
-        latitude: 00,
-        longitude: 00,
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 60,
+        city: 'Toyota',
+        province: 'Aichi',
       ),
       AoiSound(
         title: '古民家カフェの仕込み作業',
         fileName: 'kominka_cafe.m4a',
-        latitude: 00,
-        longitude: 00,
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 30,
+        city: 'Toyota',
+        province: 'Aichi',
       ),
       AoiSound(
         title: '足助町シェアハウスのベランダの雨',
         fileName: 'kura_no_naka.m4a',
-        latitude: 00,
-        longitude: 00,
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 15,
+        city: 'Toyota',
+        province: 'Aichi',
       ),
       AoiSound(
         title: 'シェアハウスリビングのリモートワーク作業音',
         fileName: 'share_house.m4a',
-        latitude: 00,
-        longitude: 00,
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 5,
+        city: 'Toyota',
+        province: 'Aichi',
       ),
     ];
 
@@ -77,16 +88,22 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 itemCount: _aoiSoundsList.length,
                 itemExtent: 70,
-                itemBuilder: (context, selectedIndex) {
-                  String title = _aoiSoundsList[selectedIndex].title;
-                  String fileName = _aoiSoundsList[selectedIndex].fileName;
+                itemBuilder: (context, _selectedIndex) {
+                  String _title = _aoiSoundsList[_selectedIndex].title;
+                  String _fileName = _aoiSoundsList[_selectedIndex].fileName;
+                  String _city = _aoiSoundsList[_selectedIndex].city;
+                  String _province = _aoiSoundsList[_selectedIndex].province;
+                  LatLng _location = _aoiSoundsList[_selectedIndex].location;
 
                   return buildAoiSoundListTile(
-                    title,
                     context,
-                    fileName,
                     _aoiSoundsList,
-                    selectedIndex,
+                    _selectedIndex,
+                    _title,
+                    _fileName,
+                    _city,
+                    _province,
+                    _location,
                   );
                 },
               ),
@@ -98,47 +115,47 @@ class _HomePageState extends State<HomePage> {
   }
 
   Padding buildAoiSoundListTile(
-    String title,
     BuildContext context,
-    String fileName,
     List<AoiSound> _aoiSoundsList,
-    int selectedIndex,
+    int _selectedIndex,
+    String _title,
+    String _fileName,
+    String city,
+    String _province,
+    LatLng _location,
   ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.white,
-            width: 1.0,
+      child: Center(
+        child: ListTile(
+          title: Text(
+            _title,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
           ),
-        ),
-        child: Center(
-          child: ListTile(
-            title: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+          trailing: Text(
+            _aoiSoundsList[_selectedIndex].length.toString() + 'min',
+            style: const TextStyle(
+              color: Colors.white,
             ),
-            trailing: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Image.asset('images/play-btn.png'),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PlayPage(
-                    currentTitle: title,
-                    currentFileName: fileName,
-                    aoiSoundsList: _aoiSoundsList,
-                    currentIndex: selectedIndex,
-                  ),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlayPage(
+                  aoiSoundsList: _aoiSoundsList,
+                  currentIndex: _selectedIndex,
+                  currentTitle: _title,
+                  currentFileName: _fileName,
+                  city: city,
+                  province: _province,
+                  location: _location,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
