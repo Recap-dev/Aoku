@@ -1,8 +1,13 @@
+import 'dart:developer';
+import 'dart:ui';
+
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:aoku/pages/map_page.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlayPage extends StatefulWidget {
@@ -33,14 +38,40 @@ class PlayPage extends StatefulWidget {
 }
 
 class _PlayPageState extends State<PlayPage> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  late final AudioCache _audioCache =
-      AudioCache(fixedPlayer: _audioPlayer, prefix: widget.fileNamePrefix);
+  late final AudioPlayer _audioPlayer;
+  late final AudioCache _audioCache;
   bool _isPlaying = false;
+  Duration _currentDuration = Duration.zero;
+  Duration _currentPosition = Duration.zero;
+  late String cachedFilePath;
 
   @override
   void initState() {
     super.initState();
+    _audioPlayer = AudioPlayer();
+    _audioCache = AudioCache(
+      fixedPlayer: _audioPlayer,
+      prefix: widget.fileNamePrefix,
+    );
+    _audioCache.clearAll();
+    _audioPlayer.onDurationChanged.listen((duration) {
+      setState(() {
+        _currentDuration = duration;
+      });
+    });
+    _audioPlayer.onAudioPositionChanged.listen((position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+    _audioPlayer.onPlayerCompletion.listen((event) {
+      if (widget.currentIndex != widget.aoiSoundsList.length - 1) {
+        _onNext();
+      } else {
+        Navigator.pop(context);
+      }
+    });
+    _audioCache.load(widget.currentFileName);
   }
 
   @override
@@ -55,7 +86,10 @@ class _PlayPageState extends State<PlayPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        _onStop();
+        return true;
+      },
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -102,23 +136,29 @@ class _PlayPageState extends State<PlayPage> {
                         SizedBox(
                           child: Column(
                             children: [
-                              Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0,
-                                    vertical: 12.0,
-                                  ),
-                                  child: Text(
-                                    widget.currentTitle,
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                              ClipRRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 20.0, sigmaY: 20.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: Text(
+                                        widget.currentTitle,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -155,18 +195,41 @@ class _PlayPageState extends State<PlayPage> {
                         const SizedBox(
                           height: 24,
                         ),
-                        // Seek bar
+                        StreamBuilder<Object>(
+                            stream: null,
+                            builder: (context, snapshot) {
+                              return ProgressBar(
+                                progress: _currentPosition,
+                                total: _currentDuration,
+                                barCapShape: BarCapShape.square,
+                                thumbColor: Colors.white,
+                                baseBarColor: Colors.white.withOpacity(0.1),
+                                progressBarColor: Colors.white.withOpacity(0.8),
+                                bufferedBarColor: Colors.transparent,
+                                thumbRadius: 4,
+                                thumbGlowRadius: 6,
+                                onSeek: (Duration duration) {
+                                  HapticFeedback.selectionClick();
+                                  _audioPlayer.seek(duration);
+                                },
+                                onDragStart:
+                                    (ThumbDragDetails thumbDragDetails) =>
+                                        HapticFeedback.lightImpact(),
+                                onDragEnd: () => HapticFeedback.mediumImpact(),
+                              );
+                            }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             IconButton(
                               onPressed:
                                   widget.currentIndex == 0 ? null : _onPrevious,
-                              icon: const Icon(
+                              icon: Icon(
                                 CupertinoIcons.backward_fill,
-                                color: Colors.white,
+                                color: widget.currentIndex == 0
+                                    ? Colors.white.withOpacity(0.4)
+                                    : Colors.white,
                               ),
-                              //icon: Image.asset('images/prev-arrow.png'),
                             ),
                             !_isPlaying
                                 ? IconButton(
@@ -192,11 +255,13 @@ class _PlayPageState extends State<PlayPage> {
                                       widget.aoiSoundsList.length - 1
                                   ? null
                                   : _onNext,
-                              icon: const Icon(
+                              icon: Icon(
                                 CupertinoIcons.forward_fill,
-                                color: Colors.white,
+                                color: widget.currentIndex ==
+                                        widget.aoiSoundsList.length - 1
+                                    ? Colors.white.withOpacity(0.4)
+                                    : Colors.white,
                               ),
-                              //icon: Image.asset('images/prev-arrow.png'),
                             ),
                           ],
                         )
