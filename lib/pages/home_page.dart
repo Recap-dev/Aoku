@@ -127,35 +127,48 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
-        child: ListTile(
-          title: Text(
-            _title,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          trailing: Text(
-            _aoiSoundsList[_selectedIndex].length.toString() + 'min',
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlayPage(
-                  aoiSoundsList: _aoiSoundsList,
-                  currentIndex: _selectedIndex,
-                  currentTitle: _title,
-                  currentFileName: _fileName,
-                  city: city,
-                  province: _province,
-                  location: _location,
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.0,
                 ),
               ),
-            );
-          },
+              child: ListTile(
+                title: Text(
+                  _title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                trailing: Text(
+                  _aoiSoundsList[_selectedIndex].length.toString() + 'min',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayPage(
+                        aoiSoundsList: _aoiSoundsList,
+                        currentIndex: _selectedIndex,
+                        currentTitle: _title,
+                        currentFileName: _fileName,
+                        city: city,
+                        province: _province,
+                        location: _location,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );

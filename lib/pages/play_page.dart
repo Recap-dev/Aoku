@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:aoku/pages/map_page.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -55,7 +57,10 @@ class _PlayPageState extends State<PlayPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        _onStop();
+        return true;
+      },
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -102,23 +107,29 @@ class _PlayPageState extends State<PlayPage> {
                         SizedBox(
                           child: Column(
                             children: [
-                              Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0,
-                                    vertical: 12.0,
-                                  ),
-                                  child: Text(
-                                    widget.currentTitle,
-                                    style: const TextStyle(
-                                      color: Colors.white,
+                              ClipRRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaX: 20.0, sigmaY: 20.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 12.0,
+                                      ),
+                                      child: Text(
+                                        widget.currentTitle,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -162,11 +173,12 @@ class _PlayPageState extends State<PlayPage> {
                             IconButton(
                               onPressed:
                                   widget.currentIndex == 0 ? null : _onPrevious,
-                              icon: const Icon(
+                              icon: Icon(
                                 CupertinoIcons.backward_fill,
-                                color: Colors.white,
+                                color: widget.currentIndex == 0
+                                    ? Colors.white.withOpacity(0.4)
+                                    : Colors.white,
                               ),
-                              //icon: Image.asset('images/prev-arrow.png'),
                             ),
                             !_isPlaying
                                 ? IconButton(
@@ -192,11 +204,13 @@ class _PlayPageState extends State<PlayPage> {
                                       widget.aoiSoundsList.length - 1
                                   ? null
                                   : _onNext,
-                              icon: const Icon(
+                              icon: Icon(
                                 CupertinoIcons.forward_fill,
-                                color: Colors.white,
+                                color: widget.currentIndex ==
+                                        widget.aoiSoundsList.length - 1
+                                    ? Colors.white.withOpacity(0.4)
+                                    : Colors.white,
                               ),
-                              //icon: Image.asset('images/prev-arrow.png'),
                             ),
                           ],
                         )
