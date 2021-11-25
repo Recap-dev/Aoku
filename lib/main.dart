@@ -32,10 +32,11 @@ class _AokuAppState extends State<AokuApp> {
             ),
           );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(
+          return MaterialApp(
             home: Scaffold(
+              backgroundColor: const Color(0xFFF5F5F5),
               body: Center(
-                child: Text('Loading...'),
+                child: Image.asset('images/blue-blur-2.png'),
               ),
             ),
           );
