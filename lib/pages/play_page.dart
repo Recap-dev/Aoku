@@ -7,6 +7,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlayPage extends StatefulWidget {
@@ -207,8 +208,14 @@ class _PlayPageState extends State<PlayPage> {
                                 bufferedBarColor: Colors.transparent,
                                 thumbRadius: 4,
                                 thumbGlowRadius: 6,
-                                onSeek: (Duration duration) =>
-                                    _audioPlayer.seek(duration),
+                                onSeek: (Duration duration) {
+                                  HapticFeedback.selectionClick();
+                                  _audioPlayer.seek(duration);
+                                },
+                                onDragStart:
+                                    (ThumbDragDetails thumbDragDetails) =>
+                                        HapticFeedback.lightImpact(),
+                                onDragEnd: () => HapticFeedback.mediumImpact(),
                               );
                             }),
                         Row(
