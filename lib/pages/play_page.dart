@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:aoku/pages/map_page.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +37,40 @@ class PlayPage extends StatefulWidget {
 }
 
 class _PlayPageState extends State<PlayPage> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  late final AudioCache _audioCache =
-      AudioCache(fixedPlayer: _audioPlayer, prefix: widget.fileNamePrefix);
+  late final AudioPlayer _audioPlayer;
+  late final AudioCache _audioCache;
   bool _isPlaying = false;
+  Duration _currentDuration = Duration.zero;
+  Duration _currentPosition = Duration.zero;
+  late String cachedFilePath;
 
   @override
   void initState() {
     super.initState();
+    _audioPlayer = AudioPlayer();
+    _audioCache = AudioCache(
+      fixedPlayer: _audioPlayer,
+      prefix: widget.fileNamePrefix,
+    );
+    _audioCache.clearAll();
+    _audioPlayer.onDurationChanged.listen((duration) {
+      setState(() {
+        _currentDuration = duration;
+      });
+    });
+    _audioPlayer.onAudioPositionChanged.listen((position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+    _audioPlayer.onPlayerCompletion.listen((event) {
+      if (widget.currentIndex != widget.aoiSoundsList.length - 1) {
+        _onNext();
+      } else {
+        Navigator.pop(context);
+      }
+    });
+    _audioCache.load(widget.currentFileName);
   }
 
   @override
@@ -166,7 +194,23 @@ class _PlayPageState extends State<PlayPage> {
                         const SizedBox(
                           height: 24,
                         ),
-                        // Seek bar
+                        StreamBuilder<Object>(
+                            stream: null,
+                            builder: (context, snapshot) {
+                              return ProgressBar(
+                                progress: _currentPosition,
+                                total: _currentDuration,
+                                barCapShape: BarCapShape.square,
+                                thumbColor: Colors.white,
+                                baseBarColor: Colors.white.withOpacity(0.1),
+                                progressBarColor: Colors.white.withOpacity(0.8),
+                                bufferedBarColor: Colors.transparent,
+                                thumbRadius: 4,
+                                thumbGlowRadius: 6,
+                                onSeek: (Duration duration) =>
+                                    _audioPlayer.seek(duration),
+                              );
+                            }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
