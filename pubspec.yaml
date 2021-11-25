@@ -28,3 +28,13 @@ flutter:
   assets:
     - sounds/
     - images/
+  fonts:
+    - family: Noto-Serif-Japanese
+      fonts:
+        - asset: fonts/NotoSerifJP-Regular.otf
+        - asset: fonts/NotoSerifJP-Bold.otf
+        - asset: fonts/NotoSerifJP-SemiBold.otf
+        - asset: fonts/NotoSerifJP-Medium.otf
+        - asset: fonts/NotoSerifJP-Black.otf
+        - asset: fonts/NotoSerifJP-Light.otf
+        - asset: fonts/NotoSerifJP-ExtraLight.otf
