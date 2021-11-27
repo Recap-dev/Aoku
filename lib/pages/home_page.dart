@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
         title: '古民家カフェの朝',
         fileName: 'shikomi.m4a',
         location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 5,
+        length: 15,
         city: 'Toyota',
         province: 'Aichi',
       ),
