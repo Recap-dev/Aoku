@@ -141,28 +141,31 @@ class _PlayPageState extends State<PlayPage> {
                                       sigmaX: 20.0, sigmaY: 20.0),
                                   child: Container(
                                     width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.9,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.white,
                                         width: 1,
                                       ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12.0,
-                                        vertical: 12.0,
-                                      ),
+                                    child: Center(
                                       child: Text(
                                         widget.currentTitle,
                                         style: const TextStyle(
                                           color: Colors.white,
+                                          fontSize: 24.0,
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 48.0,
+                              ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   const IconButton(
                                     icon: Icon(
@@ -170,6 +173,7 @@ class _PlayPageState extends State<PlayPage> {
                                       color: Colors.pink,
                                     ),
                                     onPressed: null,
+                                    iconSize: 32.0,
                                   ),
                                   IconButton(
                                     icon: const Icon(
@@ -177,13 +181,19 @@ class _PlayPageState extends State<PlayPage> {
                                       color: Colors.white,
                                     ),
                                     onPressed: _onMapTapped,
+                                    iconSize: 32.0,
+                                  ),
+                                  const SizedBox(
+                                    width: 12.0,
                                   ),
                                   GestureDetector(
                                     onTap: _onMapTapped,
                                     child: Text(
                                       '${widget.city}, ${widget.province}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -200,6 +210,7 @@ class _PlayPageState extends State<PlayPage> {
                               return ProgressBar(
                                 progress: _currentPosition,
                                 total: _currentDuration,
+                                barHeight: 2,
                                 barCapShape: BarCapShape.square,
                                 thumbColor: Colors.white,
                                 baseBarColor: Colors.white.withOpacity(0.1),
@@ -207,6 +218,10 @@ class _PlayPageState extends State<PlayPage> {
                                 bufferedBarColor: Colors.transparent,
                                 thumbRadius: 4,
                                 thumbGlowRadius: 6,
+                                timeLabelTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                timeLabelPadding: 10.0,
                                 onSeek: (Duration duration) {
                                   HapticFeedback.selectionClick();
                                   _audioPlayer.seek(duration);
@@ -218,7 +233,8 @@ class _PlayPageState extends State<PlayPage> {
                               );
                             }),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             IconButton(
                               onPressed:
@@ -229,26 +245,36 @@ class _PlayPageState extends State<PlayPage> {
                                     ? Colors.white.withOpacity(0.4)
                                     : Colors.white,
                               ),
+                              iconSize: 48,
                             ),
-                            !_isPlaying
-                                ? IconButton(
-                                    onPressed: () {
-                                      _onPlay();
-                                    },
-                                    icon: const Icon(
-                                      CupertinoIcons.play_arrow_solid,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      _onPause();
-                                    },
-                                    icon: const Icon(
-                                      CupertinoIcons.pause_solid,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            const SizedBox(
+                              width: 40,
+                            ),
+                            if (!_isPlaying)
+                              IconButton(
+                                onPressed: () {
+                                  _onPlay();
+                                },
+                                icon: const Icon(
+                                  CupertinoIcons.play_fill,
+                                  color: Colors.white,
+                                ),
+                                iconSize: 56,
+                              )
+                            else
+                              IconButton(
+                                onPressed: () {
+                                  _onPause();
+                                },
+                                icon: const Icon(
+                                  CupertinoIcons.pause_fill,
+                                  color: Colors.white,
+                                ),
+                                iconSize: 56,
+                              ),
+                            const SizedBox(
+                              width: 40,
+                            ),
                             IconButton(
                               onPressed: widget.currentIndex ==
                                       widget.aoiSoundsList.length - 1
@@ -261,9 +287,13 @@ class _PlayPageState extends State<PlayPage> {
                                     ? Colors.white.withOpacity(0.4)
                                     : Colors.white,
                               ),
+                              iconSize: 48,
                             ),
                           ],
-                        )
+                        ),
+                        const SizedBox(
+                          height: 64,
+                        ),
                       ],
                     ),
                   ),
