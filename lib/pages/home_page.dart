@@ -22,64 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<AoiSound> _aoiSoundsList = [
-      AoiSound(
-        title: '足助町シェアハウスのベランダ',
-        fileName: 'asukecho.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 60,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: '古民家カフェの仕込み作業',
-        fileName: 'kominka_cafe.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 30,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: '足助町シェアハウスのベランダの雨',
-        fileName: 'kura_no_naka.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 15,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: 'シェアハウスリビングのリモートワーク作業音',
-        fileName: 'share_house.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 5,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: '古民家カフェの朝',
-        fileName: 'shikomi.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 15,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: '風の強い日、足助町シェアハウスのベランダ',
-        fileName: 'windy-day.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 5,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-      AoiSound(
-        title: '古民家カフェの夕方仕込み開始',
-        fileName: 'shikomi-short.m4a',
-        location: const LatLng(35.135616330301005, 137.31655937710295),
-        length: 5,
-        city: 'Toyota',
-        province: 'Aichi',
-      ),
-    ];
+    final List<AoiSound> _aoiSounds = aoiSounds;
 
     return Scaffold(
       appBar: AppBar(
@@ -110,18 +53,18 @@ class _HomePageState extends State<HomePage> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: _aoiSoundsList.length,
+                itemCount: _aoiSounds.length,
                 itemExtent: 70,
                 itemBuilder: (context, _selectedIndex) {
-                  String _title = _aoiSoundsList[_selectedIndex].title;
-                  String _fileName = _aoiSoundsList[_selectedIndex].fileName;
-                  String _city = _aoiSoundsList[_selectedIndex].city;
-                  String _province = _aoiSoundsList[_selectedIndex].province;
-                  LatLng _location = _aoiSoundsList[_selectedIndex].location;
+                  String _title = _aoiSounds[_selectedIndex].title;
+                  String _fileName = _aoiSounds[_selectedIndex].fileName;
+                  String _city = _aoiSounds[_selectedIndex].city;
+                  String _province = _aoiSounds[_selectedIndex].province;
+                  LatLng _location = _aoiSounds[_selectedIndex].location;
 
                   return buildAoiSoundListTile(
                     context,
-                    _aoiSoundsList,
+                    _aoiSounds,
                     _selectedIndex,
                     _title,
                     _fileName,
@@ -140,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
   Padding buildAoiSoundListTile(
     BuildContext context,
-    List<AoiSound> _aoiSoundsList,
+    List<AoiSound> _aoiSounds,
     int _selectedIndex,
     String _title,
     String _fileName,
@@ -169,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 trailing: Text(
-                  _aoiSoundsList[_selectedIndex].length.toString() + 'min',
+                  _aoiSounds[_selectedIndex].length.toString() + 'min',
                   style: const TextStyle(
                     color: Colors.white,
                   ),
@@ -179,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => PlayPage(
-                        aoiSoundsList: _aoiSoundsList,
+                        aoiSounds: _aoiSounds,
                         currentIndex: _selectedIndex,
                         currentTitle: _title,
                         currentFileName: _fileName,
