@@ -55,6 +55,30 @@ class _HomePageState extends State<HomePage> {
         city: 'Toyota',
         province: 'Aichi',
       ),
+      AoiSound(
+        title: '古民家カフェの朝',
+        fileName: 'shikomi.m4a',
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 5,
+        city: 'Toyota',
+        province: 'Aichi',
+      ),
+      AoiSound(
+        title: '風の強い日、足助町シェアハウスのベランダ',
+        fileName: 'windy-day.m4a',
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 5,
+        city: 'Toyota',
+        province: 'Aichi',
+      ),
+      AoiSound(
+        title: '古民家カフェの夕方仕込み開始',
+        fileName: 'shikomi-short.m4a',
+        location: const LatLng(35.135616330301005, 137.31655937710295),
+        length: 5,
+        city: 'Toyota',
+        province: 'Aichi',
+      ),
     ];
 
     return Scaffold(
