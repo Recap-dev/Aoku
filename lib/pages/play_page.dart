@@ -90,6 +90,7 @@ class _PlayPageState extends State<PlayPage> {
         return true;
       },
       child: Scaffold(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color(0xFFE3E3E3),
@@ -99,7 +100,7 @@ class _PlayPageState extends State<PlayPage> {
               Navigator.pop(context);
               _onStop();
             },
-            icon: const Icon(Icons.chevron_left_rounded),
+            icon: const Icon(CupertinoIcons.chevron_left),
           ),
         ),
         backgroundColor: const Color(0xFFE3E3E3),
