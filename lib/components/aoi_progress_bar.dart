@@ -25,14 +25,15 @@ class AoiProgressBar extends StatelessWidget {
       total: _currentDuration,
       barHeight: 2,
       barCapShape: BarCapShape.square,
-      thumbColor: Colors.white,
-      baseBarColor: Colors.white.withOpacity(0.1),
-      progressBarColor: Colors.white.withOpacity(0.8),
+      thumbColor: Theme.of(context).colorScheme.onBackground,
+      baseBarColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+      progressBarColor:
+          Theme.of(context).colorScheme.onBackground.withOpacity(0.8),
       bufferedBarColor: Colors.transparent,
       thumbRadius: 4,
       thumbGlowRadius: 6,
-      timeLabelTextStyle: const TextStyle(
-        color: Colors.white,
+      timeLabelTextStyle: TextStyle(
+        color: Theme.of(context).colorScheme.onBackground,
       ),
       timeLabelPadding: 10.0,
       onSeek: (Duration duration) {

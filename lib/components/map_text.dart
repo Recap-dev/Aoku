@@ -17,8 +17,8 @@ class MapText extends StatelessWidget {
       onTap: null,
       child: Text(
         '${widget.city}, ${widget.province}',
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onBackground,
           fontSize: 16.0,
         ),
       ),

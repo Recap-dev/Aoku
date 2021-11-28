@@ -64,7 +64,7 @@ class _PlayPageState extends State<PlayPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE3E3E3),
+        backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
@@ -74,7 +74,7 @@ class _PlayPageState extends State<PlayPage> {
           icon: const Icon(CupertinoIcons.chevron_left),
         ),
       ),
-      backgroundColor: const Color(0xFFE3E3E3),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

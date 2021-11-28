@@ -19,8 +19,8 @@ class PreviousButton extends StatelessWidget {
       icon: Icon(
         CupertinoIcons.backward_fill,
         color: widget.currentIndex == 0
-            ? Colors.white.withOpacity(0.4)
-            : Colors.white,
+            ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
+            : Theme.of(context).colorScheme.onBackground,
       ),
       iconSize: 48,
     );

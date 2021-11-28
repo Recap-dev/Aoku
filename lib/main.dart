@@ -44,8 +44,40 @@ class _AokuAppState extends State<AokuApp> {
           return MaterialApp(
             title: 'Flutter Demo',
             theme: ThemeData(
+              brightness: Brightness.light,
               fontFamily: 'Noto-Serif-Japanese',
+              colorScheme: const ColorScheme.light(
+                primary: Color(0xFFF5F5F5),
+                secondary: Color(0xFFF5F5F5),
+                surface: Color(0xFFF5F5F5),
+                background: Color(0xFFF5F5F5),
+                error: Color(0xFFB00020),
+                onPrimary: Colors.white,
+                onSecondary: Colors.white,
+                onSurface: Colors.white,
+                onBackground: Colors.white,
+                onError: Colors.white,
+                brightness: Brightness.light,
+              ),
             ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              fontFamily: 'Noto-Serif-Japanese',
+              colorScheme: const ColorScheme.dark(
+                primary: Color(0xFF050A30),
+                secondary: Color(0xFF050A30),
+                surface: Color(0xFF050A30),
+                background: Color(0xFF050A30),
+                error: Color(0xFFB00020),
+                onPrimary: Color(0xFFF5F5F5),
+                onSecondary: Color(0xFFF5F5F5),
+                onSurface: Color(0xFFF5F5F5),
+                onBackground: Color(0xFFF5F5F5),
+                onError: Color(0xFFF5F5F5),
+                brightness: Brightness.dark,
+              ),
+            ),
+            themeMode: ThemeMode.system,
             home: const HomePage(title: '聞く'),
           );
         }

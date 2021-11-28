@@ -21,15 +21,15 @@ class AlbumArt extends StatelessWidget {
           height: MediaQuery.of(context).size.width * 0.9,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onBackground,
               width: 1,
             ),
           ),
           child: Center(
             child: Text(
               widget.currentTitle,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 24.0,
               ),
             ),

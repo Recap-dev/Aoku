@@ -27,10 +27,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: const Color(0xFFE3E3E3),
+        backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.transparent,
       ),
-      backgroundColor: const Color(0xFFE3E3E3),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
         children: [
           Align(
@@ -100,21 +100,21 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onBackground,
                   width: 1.0,
                 ),
               ),
               child: ListTile(
                 title: Text(
                   _title,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
                 trailing: Text(
                   _aoiSounds[_selectedIndex].length.toString() + 'min',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
                 onTap: () {
