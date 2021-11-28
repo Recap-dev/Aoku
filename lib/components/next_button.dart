@@ -20,8 +20,8 @@ class NextButton extends StatelessWidget {
       icon: Icon(
         CupertinoIcons.forward_fill,
         color: widget.currentIndex == widget.aoiSounds.length - 1
-            ? Colors.white.withOpacity(0.4)
-            : Colors.white,
+            ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
+            : Theme.of(context).colorScheme.onBackground,
       ),
       iconSize: 48,
     );

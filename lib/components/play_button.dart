@@ -13,9 +13,9 @@ class PlayButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      icon: const Icon(
+      icon: Icon(
         CupertinoIcons.play_fill,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onBackground,
       ),
       iconSize: 56,
     );

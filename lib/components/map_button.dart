@@ -12,9 +12,9 @@ class MapButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(
+      icon: Icon(
         CupertinoIcons.map_fill,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onBackground,
       ),
       onPressed: onPressed,
       iconSize: 32.0,
