@@ -21,6 +21,7 @@ class _MapPageState extends State<MapPage> {
     zoom: 14.4746,
   );
   final Set<Marker> _markers = {};
+  bool isOnInitialLocation = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +34,37 @@ class _MapPageState extends State<MapPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(CupertinoIcons.chevron_left),
+          icon: const Icon(
+            CupertinoIcons.chevron_left,
+            color: Color(0xFF050A30),
+          ),
         ),
       ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        markers: _markers,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _onMapCreated(controller);
-          _controller.complete(controller);
-        },
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            markers: _markers,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _onMapCreated(controller);
+              _controller.complete(controller);
+            },
+            myLocationButtonEnabled: false,
+            myLocationEnabled: true,
+          ),
+          Align(
+            alignment: const Alignment(0, 0.9),
+            child: CupertinoButton(
+              color: const Color(0xFF050A30).withOpacity(0.05),
+              child: const Icon(
+                CupertinoIcons.map_pin_ellipse,
+                color: Color(0xFF050A30),
+              ),
+              onPressed: _onBackToInitialLocationPressed,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -58,6 +77,12 @@ class _MapPageState extends State<MapPage> {
         markerId: const MarkerId('aoi-location'),
         position: widget.initialLocation,
       ));
+    });
+  }
+
+  void _onBackToInitialLocationPressed() {
+    _controller.future.then((GoogleMapController controller) {
+      controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
     });
   }
 }

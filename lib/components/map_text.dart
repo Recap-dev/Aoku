@@ -14,7 +14,7 @@ class MapText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: null,
+      onTap: onTap,
       child: Text(
         '${widget.city}, ${widget.province}',
         style: TextStyle(
