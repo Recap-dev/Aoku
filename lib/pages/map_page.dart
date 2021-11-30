@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
@@ -56,7 +57,7 @@ class _MapPageState extends State<MapPage> {
           Align(
             alignment: const Alignment(0, 0.9),
             child: CupertinoButton(
-              color: const Color(0xFF050A30).withOpacity(0.05),
+              color: Colors.blueGrey.withOpacity(0.05),
               child: const Icon(
                 CupertinoIcons.map_pin_ellipse,
                 color: Color(0xFF050A30),
@@ -81,6 +82,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _onBackToInitialLocationPressed() {
+    HapticFeedback.lightImpact();
+
     _controller.future.then((GoogleMapController controller) {
       controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
     });
