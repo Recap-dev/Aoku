@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -22,7 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<AoiSound> _aoiSounds = aoiSounds;
+    final List<AoiSound> _aoiSounds = aoiSoundsMaster;
 
     return Scaffold(
       appBar: AppBar(

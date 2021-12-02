@@ -1,15 +1,18 @@
 import 'dart:ui';
 
-import 'package:aoku/pages/play_page.dart';
+import 'package:aoku/models/aoi_sound.dart';
 import 'package:flutter/material.dart';
 
 class AlbumArt extends StatelessWidget {
   const AlbumArt({
     Key? key,
-    required this.widget,
+    //required this.widget,
+    required this.aoiSounds,
+    required this.currentIndex,
   }) : super(key: key);
 
-  final PlayPage widget;
+  final List<AoiSound> aoiSounds;
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class AlbumArt extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              widget.aoiSounds[widget.currentIndex].title,
+              aoiSounds[currentIndex].title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 24.0,
