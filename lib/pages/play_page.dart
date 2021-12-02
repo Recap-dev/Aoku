@@ -2,7 +2,7 @@ import 'package:aoku/components/album_art.dart';
 import 'package:aoku/components/aoi_progress_bar.dart';
 import 'package:aoku/components/heart_button.dart';
 import 'package:aoku/components/map_button.dart';
-import 'package:aoku/components/map_text.dart';
+import 'package:aoku/components/info_text.dart';
 import 'package:aoku/components/next_button.dart';
 import 'package:aoku/components/pause_button.dart';
 import 'package:aoku/components/play_button.dart';
@@ -12,18 +12,12 @@ import 'package:aoku/pages/map_page.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PlayPage extends StatefulWidget {
   PlayPage({
     Key? key,
     required this.aoiSounds,
     required this.currentIndex,
-    required this.currentTitle,
-    required this.currentFileName,
-    required this.city,
-    required this.province,
-    required this.location,
   }) : super(key: key);
 
   final String fileNamePrefix = 'sounds/';
@@ -31,11 +25,6 @@ class PlayPage extends StatefulWidget {
 
   // Might be changed if next/previous is pressed
   int currentIndex;
-  String currentTitle;
-  String currentFileName;
-  String city;
-  String province;
-  LatLng location;
 
   @override
   State<PlayPage> createState() => _PlayPageState();
@@ -48,14 +37,12 @@ class _PlayPageState extends State<PlayPage> {
   Duration _currentDuration = Duration.zero;
   Duration _currentPosition = Duration.zero;
   late String cachedFilePath;
-  late bool _isFirstSound;
 
   @override
   void initState() {
     super.initState();
-    _isFirstSound = widget.currentIndex == 0;
     initAudioPlayer();
-    _audioCache.load(widget.currentFileName);
+    _audioCache.load(widget.aoiSounds[widget.currentIndex].fileName);
     _onPlay();
   }
 
@@ -105,17 +92,12 @@ class _PlayPageState extends State<PlayPage> {
                         height: 48.0,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const HeartButton(),
+                          InfoText(widget: widget),
                           MapButton(onPressed: _onMapTapped),
-                          const SizedBox(
-                            width: 12.0,
-                          ),
-                          MapText(
-                            widget: widget,
-                            onTap: _onMapTapped,
-                          ),
                         ],
                       ),
                     ],
@@ -190,7 +172,7 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   void _onPlay() {
-    _audioCache.play(widget.currentFileName);
+    _audioCache.play(widget.aoiSounds[widget.currentIndex].fileName);
     setState(() {
       _isPlaying = true;
     });
@@ -212,13 +194,9 @@ class _PlayPageState extends State<PlayPage> {
 
   void _onNext() {
     _onStop();
-    if (widget.currentIndex == widget.aoiSounds.length - 1) {
-      Navigator.pop(context);
-    } else {
+    if (!(widget.currentIndex == widget.aoiSounds.length - 1)) {
       setState(() {
         widget.currentIndex = widget.currentIndex + 1;
-        widget.currentFileName = widget.aoiSounds[widget.currentIndex].fileName;
-        widget.currentTitle = widget.aoiSounds[widget.currentIndex].title;
       });
       _onPlay();
     }
@@ -226,13 +204,9 @@ class _PlayPageState extends State<PlayPage> {
 
   void _onPrevious() {
     _onStop();
-    if (_isFirstSound) {
-      Navigator.pop(context);
-    } else {
+    if (!(widget.currentIndex == 0)) {
       setState(() {
         widget.currentIndex = widget.currentIndex - 1;
-        widget.currentFileName = widget.aoiSounds[widget.currentIndex].fileName;
-        widget.currentTitle = widget.aoiSounds[widget.currentIndex].title;
       });
       _onPlay();
     }
@@ -243,7 +217,7 @@ class _PlayPageState extends State<PlayPage> {
       context,
       MaterialPageRoute(
         builder: (context) => MapPage(
-          initialLocation: widget.location,
+          initialLocation: widget.aoiSounds[widget.currentIndex].location,
         ),
       ),
     );

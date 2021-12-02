@@ -55,22 +55,11 @@ class _HomePageState extends State<HomePage> {
                 shrinkWrap: true,
                 itemCount: _aoiSounds.length,
                 itemExtent: 70,
-                itemBuilder: (context, _selectedIndex) {
-                  String _title = _aoiSounds[_selectedIndex].title;
-                  String _fileName = _aoiSounds[_selectedIndex].fileName;
-                  String _city = _aoiSounds[_selectedIndex].city;
-                  String _province = _aoiSounds[_selectedIndex].province;
-                  LatLng _location = _aoiSounds[_selectedIndex].location;
-
+                itemBuilder: (context, _currentIndex) {
                   return buildAoiSoundListTile(
                     context,
                     _aoiSounds,
-                    _selectedIndex,
-                    _title,
-                    _fileName,
-                    _city,
-                    _province,
-                    _location,
+                    _currentIndex,
                   );
                 },
               ),
@@ -85,12 +74,9 @@ class _HomePageState extends State<HomePage> {
     BuildContext context,
     List<AoiSound> _aoiSounds,
     int _selectedIndex,
-    String _title,
-    String _fileName,
-    String city,
-    String _province,
-    LatLng _location,
   ) {
+    String _title = _aoiSounds[_selectedIndex].title;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -124,11 +110,6 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) => PlayPage(
                         aoiSounds: _aoiSounds,
                         currentIndex: _selectedIndex,
-                        currentTitle: _title,
-                        currentFileName: _fileName,
-                        city: city,
-                        province: _province,
-                        location: _location,
                       ),
                     ),
                   );
