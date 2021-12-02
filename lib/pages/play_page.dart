@@ -38,11 +38,18 @@ class _PlayPageState extends State<PlayPage> {
   Duration _currentPosition = Duration.zero;
   late String cachedFilePath;
 
+  late List<AoiSound> _aoiSounds;
+  late int _currentIndex;
+
   @override
   void initState() {
     super.initState();
     initAudioPlayer();
-    _audioCache.load(widget.aoiSounds[widget.currentIndex].fileName);
+
+    _aoiSounds = widget.aoiSounds;
+    _currentIndex = widget.currentIndex;
+
+    _audioCache.load(_aoiSounds[_currentIndex].fileName);
     _onPlay();
   }
 
@@ -87,7 +94,10 @@ class _PlayPageState extends State<PlayPage> {
                 children: [
                   Column(
                     children: [
-                      AlbumArt(widget: widget),
+                      AlbumArt(
+                        aoiSounds: _aoiSounds,
+                        currentIndex: _currentIndex,
+                      ),
                       const SizedBox(
                         height: 48.0,
                       ),
@@ -96,7 +106,10 @@ class _PlayPageState extends State<PlayPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const HeartButton(),
-                          InfoText(widget: widget),
+                          InfoText(
+                            aoiSounds: _aoiSounds,
+                            currentIndex: _currentIndex,
+                          ),
                           MapButton(onPressed: _onMapTapped),
                         ],
                       ),
@@ -115,7 +128,7 @@ class _PlayPageState extends State<PlayPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       PreviousButton(
-                        widget: widget,
+                        currentIndex: _currentIndex,
                         onPressed: _onPrevious,
                       ),
                       const SizedBox(
@@ -128,7 +141,8 @@ class _PlayPageState extends State<PlayPage> {
                         width: 40,
                       ),
                       NextButton(
-                        widget: widget,
+                        aoiSounds: _aoiSounds,
+                        currentIndex: _currentIndex,
                         onPressed: _onNext,
                       ),
                     ],
@@ -163,7 +177,7 @@ class _PlayPageState extends State<PlayPage> {
       });
     });
     _audioPlayer.onPlayerCompletion.listen((event) {
-      if (widget.currentIndex != widget.aoiSounds.length - 1) {
+      if (_currentIndex != _aoiSounds.length - 1) {
         _onNext();
       } else {
         Navigator.pop(context);
@@ -172,7 +186,7 @@ class _PlayPageState extends State<PlayPage> {
   }
 
   void _onPlay() {
-    _audioCache.play(widget.aoiSounds[widget.currentIndex].fileName);
+    _audioCache.play(_aoiSounds[_currentIndex].fileName);
     setState(() {
       _isPlaying = true;
     });
@@ -194,9 +208,9 @@ class _PlayPageState extends State<PlayPage> {
 
   void _onNext() {
     _onStop();
-    if (!(widget.currentIndex == widget.aoiSounds.length - 1)) {
+    if (!(_currentIndex == _aoiSounds.length - 1)) {
       setState(() {
-        widget.currentIndex = widget.currentIndex + 1;
+        _currentIndex++;
       });
       _onPlay();
     }
@@ -204,9 +218,9 @@ class _PlayPageState extends State<PlayPage> {
 
   void _onPrevious() {
     _onStop();
-    if (!(widget.currentIndex == 0)) {
+    if (!(_currentIndex == 0)) {
       setState(() {
-        widget.currentIndex = widget.currentIndex - 1;
+        _currentIndex--;
       });
       _onPlay();
     }
@@ -217,7 +231,7 @@ class _PlayPageState extends State<PlayPage> {
       context,
       MaterialPageRoute(
         builder: (context) => MapPage(
-          initialLocation: widget.aoiSounds[widget.currentIndex].location,
+          initialLocation: _aoiSounds[_currentIndex].location,
         ),
       ),
     );

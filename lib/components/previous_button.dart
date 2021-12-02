@@ -1,24 +1,23 @@
-import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PreviousButton extends StatelessWidget {
   const PreviousButton({
     Key? key,
-    required this.widget,
+    required this.currentIndex,
     this.onPressed,
   }) : super(key: key);
 
-  final PlayPage widget;
+  final int currentIndex;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: widget.currentIndex == 0 ? null : onPressed,
+      onPressed: currentIndex == 0 ? null : onPressed,
       icon: Icon(
         CupertinoIcons.backward_fill,
-        color: widget.currentIndex == 0
+        color: currentIndex == 0
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
             : Theme.of(context).colorScheme.onBackground,
       ),
