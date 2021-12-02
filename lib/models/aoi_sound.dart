@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AoiSound {
@@ -8,6 +9,7 @@ class AoiSound {
     required this.length,
     required this.city,
     required this.province,
+    required this.time,
   });
 
   final String title;
@@ -16,6 +18,7 @@ class AoiSound {
   final int length;
   final String city;
   final String province;
+  final TimeOfDay time;
 }
 
 List<AoiSound> aoiSounds = [
@@ -26,6 +29,7 @@ List<AoiSound> aoiSounds = [
     length: 60,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 22, minute: 23),
   ),
   AoiSound(
     title: '古民家カフェの仕込み作業',
@@ -34,6 +38,7 @@ List<AoiSound> aoiSounds = [
     length: 30,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 7, minute: 11),
   ),
   AoiSound(
     title: '足助町シェアハウスのベランダの雨',
@@ -42,6 +47,7 @@ List<AoiSound> aoiSounds = [
     length: 15,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 10, minute: 11),
   ),
   AoiSound(
     title: 'シェアハウスリビングのリモートワーク作業音',
@@ -50,6 +56,7 @@ List<AoiSound> aoiSounds = [
     length: 5,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 14, minute: 23),
   ),
   AoiSound(
     title: '古民家カフェの朝',
@@ -58,6 +65,7 @@ List<AoiSound> aoiSounds = [
     length: 15,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 7, minute: 11),
   ),
   AoiSound(
     title: '風の強い日、足助町シェアハウスのベランダ',
@@ -66,6 +74,7 @@ List<AoiSound> aoiSounds = [
     length: 5,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 17, minute: 48),
   ),
   AoiSound(
     title: '古民家カフェの夕方仕込み開始',
@@ -74,5 +83,6 @@ List<AoiSound> aoiSounds = [
     length: 5,
     city: 'Toyota',
     province: 'Aichi',
+    time: const TimeOfDay(hour: 15, minute: 24),
   ),
 ];

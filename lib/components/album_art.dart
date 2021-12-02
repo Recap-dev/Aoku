@@ -27,7 +27,7 @@ class AlbumArt extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              widget.currentTitle,
+              widget.aoiSounds[widget.currentIndex].title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 24.0,
