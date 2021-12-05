@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class AlbumArt extends StatelessWidget {
   const AlbumArt({
     Key? key,
-    //required this.widget,
     required this.aoiSounds,
     required this.currentIndex,
   }) : super(key: key);

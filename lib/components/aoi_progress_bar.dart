@@ -34,6 +34,7 @@ class AoiProgressBar extends StatelessWidget {
       thumbGlowRadius: 6,
       timeLabelTextStyle: TextStyle(
         color: Theme.of(context).colorScheme.onBackground,
+        fontFamily: 'Noto-Serif-Japanese',
       ),
       timeLabelPadding: 10.0,
       onSeek: (Duration duration) {

@@ -7,54 +7,24 @@ import 'package:aoku/components/next_button.dart';
 import 'package:aoku/components/pause_button.dart';
 import 'package:aoku/components/play_button.dart';
 import 'package:aoku/components/previous_button.dart';
-import 'package:aoku/models/aoi_sound.dart';
+import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/map_page.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PlayPage extends StatefulWidget {
-  PlayPage({
+class PlayPage extends HookConsumerWidget {
+  const PlayPage({
     Key? key,
-    required this.aoiSounds,
-    required this.currentIndex,
+    required this.initialIndex,
   }) : super(key: key);
 
-  final String fileNamePrefix = 'sounds/';
-  final List<AoiSound> aoiSounds;
-
-  // Might be changed if next/previous is pressed
-  int currentIndex;
+  final int initialIndex;
 
   @override
-  State<PlayPage> createState() => _PlayPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
 
-class _PlayPageState extends State<PlayPage> {
-  late final AudioPlayer _audioPlayer;
-  late final AudioCache _audioCache;
-  bool _isPlaying = false;
-  Duration _currentDuration = Duration.zero;
-  Duration _currentPosition = Duration.zero;
-  late String cachedFilePath;
-
-  late List<AoiSound> _aoiSounds;
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    initAudioPlayer();
-
-    _aoiSounds = widget.aoiSounds;
-    _currentIndex = widget.currentIndex;
-
-    _audioCache.load(_aoiSounds[_currentIndex].fileName);
-    _onPlay();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -63,7 +33,7 @@ class _PlayPageState extends State<PlayPage> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
-            _onStop();
+            audioState.stop();
           },
           icon: const Icon(CupertinoIcons.chevron_left),
         ),
@@ -95,8 +65,8 @@ class _PlayPageState extends State<PlayPage> {
                   Column(
                     children: [
                       AlbumArt(
-                        aoiSounds: _aoiSounds,
-                        currentIndex: _currentIndex,
+                        aoiSounds: audioState.aoiSounds,
+                        currentIndex: audioState.index,
                       ),
                       const SizedBox(
                         height: 48.0,
@@ -107,10 +77,22 @@ class _PlayPageState extends State<PlayPage> {
                         children: [
                           const HeartButton(),
                           InfoText(
-                            aoiSounds: _aoiSounds,
-                            currentIndex: _currentIndex,
+                            aoiSounds: audioState.aoiSounds,
+                            currentIndex: audioState.index,
                           ),
-                          MapButton(onPressed: _onMapTapped),
+                          MapButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MapPage(
+                                    initialLocation: audioState
+                                        .aoiSounds[audioState.index].location,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ],
@@ -119,31 +101,33 @@ class _PlayPageState extends State<PlayPage> {
                     height: 24,
                   ),
                   AoiProgressBar(
-                    currentPosition: _currentPosition,
-                    currentDuration: _currentDuration,
-                    audioPlayer: _audioPlayer,
+                    currentPosition: audioState.position,
+                    currentDuration: audioState.duration,
+                    audioPlayer: audioState.audioPlayer,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       PreviousButton(
-                        currentIndex: _currentIndex,
-                        onPressed: _onPrevious,
+                        currentIndex: audioState.index,
+                        onPressed: audioState.previous,
                       ),
                       const SizedBox(
                         width: 40,
                       ),
-                      _isPlaying
-                          ? PauseButton(onPressed: _onPause)
-                          : PlayButton(onPressed: _onPlay),
+                      audioState.isPlaying
+                          ? PauseButton(onPressed: audioState.pause)
+                          : PlayButton(
+                              onPressed: () => audioState.play(),
+                            ),
                       const SizedBox(
                         width: 40,
                       ),
                       NextButton(
-                        aoiSounds: _aoiSounds,
-                        currentIndex: _currentIndex,
-                        onPressed: _onNext,
+                        aoiSounds: audioState.aoiSounds,
+                        currentIndex: audioState.index,
+                        onPressed: audioState.next,
                       ),
                     ],
                   ),
@@ -157,92 +141,5 @@ class _PlayPageState extends State<PlayPage> {
         ),
       ),
     );
-  }
-
-  void initAudioPlayer() {
-    _audioPlayer = AudioPlayer();
-    _audioCache = AudioCache(
-      fixedPlayer: _audioPlayer,
-      prefix: widget.fileNamePrefix,
-    );
-    _audioCache.clearAll();
-    _audioPlayer.onDurationChanged.listen((duration) {
-      setState(() {
-        _currentDuration = duration;
-      });
-    });
-    _audioPlayer.onAudioPositionChanged.listen((position) {
-      setState(() {
-        _currentPosition = position;
-      });
-    });
-    _audioPlayer.onPlayerCompletion.listen((event) {
-      if (_currentIndex != _aoiSounds.length - 1) {
-        _onNext();
-      } else {
-        Navigator.pop(context);
-      }
-    });
-  }
-
-  void _onPlay() {
-    _audioCache.play(_aoiSounds[_currentIndex].fileName);
-    setState(() {
-      _isPlaying = true;
-    });
-  }
-
-  void _onPause() {
-    _audioPlayer.pause();
-    setState(() {
-      _isPlaying = false;
-    });
-  }
-
-  void _onStop() {
-    _audioPlayer.stop();
-    setState(() {
-      _isPlaying = false;
-    });
-  }
-
-  void _onNext() {
-    _onStop();
-    if (!(_currentIndex == _aoiSounds.length - 1)) {
-      setState(() {
-        _currentIndex++;
-      });
-      _onPlay();
-    }
-  }
-
-  void _onPrevious() {
-    _onStop();
-    if (!(_currentIndex == 0)) {
-      setState(() {
-        _currentIndex--;
-      });
-      _onPlay();
-    }
-  }
-
-  void _onMapTapped() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MapPage(
-          initialLocation: _aoiSounds[_currentIndex].location,
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _audioPlayer.stop();
-    _audioPlayer.release();
-    _audioPlayer.dispose();
-    _audioCache.clearAll();
-    super.dispose();
   }
 }
