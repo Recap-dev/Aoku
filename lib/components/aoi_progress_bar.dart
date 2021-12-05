@@ -1,28 +1,21 @@
+import 'package:aoku/models/audio_state.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AoiProgressBar extends StatelessWidget {
+class AoiProgressBar extends HookConsumerWidget {
   const AoiProgressBar({
     Key? key,
-    required Duration currentPosition,
-    required Duration currentDuration,
-    required AudioPlayer audioPlayer,
-  })  : _currentPosition = currentPosition,
-        _currentDuration = currentDuration,
-        _audioPlayer = audioPlayer,
-        super(key: key);
-
-  final Duration _currentPosition;
-  final Duration _currentDuration;
-  final AudioPlayer _audioPlayer;
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return ProgressBar(
-      progress: _currentPosition,
-      total: _currentDuration,
+      progress: audioState.position,
+      total: audioState.duration,
       barHeight: 2,
       barCapShape: BarCapShape.square,
       thumbColor: Theme.of(context).colorScheme.onBackground,
@@ -39,10 +32,9 @@ class AoiProgressBar extends StatelessWidget {
       timeLabelPadding: 10.0,
       onSeek: (Duration duration) {
         HapticFeedback.selectionClick();
-        _audioPlayer.seek(duration);
+        audioState.audioPlayer.seek(duration);
       },
-      onDragStart: (ThumbDragDetails thumbDragDetails) =>
-          HapticFeedback.lightImpact(),
+      onDragStart: (ThumbDragDetails _) => HapticFeedback.lightImpact(),
       onDragEnd: () => HapticFeedback.mediumImpact(),
     );
   }

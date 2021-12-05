@@ -65,8 +65,6 @@ class HomePage extends HookConsumerWidget {
     AudioState audioState,
     int _index,
   ) {
-    String _title = audioState.aoiSounds[_index].title;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -82,7 +80,7 @@ class HomePage extends HookConsumerWidget {
               ),
               child: ListTile(
                 title: Text(
-                  _title,
+                  audioState.aoiSounds[_index].title,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
@@ -95,7 +93,7 @@ class HomePage extends HookConsumerWidget {
                 ),
                 onTap: () {
                   audioState.initialIndex = _index;
-                  audioState.initAudioPlayer();
+                  audioState.play();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

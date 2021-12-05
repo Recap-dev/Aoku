@@ -24,6 +24,7 @@ class PlayPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AudioState audioState = ref.watch(audioProvider);
+    audioState.load();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -33,7 +34,6 @@ class PlayPage extends HookConsumerWidget {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
-            audioState.stop();
           },
           icon: const Icon(CupertinoIcons.chevron_left),
         ),
@@ -64,10 +64,7 @@ class PlayPage extends HookConsumerWidget {
                 children: [
                   Column(
                     children: [
-                      AlbumArt(
-                        aoiSounds: audioState.aoiSounds,
-                        currentIndex: audioState.index,
-                      ),
+                      const AlbumArt(),
                       const SizedBox(
                         height: 48.0,
                       ),
@@ -76,10 +73,7 @@ class PlayPage extends HookConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const HeartButton(),
-                          InfoText(
-                            aoiSounds: audioState.aoiSounds,
-                            currentIndex: audioState.index,
-                          ),
+                          const InfoText(),
                           MapButton(
                             onPressed: () {
                               Navigator.push(
@@ -100,35 +94,22 @@ class PlayPage extends HookConsumerWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  AoiProgressBar(
-                    currentPosition: audioState.position,
-                    currentDuration: audioState.duration,
-                    audioPlayer: audioState.audioPlayer,
-                  ),
+                  const AoiProgressBar(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      PreviousButton(
-                        currentIndex: audioState.index,
-                        onPressed: audioState.previous,
-                      ),
+                      const PreviousButton(),
                       const SizedBox(
                         width: 40,
                       ),
                       audioState.isPlaying
-                          ? PauseButton(onPressed: audioState.pause)
-                          : PlayButton(
-                              onPressed: () => audioState.play(),
-                            ),
+                          ? const PauseButton()
+                          : const PlayButton(),
                       const SizedBox(
                         width: 40,
                       ),
-                      NextButton(
-                        aoiSounds: audioState.aoiSounds,
-                        currentIndex: audioState.index,
-                        onPressed: audioState.next,
-                      ),
+                      const NextButton(),
                     ],
                   ),
                   const SizedBox(

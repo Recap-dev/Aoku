@@ -1,26 +1,24 @@
-import 'package:aoku/models/aoi_sound.dart';
+import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class NextButton extends StatelessWidget {
+class NextButton extends HookConsumerWidget {
   const NextButton({
     Key? key,
-    required this.aoiSounds,
-    required this.currentIndex,
-    this.onPressed,
   }) : super(key: key);
 
-  final List<AoiSound> aoiSounds;
-  final int currentIndex;
-  final VoidCallback? onPressed;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return IconButton(
-      onPressed: currentIndex == aoiSounds.length - 1 ? null : onPressed,
+      onPressed: audioState.index == audioState.aoiSounds.length - 1
+          ? null
+          : audioState.next,
       icon: Icon(
         CupertinoIcons.forward_fill,
-        color: currentIndex == aoiSounds.length - 1
+        color: audioState.index == audioState.aoiSounds.length - 1
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
             : Theme.of(context).colorScheme.onBackground,
       ),

@@ -34,12 +34,15 @@ class AudioState extends ChangeNotifier {
   void initAudioPlayer() {
     _audioPlayer.onDurationChanged.listen((duration) {
       _duration = duration;
+      notifyListeners();
     });
     _audioPlayer.onAudioPositionChanged.listen((position) {
       _position = position;
+      notifyListeners();
     });
     _audioPlayer.onPlayerCompletion.listen((event) {
       _isPlaying = false;
+      notifyListeners();
     });
     _isInitialized = true;
     notifyListeners();
@@ -47,7 +50,6 @@ class AudioState extends ChangeNotifier {
 
   void load() {
     _audioCache.load(_sounds[_index].fileName);
-    notifyListeners();
   }
 
   void play() {

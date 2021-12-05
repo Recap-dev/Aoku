@@ -1,23 +1,22 @@
+import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class PreviousButton extends StatelessWidget {
+class PreviousButton extends HookConsumerWidget {
   const PreviousButton({
     Key? key,
-    required this.currentIndex,
-    this.onPressed,
   }) : super(key: key);
 
-  final int currentIndex;
-  final VoidCallback? onPressed;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return IconButton(
-      onPressed: currentIndex == 0 ? null : onPressed,
+      onPressed: audioState.index == 0 ? null : audioState.previous,
       icon: Icon(
         CupertinoIcons.backward_fill,
-        color: currentIndex == 0
+        color: audioState.index == 0
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
             : Theme.of(context).colorScheme.onBackground,
       ),
