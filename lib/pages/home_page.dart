@@ -1,31 +1,22 @@
 import 'dart:ui';
 
-import 'package:aoku/models/aoi_sound.dart';
+import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<AoiSound> _aoiSounds = aoiSoundsMaster;
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
         backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.transparent,
       ),
@@ -52,12 +43,12 @@ class _HomePageState extends State<HomePage> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: _aoiSounds.length,
+                itemCount: audioState.aoiSounds.length,
                 itemExtent: 70,
                 itemBuilder: (context, _currentIndex) {
                   return buildAoiSoundListTile(
                     context,
-                    _aoiSounds,
+                    audioState,
                     _currentIndex,
                   );
                 },
@@ -71,10 +62,10 @@ class _HomePageState extends State<HomePage> {
 
   Padding buildAoiSoundListTile(
     BuildContext context,
-    List<AoiSound> _aoiSounds,
-    int _selectedIndex,
+    AudioState audioState,
+    int _index,
   ) {
-    String _title = _aoiSounds[_selectedIndex].title;
+    String _title = audioState.aoiSounds[_index].title;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -97,18 +88,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 trailing: Text(
-                  _aoiSounds[_selectedIndex].length.toString() + 'min',
+                  audioState.aoiSounds[_index].length.toString() + 'min',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
                 onTap: () {
+                  audioState.initialIndex = _index;
+                  audioState.initAudioPlayer();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PlayPage(
-                        aoiSounds: _aoiSounds,
-                        currentIndex: _selectedIndex,
+                        initialIndex: _index,
                       ),
                     ),
                   );
