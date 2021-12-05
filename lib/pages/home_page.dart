@@ -4,6 +4,7 @@ import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:truncate/truncate.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -65,8 +66,6 @@ class HomePage extends HookConsumerWidget {
     AudioState audioState,
     int _index,
   ) {
-    String _title = audioState.aoiSounds[_index].title;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -82,7 +81,10 @@ class HomePage extends HookConsumerWidget {
               ),
               child: ListTile(
                 title: Text(
-                  _title,
+                  truncate(
+                    audioState.aoiSounds[_index].title,
+                    15,
+                  ),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
@@ -95,7 +97,7 @@ class HomePage extends HookConsumerWidget {
                 ),
                 onTap: () {
                   audioState.initialIndex = _index;
-                  audioState.initAudioPlayer();
+                  audioState.play();
                   Navigator.push(
                     context,
                     MaterialPageRoute(

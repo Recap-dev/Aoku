@@ -1,20 +1,18 @@
-import 'package:aoku/models/aoi_sound.dart';
+import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class InfoText extends StatelessWidget {
+class InfoText extends HookConsumerWidget {
   const InfoText({
     Key? key,
-    required this.aoiSounds,
-    required this.currentIndex,
   }) : super(key: key);
 
-  final List<AoiSound> aoiSounds;
-  final int currentIndex;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return Text(
-      '${aoiSounds[currentIndex].time.hour.toString()}:${aoiSounds[currentIndex].time.minute.toString()} at ${aoiSounds[currentIndex].city}, ${aoiSounds[currentIndex].province}',
+      '${audioState.aoiSounds[audioState.index].time.hour.toString()}:${audioState.aoiSounds[audioState.index].time.minute.toString()} at ${audioState.aoiSounds[audioState.index].city}, ${audioState.aoiSounds[audioState.index].province}',
       style: TextStyle(
         color: Theme.of(context).colorScheme.onBackground,
         fontSize: 16.0,
