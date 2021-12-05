@@ -41,7 +41,11 @@ class AudioState extends ChangeNotifier {
       notifyListeners();
     });
     _audioPlayer.onPlayerCompletion.listen((event) {
-      _isPlaying = false;
+      if (aoiSounds.length > _index + 1) {
+        next();
+      } else {
+        _isPlaying = false;
+      }
       notifyListeners();
     });
     _isInitialized = true;
