@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const ProviderScope(
@@ -57,11 +57,11 @@ class _AokuAppState extends State<AokuApp> {
                 surface: Color(0xFFF5F5F5),
                 background: Color(0xFFF5F5F5),
                 error: Color(0xFFB00020),
-                onPrimary: Colors.white,
-                onSecondary: Colors.white,
-                onSurface: Colors.white,
-                onBackground: Colors.white,
-                onError: Colors.white,
+                onPrimary: Color(0xFF050A30),
+                onSecondary: Color(0xFF050A30),
+                onSurface: Color(0xFF050A30),
+                onBackground: Color(0xFF050A30),
+                onError: Color(0xFF050A30),
                 brightness: Brightness.light,
               ),
             ),

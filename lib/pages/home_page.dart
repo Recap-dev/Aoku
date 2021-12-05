@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:aoku/components/signin_button.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:truncate/truncate.dart';
@@ -20,6 +22,12 @@ class HomePage extends HookConsumerWidget {
         title: Text(title),
         backgroundColor: Theme.of(context).colorScheme.background,
         shadowColor: Colors.transparent,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: SigninButton(),
+          ),
+        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Stack(
