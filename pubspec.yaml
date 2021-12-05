@@ -21,6 +21,7 @@ dependencies:
   audioplayers: ^0.20.1
   flutter_hooks: ^0.18.1
   hooks_riverpod: ^1.0.1
+  truncate: ^3.0.1
 
 dev_dependencies:
   flutter_test:
