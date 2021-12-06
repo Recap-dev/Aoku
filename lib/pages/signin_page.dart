@@ -26,10 +26,12 @@ class SigninPage extends HookConsumerWidget {
           children: [
             CupertinoTextFormFieldRow(
               autocorrect: false,
+              autofocus: true,
               keyboardType: TextInputType.emailAddress,
               controller: _emailController,
               placeholder: 'Email',
               showCursor: true,
+              cursorColor: Theme.of(context).colorScheme.onBackground,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
               ),
@@ -41,6 +43,7 @@ class SigninPage extends HookConsumerWidget {
               obscureText: true,
               placeholder: 'Password',
               showCursor: true,
+              cursorColor: Theme.of(context).colorScheme.onBackground,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
               ),
