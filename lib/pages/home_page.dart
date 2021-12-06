@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:aoku/components/pause_button.dart';
+import 'package:aoku/components/play_button.dart';
 import 'package:aoku/components/signin_button.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
@@ -61,6 +63,45 @@ class HomePage extends HookConsumerWidget {
                     _currentIndex,
                   );
                 },
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: GestureDetector(
+              onTap: !audioState.isPlaying
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PlayPage(initialIndex: audioState.index),
+                        ),
+                      );
+                    },
+              child: Container(
+                width: double.infinity,
+                height: 100.0,
+                color:
+                    Theme.of(context).colorScheme.background.withOpacity(0.95),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    audioState.isPlaying
+                        ? Text(
+                            truncate(
+                              audioState.aoiSounds[audioState.index].title,
+                              10,
+                            ),
+                          )
+                        : const Text('Not Playing'),
+                    audioState.isPlaying
+                        ? const PauseButton(size: 30.0)
+                        : const PlayButton(size: 30.0),
+                  ],
+                ),
               ),
             ),
           ),

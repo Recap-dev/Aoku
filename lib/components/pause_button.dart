@@ -6,7 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class PauseButton extends HookConsumerWidget {
   const PauseButton({
     Key? key,
+    this.size = 56.0,
   }) : super(key: key);
+
+  final double size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +21,7 @@ class PauseButton extends HookConsumerWidget {
         CupertinoIcons.pause_fill,
         color: Theme.of(context).colorScheme.onBackground,
       ),
-      iconSize: 56,
+      iconSize: size,
     );
   }
 }
