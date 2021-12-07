@@ -6,7 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class PlayButton extends HookConsumerWidget {
   const PlayButton({
     Key? key,
+    this.size = 56.0,
   }) : super(key: key);
+
+  final double size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +21,7 @@ class PlayButton extends HookConsumerWidget {
         CupertinoIcons.play_fill,
         color: Theme.of(context).colorScheme.onBackground,
       ),
-      iconSize: 56,
+      iconSize: size,
     );
   }
 }
