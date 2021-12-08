@@ -8,13 +8,13 @@ class HeartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const IconButton(
+    return IconButton(
       icon: Icon(
         CupertinoIcons.heart_fill,
-        color: Colors.pink,
+        color: Theme.of(context).colorScheme.onBackground,
       ),
       onPressed: null,
-      iconSize: 32.0,
+      iconSize: 24.0,
     );
   }
 }

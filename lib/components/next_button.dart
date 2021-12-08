@@ -22,7 +22,7 @@ class NextButton extends HookConsumerWidget {
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
             : Theme.of(context).colorScheme.onBackground,
       ),
-      iconSize: 48,
+      iconSize: 40,
     );
   }
 }
