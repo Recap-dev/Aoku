@@ -4,6 +4,7 @@ import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class BottomPlayer extends HookConsumerWidget {
   const BottomPlayer({
@@ -18,17 +19,16 @@ class BottomPlayer extends HookConsumerWidget {
       onTap: !audioState.isPlaying
           ? null
           : () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PlayPage(initialIndex: audioState.index),
+              showCupertinoModalBottomSheet(
+                context: context,
+                builder: (context) => PlayPage(
+                  initialIndex: audioState.index,
                 ),
               );
             },
       child: Container(
         width: double.infinity,
-        height: 100.0,
+        height: 90.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,

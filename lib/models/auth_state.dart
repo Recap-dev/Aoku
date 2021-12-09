@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -10,7 +9,6 @@ final authProvider = ChangeNotifierProvider((_) => AuthState());
 
 class AuthState extends ChangeNotifier {
   User? _user = auth.currentUser;
-  final String? _uid = auth.currentUser?.uid;
   String? _email = auth.currentUser?.email;
   String? _displayName = auth.currentUser?.displayName;
   String? _photoUrl = auth.currentUser?.photoURL;

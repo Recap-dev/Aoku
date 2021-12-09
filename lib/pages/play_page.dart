@@ -9,7 +9,6 @@ import 'package:aoku/components/pause_button.dart';
 import 'package:aoku/components/play_button.dart';
 import 'package:aoku/components/previous_button.dart';
 import 'package:aoku/models/audio_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -28,16 +27,6 @@ class PlayPage extends HookConsumerWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(CupertinoIcons.chevron_left),
-        ),
-      ),
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [

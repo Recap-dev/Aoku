@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/signin_button.dart';
 import 'package:aoku/models/audio_state.dart';
-import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -53,6 +52,7 @@ class HomePage extends HookConsumerWidget {
               padding: const EdgeInsets.only(
                 left: 16.0,
                 right: 24.0,
+                bottom: 50.0,
               ),
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -87,15 +87,7 @@ class HomePage extends HookConsumerWidget {
       child: GestureDetector(
         onTap: () {
           audioState.initialIndex = _index;
-          audioState.play();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlayPage(
-                initialIndex: _index,
-              ),
-            ),
-          );
+          audioState.play(isSameSound: false);
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
