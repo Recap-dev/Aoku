@@ -89,73 +89,76 @@ class HomePage extends HookConsumerWidget {
           audioState.initialIndex = _index;
           audioState.play(isSameSound: false);
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(
-              width: 24.0,
-              child: Visibility(
-                visible: audioState.isPlaying && audioState.index == _index,
-                child: Icon(
-                  CupertinoIcons.waveform,
-                  color: Theme.of(context).colorScheme.onBackground,
+        child: Container(
+          color: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 24.0,
+                child: Visibility(
+                  visible: audioState.isPlaying && audioState.index == _index,
+                  child: Icon(
+                    CupertinoIcons.waveform,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    audioState.aoiSounds[_index].title,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        CupertinoIcons.map_pin,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      audioState.aoiSounds[_index].title,
+                      style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
-                        size: 12.0,
                       ),
-                      Text(
-                        '${audioState.aoiSounds[_index].city}, ${audioState.aoiSounds[_index].province}',
-                        style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          CupertinoIcons.map_pin,
                           color: Theme.of(context).colorScheme.onBackground,
-                          fontSize: 10.0,
+                          size: 12.0,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 12.0,
-              child: Icon(
-                CupertinoIcons.heart_solid,
-                color: Theme.of(context).colorScheme.onBackground,
-                size: 16.0,
-              ),
-            ),
-            SizedBox(
-              width: 32.0,
-              child: Text(
-                '15:35',
-                style: TextStyle(
-                  fontSize: 12.0,
-                  color: Theme.of(context).colorScheme.onBackground,
+                        Text(
+                          '${audioState.aoiSounds[_index].city}, ${audioState.aoiSounds[_index].province}',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontSize: 10.0,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 12.0,
+                child: Icon(
+                  CupertinoIcons.heart_solid,
+                  color: Theme.of(context).colorScheme.onBackground,
+                  size: 16.0,
+                ),
+              ),
+              SizedBox(
+                width: 32.0,
+                child: Text(
+                  '15:35',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
