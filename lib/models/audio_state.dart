@@ -56,12 +56,17 @@ class AudioState extends ChangeNotifier {
     _audioCache.load(_sounds[_index].fileName);
   }
 
-  void play() {
+  void play({required bool isSameSound}) {
     if (!_isInitialized) {
       initAudioPlayer();
     }
 
-    _audioCache.play(_sounds[_index].fileName);
+    if (isSameSound) {
+      _audioPlayer.resume();
+    } else {
+      _audioCache.play(_sounds[_index].fileName);
+    }
+
     _isPlaying = true;
     notifyListeners();
   }
@@ -82,7 +87,7 @@ class AudioState extends ChangeNotifier {
     stop();
     _index++;
     notifyListeners();
-    play();
+    play(isSameSound: false);
     notifyListeners();
   }
 
@@ -90,7 +95,7 @@ class AudioState extends ChangeNotifier {
     stop();
     _index--;
     notifyListeners();
-    play();
+    play(isSameSound: false);
     notifyListeners();
   }
 }
