@@ -69,30 +69,31 @@ class BottomPlayer extends HookConsumerWidget {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              child: Container(
-                // Take the progress of the current song in percentage
-                width: audioState.isPlaying
-                    ? audioState.position.inMilliseconds.toDouble() /
-                        audioState.duration.inMilliseconds.toDouble() *
-                        MediaQuery.of(context).size.width
-                    : 0.0,
-                height: 4.0,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).colorScheme.secondary.withOpacity(0.8),
-                      Theme.of(context).colorScheme.primary,
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(2.0)),
-                ),
-              ),
-            ),
+            // TODO: Set minWidth and maxWidth to avoid crash
+            //Positioned(
+            //  bottom: 0.0,
+            //  left: 0.0,
+            //  child: Container(
+            //    // Take the progress of the current song in percentage
+            //    width: audioState.isPlaying
+            //        ? audioState.position.inMilliseconds.toDouble() /
+            //            audioState.duration.inMilliseconds.toDouble() *
+            //            MediaQuery.of(context).size.width
+            //        : 0.0,
+            //    height: 4.0,
+            //    decoration: BoxDecoration(
+            //      gradient: LinearGradient(
+            //        begin: Alignment.topCenter,
+            //        end: Alignment.bottomCenter,
+            //        colors: [
+            //          Theme.of(context).colorScheme.secondary.withOpacity(0.8),
+            //          Theme.of(context).colorScheme.primary,
+            //        ],
+            //      ),
+            //      borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+            //    ),
+            //  ),
+            //),
           ],
         ),
       ),
