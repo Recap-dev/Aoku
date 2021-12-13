@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:aoku/components/bottom_player.dart';
-import 'package:aoku/components/signin_button.dart';
+import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class HomePage extends HookConsumerWidget {
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: SigninButton(),
+            child: ProfileButton(),
           ),
         ],
       ),
