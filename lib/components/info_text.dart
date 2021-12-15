@@ -14,16 +14,14 @@ class InfoText extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MapPage(
-              initialLocation: audioState.aoiSounds[audioState.index].location,
-            ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MapPage(
+            initialLocation: audioState.aoiSounds[audioState.index].location,
           ),
-        );
-      },
+        ),
+      ),
       child: Column(
         children: [
           Row(

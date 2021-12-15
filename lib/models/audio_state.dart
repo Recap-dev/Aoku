@@ -52,9 +52,7 @@ class AudioState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void load() {
-    _audioCache.load(_sounds[_index].fileName);
-  }
+  void load() => _audioCache.load(_sounds[_index].fileName);
 
   void play({required bool isSameSound}) {
     if (!_isInitialized) {

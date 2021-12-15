@@ -59,13 +59,11 @@ class HomePage extends HookConsumerWidget {
                 shrinkWrap: true,
                 itemCount: audioState.aoiSounds.length,
                 itemExtent: 70,
-                itemBuilder: (context, _currentIndex) {
-                  return buildAoiSoundListTile(
-                    context,
-                    audioState,
-                    _currentIndex,
-                  );
-                },
+                itemBuilder: (context, _currentIndex) => buildAoiSoundListTile(
+                  context,
+                  audioState,
+                  _currentIndex,
+                ),
               ),
             ),
           ),
