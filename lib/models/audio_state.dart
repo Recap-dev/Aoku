@@ -1,99 +1,109 @@
+import 'dart:developer';
+
 import 'package:aoku/models/aoi_sound.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 final audioProvider = ChangeNotifierProvider<AudioState>((_) => AudioState());
 
 class AudioState extends ChangeNotifier {
-  bool _isPlaying = false;
   bool _isInitialized = false;
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  late final AudioCache _audioCache = AudioCache(
-    fixedPlayer: _audioPlayer,
-    prefix: 'sounds/',
-  );
-  final List<AoiSound> _sounds = aoiSoundsMaster;
-  late int _index;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
+  final AudioPlayer _player = AudioPlayer();
+  final List<AoiSound> _sounds = soundsMaster;
+  //late int _index;
+  late Duration _duration;
+  late Duration _position;
 
-  bool get isPlaying => _isPlaying;
+  late final ConcatenatingAudioSource _playList;
+
+  bool get isPlaying => _player.playerState.playing;
   bool get isInitialized => _isInitialized;
-  AudioPlayer get audioPlayer => _audioPlayer;
-  AudioCache get audioCache => _audioCache;
-  List<AoiSound> get aoiSounds => _sounds;
-  int get index => _index;
+  AudioPlayer get player => _player;
+  List<AoiSound> get sounds => _sounds;
+  //int get index => _player.currentIndex ?? 0;
+  ConcatenatingAudioSource get playList => _playList;
   Duration get duration => _duration;
   Duration get position => _position;
 
-  set initialIndex(int initialIndex) {
-    _index = initialIndex;
-  }
+  //set initialIndex(int initialIndex) {
+  //  _index = initialIndex;
+  //}
 
-  void initAudioPlayer() {
-    _audioPlayer.onDurationChanged.listen((duration) {
-      _duration = duration;
+  Future<void> init() async {
+    final AudioSession session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+
+    _player.playbackEventStream.listen(
+      (event) {},
+      onError: (Object e, StackTrace stackTrace) {
+        log('A stream error occured: $e');
+        notifyListeners();
+      },
+    );
+
+    _player.durationStream.listen((duration) {
+      _duration = duration ?? Duration.zero;
       notifyListeners();
     });
-    _audioPlayer.onAudioPositionChanged.listen((position) {
+
+    _player.positionStream.listen((position) {
       _position = position;
       notifyListeners();
     });
-    _audioPlayer.onPlayerCompletion.listen((event) {
-      if (aoiSounds.length > _index + 1) {
-        next();
-      } else {
-        _isPlaying = false;
-      }
-      notifyListeners();
-    });
+
+    _playList = ConcatenatingAudioSource(
+      children: List.generate(10, (index) {
+        return AudioSource.uri(
+          Uri.parse('sounds/${_sounds[index].fileName}'),
+          tag: MediaItem(
+            id: _sounds[index].fileName,
+            title: _sounds[index].title,
+          ),
+        );
+      }),
+    );
+
+    _player.setAudioSource(_playList);
+
     _isInitialized = true;
     notifyListeners();
   }
 
-  void load() => _audioCache.load(_sounds[_index].fileName);
-
   void play({required bool isSameSound}) {
     if (!_isInitialized) {
-      initAudioPlayer();
+      init();
     }
 
-    if (isSameSound) {
-      _audioPlayer.resume();
-    } else {
-      _audioCache.play(_sounds[_index].fileName);
-    }
-
-    _isPlaying = true;
+    _player.play();
     notifyListeners();
   }
 
   void pause() {
-    _audioPlayer.pause();
-    _isPlaying = false;
+    _player.pause();
     notifyListeners();
   }
 
   void stop() {
-    _audioPlayer.stop();
-    _isPlaying = false;
+    _player.stop();
     notifyListeners();
   }
 
   void next() {
-    stop();
-    _index++;
-    notifyListeners();
-    play(isSameSound: false);
+    //play(isSameSound: false);
+    if (_player.hasNext) {
+      _player.seekToNext();
+    }
     notifyListeners();
   }
 
   void previous() {
-    stop();
-    _index--;
-    notifyListeners();
-    play(isSameSound: false);
+    //play(isSameSound: false);
+    if (_player.hasPrevious) {
+      _player.seekToPrevious();
+    }
     notifyListeners();
   }
 }

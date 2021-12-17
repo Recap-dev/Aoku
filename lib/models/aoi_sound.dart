@@ -21,7 +21,7 @@ class AoiSound {
   final TimeOfDay time;
 }
 
-List<AoiSound> aoiSoundsMaster = [
+List<AoiSound> soundsMaster = [
   AoiSound(
     title: '足助町シェアハウスのベランダ',
     fileName: 'asukecho.m4a',

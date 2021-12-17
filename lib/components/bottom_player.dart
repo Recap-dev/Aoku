@@ -23,9 +23,7 @@ class BottomPlayer extends HookConsumerWidget {
           : () {
               showCupertinoModalBottomSheet(
                 context: context,
-                builder: (context) => PlayPage(
-                  initialIndex: audioState.index,
-                ),
+                builder: (context) => const PlayPage(),
               );
             },
       child: Container(
@@ -67,7 +65,9 @@ class BottomPlayer extends HookConsumerWidget {
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Text(
                       audioState.isInitialized
-                          ? audioState.aoiSounds[audioState.index].title
+                          ? audioState
+                              .sounds[audioState.player.currentIndex as int]
+                              .title
                           : '',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

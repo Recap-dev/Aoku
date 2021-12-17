@@ -15,15 +15,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class PlayPage extends HookConsumerWidget {
   const PlayPage({
     Key? key,
-    required this.initialIndex,
   }) : super(key: key);
-
-  final int initialIndex;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AudioState audioState = ref.watch(audioProvider);
-    audioState.load();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -61,7 +57,8 @@ class PlayPage extends HookConsumerWidget {
                       thickness: 0.8,
                     ),
                     Text(
-                      audioState.aoiSounds[audioState.index].title,
+                      audioState
+                          .sounds[audioState.player.currentIndex as int].title,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
                         fontSize: 20.0,

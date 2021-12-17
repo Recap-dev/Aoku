@@ -32,7 +32,7 @@ class AoiProgressBar extends HookConsumerWidget {
       timeLabelPadding: 10.0,
       onSeek: (Duration duration) {
         HapticFeedback.selectionClick();
-        audioState.audioPlayer.seek(duration);
+        audioState.player.seek(duration);
       },
       onDragStart: (ThumbDragDetails _) => HapticFeedback.lightImpact(),
       onDragEnd: () => HapticFeedback.mediumImpact(),

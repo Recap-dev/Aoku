@@ -18,7 +18,8 @@ class InfoText extends HookConsumerWidget {
         context,
         MaterialPageRoute(
           builder: (context) => MapPage(
-            initialLocation: audioState.aoiSounds[audioState.index].location,
+            initialLocation: audioState
+                .sounds[audioState.player.currentIndex as int].location,
           ),
         ),
       ),
@@ -34,7 +35,7 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                '${audioState.aoiSounds[audioState.index].city}, ${audioState.aoiSounds[audioState.index].province}',
+                '${audioState.sounds[audioState.player.currentIndex as int].city}, ${audioState.sounds[audioState.player.currentIndex as int].province}',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontSize: 12.0,
@@ -52,7 +53,8 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                audioState.aoiSounds[audioState.index].time.format(context),
+                audioState.sounds[audioState.player.currentIndex as int].time
+                    .format(context),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontSize: 12.0,
