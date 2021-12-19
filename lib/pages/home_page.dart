@@ -147,7 +147,7 @@ class HomePage extends HookConsumerWidget {
               SizedBox(
                 width: 32.0,
                 child: Text(
-                  '15:35',
+                  '${audioState.sounds[_index].length.inMinutes.toString().padLeft(2, '0')}:${audioState.sounds[_index].length.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Theme.of(context).colorScheme.onBackground,
