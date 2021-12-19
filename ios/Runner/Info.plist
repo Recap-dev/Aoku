@@ -26,6 +26,8 @@
 		<true/>
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs to know where you are.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Some external packages uses microphone.</string>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>audio</string>

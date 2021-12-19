@@ -72,14 +72,14 @@ class _MapPageState extends State<MapPage> {
           : _MapUtils.lightMapStyle,
     );
 
-    setState(() {
-      _markers.add(
+    setState(
+      () => _markers.add(
         Marker(
           markerId: const MarkerId('aoi-location'),
           position: widget.initialLocation,
         ),
-      );
-    });
+      ),
+    );
 
     _controller.complete(controller);
   }
@@ -87,9 +87,8 @@ class _MapPageState extends State<MapPage> {
   void _onBackToInitialLocationPressed() {
     HapticFeedback.lightImpact();
 
-    _controller.future.then((GoogleMapController controller) {
-      controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
-    });
+    _controller.future.then((GoogleMapController controller) =>
+        controller.animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex)));
   }
 }
 
