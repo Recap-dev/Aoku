@@ -14,20 +14,21 @@ class AudioState extends ChangeNotifier {
   bool _isInitialized = false;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = soundsMaster;
+  late final ConcatenatingAudioSource _playList;
+  int _currentIndex = 0;
   late Duration _duration;
   late Duration _position;
-
-  late final ConcatenatingAudioSource _playList;
 
   bool get isPlaying => _player.playerState.playing;
   bool get isInitialized => _isInitialized;
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
   ConcatenatingAudioSource get playList => _playList;
+  int get currentIndex => _currentIndex;
   Duration get duration => _duration;
   Duration get position => _position;
 
-  Future<void> init() async {
+  Future<bool> init() async {
     final AudioSession session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
     List<String> urls = [];
@@ -88,11 +89,21 @@ class AudioState extends ChangeNotifier {
 
     _isInitialized = true;
     notifyListeners();
+
+    return true;
   }
 
-  void play({required bool isSameSound}) {
+  void play(int selectedIndex) {
     if (!_isInitialized) {
       init();
+    }
+
+    if (selectedIndex != _currentIndex) {
+      _player.seek(
+        Duration.zero,
+        index: selectedIndex,
+      );
+      _currentIndex = selectedIndex;
     }
 
     _player.play();
@@ -110,17 +121,17 @@ class AudioState extends ChangeNotifier {
   }
 
   void next() {
-    //play(isSameSound: false);
     if (_player.hasNext) {
       _player.seekToNext();
+      _currentIndex++;
     }
     notifyListeners();
   }
 
   void previous() {
-    //play(isSameSound: false);
     if (_player.hasPrevious) {
       _player.seekToPrevious();
+      _currentIndex--;
     }
     notifyListeners();
   }

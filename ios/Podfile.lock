@@ -357,6 +357,10 @@ PODS:
     - Firebase/Firestore (= 8.9.0)
     - firebase_core
     - Flutter
+  - cloud_functions (3.2.4):
+    - Firebase/Functions (= 8.9.0)
+    - firebase_core
+    - Flutter
   - FBAEMKit (12.1.0):
     - FBSDKCoreKit_Basics (= 12.1.0)
   - FBSDKCoreKit (12.1.0):
@@ -384,6 +388,9 @@ PODS:
   - Firebase/Firestore (8.9.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.9.0)
+  - Firebase/Functions (8.9.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 8.9.0)
   - Firebase/Storage (8.9.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.9.0)
@@ -460,6 +467,9 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+  - FirebaseFunctions (8.9.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - FirebaseInstallations (8.10.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.6)
@@ -585,6 +595,7 @@ DEPENDENCIES:
   - audio_service (from `.symlinks/plugins/audio_service/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -618,6 +629,7 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseDynamicLinks
     - FirebaseFirestore
+    - FirebaseFunctions
     - FirebaseInstallations
     - FirebaseStorage
     - FMDB
@@ -641,6 +653,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_auth:
@@ -679,6 +693,7 @@ SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 338122a6149c14ca376ad363626b5bf3037a5056
+  cloud_functions: d06612b3b0f30419e8305620f1382df43bdf4003
   FBAEMKit: 56c0bb9b42e3747cd82b67934f0c2b19325382ea
   FBSDKCoreKit: 75368765d9c2303073145a7925dfaa9d60bcd77b
   FBSDKCoreKit_Basics: 39865aff97e5f6951a78fb3e89dc4460e35e1895
@@ -697,6 +712,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 2236b804cf0cac165b4620669bedf7ee643a2bcc
   FirebaseDynamicLinks: 50980cbe21d2bbe8374afcdccd94dc2db20dffca
   FirebaseFirestore: 15ae9648476436efed698a909e44c4737498f9b4
+  FirebaseFunctions: c78ec2f93cd453f25fb5e4c694c830f7a31ab349
   FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
   FirebaseStorage: 452c98c31ccb40b819764bf3039426c4388d9939
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a

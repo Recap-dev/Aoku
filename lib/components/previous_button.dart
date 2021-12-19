@@ -13,12 +13,12 @@ class PreviousButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: audioState.player.hasPrevious ? null : audioState.previous,
+      onPressed: audioState.player.hasPrevious ? audioState.previous : null,
       icon: Icon(
         CupertinoIcons.backward_fill,
         color: audioState.player.hasPrevious
-            ? Theme.of(context).colorScheme.onBackground.withOpacity(0.4)
-            : Theme.of(context).colorScheme.onBackground,
+            ? Theme.of(context).colorScheme.onBackground
+            : Theme.of(context).colorScheme.onBackground.withOpacity(0.4),
       ),
       iconSize: 40,
     );

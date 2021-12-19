@@ -83,9 +83,7 @@ class HomePage extends HookConsumerWidget {
   ) {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          audioState.play(isSameSound: false);
-        },
+        onTap: () => audioState.play(_index),
         child: Container(
           color: Colors.transparent,
           child: Row(
@@ -94,12 +92,13 @@ class HomePage extends HookConsumerWidget {
               SizedBox(
                 width: 24.0,
                 child: Visibility(
-                  visible: audioState.isPlaying &&
-                      _index == audioState.player.currentIndex,
-                  child: Icon(
-                    CupertinoIcons.waveform,
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                  visible: _index == audioState.player.currentIndex,
+                  child: audioState.isInitialized
+                      ? Icon(
+                          CupertinoIcons.waveform,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        )
+                      : const CupertinoActivityIndicator(),
                 ),
               ),
               SizedBox(
