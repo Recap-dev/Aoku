@@ -18,7 +18,7 @@ class BottomPlayer extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return GestureDetector(
-      onTap: !audioState.isPlaying
+      onTap: !audioState.isInitialized
           ? null
           : () {
               showCupertinoModalBottomSheet(

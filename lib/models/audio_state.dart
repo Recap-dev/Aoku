@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
@@ -13,7 +14,6 @@ class AudioState extends ChangeNotifier {
   bool _isInitialized = false;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = soundsMaster;
-  //late int _index;
   late Duration _duration;
   late Duration _position;
 
@@ -23,18 +23,14 @@ class AudioState extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
-  //int get index => _player.currentIndex ?? 0;
   ConcatenatingAudioSource get playList => _playList;
   Duration get duration => _duration;
   Duration get position => _position;
 
-  //set initialIndex(int initialIndex) {
-  //  _index = initialIndex;
-  //}
-
   Future<void> init() async {
     final AudioSession session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
+    List<String> urls = [];
 
     _player.playbackEventStream.listen(
       (event) {},
@@ -54,10 +50,32 @@ class AudioState extends ChangeNotifier {
       notifyListeners();
     });
 
+    _player.playerStateStream.listen((state) {
+      notifyListeners();
+    });
+
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
+
+    for (int i = 0; i < sounds.length; i++) {
+      log('sounds/${_sounds[i].fileName}');
+
+      try {
+        urls.add(
+          // Read the sound file from Firebase Cloud Storage
+          await storage.ref('sounds/${_sounds[i].fileName}').getDownloadURL(),
+        );
+      } on firebase_storage.FirebaseException catch (e) {
+        log('Error getting download url: $e');
+      } on Exception catch (e) {
+        log('Error getting download url: $e');
+      }
+    }
+
     _playList = ConcatenatingAudioSource(
       children: List.generate(10, (index) {
         return AudioSource.uri(
-          Uri.parse('sounds/${_sounds[index].fileName}'),
+          Uri.parse(urls[index]),
           tag: MediaItem(
             id: _sounds[index].fileName,
             title: _sounds[index].title,
