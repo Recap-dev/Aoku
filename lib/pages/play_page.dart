@@ -8,6 +8,8 @@ import 'package:aoku/components/next_button.dart';
 import 'package:aoku/components/pause_button.dart';
 import 'package:aoku/components/play_button.dart';
 import 'package:aoku/components/previous_button.dart';
+import 'package:aoku/components/repeat_button.dart';
+import 'package:aoku/components/shuffle_button.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -57,8 +59,11 @@ class PlayPage extends HookConsumerWidget {
                       thickness: 0.8,
                     ),
                     Text(
-                      audioState
-                          .sounds[audioState.player.currentIndex as int].title,
+                      audioState.initStatus == AudioStateInitStatus.initialized
+                          ? audioState
+                              .sounds[audioState.player.currentIndex as int]
+                              .title
+                          : 'Loading...',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
                         fontSize: 20.0,
@@ -86,13 +91,15 @@ class PlayPage extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    ShuffleButton(audioState: audioState),
+                    const SizedBox(width: 5),
                     const PreviousButton(),
-                    const SizedBox(width: 40),
                     audioState.isPlaying
                         ? const PauseButton()
                         : const PlayButton(),
-                    const SizedBox(width: 40),
                     const NextButton(),
+                    const SizedBox(width: 5),
+                    RepeatButton(audioState: audioState),
                   ],
                 ),
                 const SizedBox(height: 64),

@@ -16,14 +16,14 @@ class NextButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: audioState.isInitialized
+      onPressed: audioState.initStatus == AudioStateInitStatus.initialized
           ? audioState.player.hasNext
               ? () => audioState.player.seekToNext()
               : null
           : null,
       icon: Icon(
         CupertinoIcons.forward_fill,
-        color: audioState.isInitialized
+        color: audioState.initStatus == AudioStateInitStatus.initialized
             ? audioState.player.hasNext
                 ? Theme.of(context).colorScheme.onBackground
                 : Theme.of(context).colorScheme.onBackground.withOpacity(0.4)

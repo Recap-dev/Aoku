@@ -35,7 +35,9 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                '${audioState.sounds[audioState.player.currentIndex as int].city}, ${audioState.sounds[audioState.player.currentIndex as int].province}',
+                audioState.initStatus == AudioStateInitStatus.initialized
+                    ? '${audioState.sounds[audioState.player.currentIndex as int].city}, ${audioState.sounds[audioState.player.currentIndex as int].province}'
+                    : 'Loading...',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontSize: 12.0,
@@ -53,8 +55,11 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                audioState.sounds[audioState.player.currentIndex as int].time
-                    .format(context),
+                audioState.initStatus == AudioStateInitStatus.initialized
+                    ? audioState
+                        .sounds[audioState.player.currentIndex as int].time
+                        .format(context)
+                    : 'Loading...',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontSize: 12.0,

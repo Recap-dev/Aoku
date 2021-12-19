@@ -10,25 +10,37 @@ import 'package:just_audio_background/just_audio_background.dart';
 
 final audioProvider = ChangeNotifierProvider<AudioState>((_) => AudioState());
 
+enum AudioStateInitStatus {
+  notInitialized,
+  inProgress,
+  initialized,
+}
+
 class AudioState extends ChangeNotifier {
-  bool _isInitialized = false;
+  AudioStateInitStatus _initStatus = AudioStateInitStatus.notInitialized;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = soundsMaster;
   late final ConcatenatingAudioSource _playList;
   int _currentIndex = 0;
   late Duration _duration;
   late Duration _position;
+  bool _shuffleModeEnabled = false;
+  LoopMode _loopMode = LoopMode.off;
 
   bool get isPlaying => _player.playerState.playing;
-  bool get isInitialized => _isInitialized;
+  AudioStateInitStatus get initStatus => _initStatus;
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
   ConcatenatingAudioSource get playList => _playList;
   int get currentIndex => _currentIndex;
   Duration get duration => _duration;
   Duration get position => _position;
+  bool get shuffleModeEnabled => _shuffleModeEnabled;
+  LoopMode get loopMode => _loopMode;
 
   Future<bool> init(int initialIndex) async {
+    _initStatus = AudioStateInitStatus.inProgress;
+
     final AudioSession session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
     List<String> urls = [];
@@ -52,6 +64,16 @@ class AudioState extends ChangeNotifier {
     });
 
     _player.playerStateStream.listen((state) {
+      notifyListeners();
+    });
+
+    _player.shuffleModeEnabledStream.listen((shuffleModeEnabled) {
+      _shuffleModeEnabled = shuffleModeEnabled;
+      notifyListeners();
+    });
+
+    _player.loopModeStream.listen((loopModeEnabled) {
+      _loopMode = loopModeEnabled;
       notifyListeners();
     });
 
@@ -95,14 +117,14 @@ class AudioState extends ChangeNotifier {
       _currentIndex = initialIndex;
     }
 
-    _isInitialized = true;
+    _initStatus = AudioStateInitStatus.initialized;
     notifyListeners();
 
     return true;
   }
 
   Future<void> play(int selectedIndex) async {
-    if (!_isInitialized) {
+    if (_initStatus == AudioStateInitStatus.notInitialized) {
       log('Initializing AudioState...');
       await init(selectedIndex);
       log('Done');
@@ -112,14 +134,14 @@ class AudioState extends ChangeNotifier {
     log('selectedIndex: $selectedIndex');
 
     if (selectedIndex != _currentIndex) {
-      _player.seek(
+      await _player.seek(
         Duration.zero,
         index: selectedIndex,
       );
       _currentIndex = selectedIndex;
     }
 
-    _player.play();
+    await _player.play();
     notifyListeners();
   }
 
@@ -146,6 +168,24 @@ class AudioState extends ChangeNotifier {
       _player.seekToPrevious();
       _currentIndex--;
     }
+    notifyListeners();
+  }
+
+  void toggleShuffleMode() {
+    _shuffleModeEnabled = !shuffleModeEnabled;
+    _player.setShuffleModeEnabled(_shuffleModeEnabled);
+    notifyListeners();
+  }
+
+  void toggleLoopMode() {
+    if (_loopMode == LoopMode.off) {
+      _loopMode = LoopMode.all;
+    } else if (_loopMode == LoopMode.all) {
+      _loopMode = LoopMode.one;
+    } else {
+      _loopMode = LoopMode.off;
+    }
+    _player.setLoopMode(_loopMode);
     notifyListeners();
   }
 }
