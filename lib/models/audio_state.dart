@@ -28,7 +28,7 @@ class AudioState extends ChangeNotifier {
   Duration get duration => _duration;
   Duration get position => _position;
 
-  Future<bool> init() async {
+  Future<bool> init(int initialIndex) async {
     final AudioSession session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
     List<String> urls = [];
@@ -87,16 +87,29 @@ class AudioState extends ChangeNotifier {
 
     _player.setAudioSource(_playList);
 
+    if (initialIndex != _currentIndex) {
+      _player.seek(
+        Duration.zero,
+        index: initialIndex,
+      );
+      _currentIndex = initialIndex;
+    }
+
     _isInitialized = true;
     notifyListeners();
 
     return true;
   }
 
-  void play(int selectedIndex) {
+  Future<void> play(int selectedIndex) async {
     if (!_isInitialized) {
-      init();
+      log('Initializing AudioState...');
+      await init(selectedIndex);
+      log('Done');
     }
+
+    log('currentIndex: $_currentIndex');
+    log('selectedIndex: $selectedIndex');
 
     if (selectedIndex != _currentIndex) {
       _player.seek(
