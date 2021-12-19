@@ -1,101 +1,151 @@
+import 'dart:developer';
+
 import 'package:aoku/models/aoi_sound.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_session/audio_session.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 
 final audioProvider = ChangeNotifierProvider<AudioState>((_) => AudioState());
 
 class AudioState extends ChangeNotifier {
-  bool _isPlaying = false;
   bool _isInitialized = false;
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  late final AudioCache _audioCache = AudioCache(
-    fixedPlayer: _audioPlayer,
-    prefix: 'sounds/',
-  );
-  final List<AoiSound> _sounds = aoiSoundsMaster;
-  late int _index;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
+  final AudioPlayer _player = AudioPlayer();
+  final List<AoiSound> _sounds = soundsMaster;
+  late final ConcatenatingAudioSource _playList;
+  int _currentIndex = 0;
+  late Duration _duration;
+  late Duration _position;
 
-  bool get isPlaying => _isPlaying;
+  bool get isPlaying => _player.playerState.playing;
   bool get isInitialized => _isInitialized;
-  AudioPlayer get audioPlayer => _audioPlayer;
-  AudioCache get audioCache => _audioCache;
-  List<AoiSound> get aoiSounds => _sounds;
-  int get index => _index;
+  AudioPlayer get player => _player;
+  List<AoiSound> get sounds => _sounds;
+  ConcatenatingAudioSource get playList => _playList;
+  int get currentIndex => _currentIndex;
   Duration get duration => _duration;
   Duration get position => _position;
 
-  set initialIndex(int initialIndex) {
-    _index = initialIndex;
-  }
+  Future<bool> init(int initialIndex) async {
+    final AudioSession session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.music());
+    List<String> urls = [];
 
-  void initAudioPlayer() {
-    _audioPlayer.onDurationChanged.listen((duration) {
-      _duration = duration;
+    _player.playbackEventStream.listen(
+      (event) {},
+      onError: (Object e, StackTrace stackTrace) {
+        log('A stream error occured: $e');
+        notifyListeners();
+      },
+    );
+
+    _player.durationStream.listen((duration) {
+      _duration = duration ?? Duration.zero;
       notifyListeners();
     });
-    _audioPlayer.onAudioPositionChanged.listen((position) {
+
+    _player.positionStream.listen((position) {
       _position = position;
       notifyListeners();
     });
-    _audioPlayer.onPlayerCompletion.listen((event) {
-      if (aoiSounds.length > _index + 1) {
-        next();
-      } else {
-        _isPlaying = false;
-      }
+
+    _player.playerStateStream.listen((state) {
       notifyListeners();
     });
+
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
+
+    for (int i = 0; i < sounds.length; i++) {
+      log('sounds/${_sounds[i].fileName}');
+
+      try {
+        urls.add(
+          // Read the sound file from Firebase Cloud Storage
+          await storage.ref('sounds/${_sounds[i].fileName}').getDownloadURL(),
+        );
+      } on firebase_storage.FirebaseException catch (e) {
+        log('Error getting download url: $e');
+      } on Exception catch (e) {
+        log('Error getting download url: $e');
+      }
+    }
+
+    _playList = ConcatenatingAudioSource(
+      children: List.generate(10, (index) {
+        return AudioSource.uri(
+          Uri.parse(urls[index]),
+          tag: MediaItem(
+            id: _sounds[index].fileName,
+            title: _sounds[index].title,
+          ),
+        );
+      }),
+    );
+
+    _player.setAudioSource(_playList);
+
+    if (initialIndex != _currentIndex) {
+      _player.seek(
+        Duration.zero,
+        index: initialIndex,
+      );
+      _currentIndex = initialIndex;
+    }
+
     _isInitialized = true;
     notifyListeners();
+
+    return true;
   }
 
-  void load() {
-    _audioCache.load(_sounds[_index].fileName);
-  }
-
-  void play({required bool isSameSound}) {
+  Future<void> play(int selectedIndex) async {
     if (!_isInitialized) {
-      initAudioPlayer();
+      log('Initializing AudioState...');
+      await init(selectedIndex);
+      log('Done');
     }
 
-    if (isSameSound) {
-      _audioPlayer.resume();
-    } else {
-      _audioCache.play(_sounds[_index].fileName);
+    log('currentIndex: $_currentIndex');
+    log('selectedIndex: $selectedIndex');
+
+    if (selectedIndex != _currentIndex) {
+      _player.seek(
+        Duration.zero,
+        index: selectedIndex,
+      );
+      _currentIndex = selectedIndex;
     }
 
-    _isPlaying = true;
+    _player.play();
     notifyListeners();
   }
 
   void pause() {
-    _audioPlayer.pause();
-    _isPlaying = false;
+    _player.pause();
     notifyListeners();
   }
 
   void stop() {
-    _audioPlayer.stop();
-    _isPlaying = false;
+    _player.stop();
     notifyListeners();
   }
 
   void next() {
-    stop();
-    _index++;
-    notifyListeners();
-    play(isSameSound: false);
+    if (_player.hasNext) {
+      _player.seekToNext();
+      _currentIndex++;
+    }
     notifyListeners();
   }
 
   void previous() {
-    stop();
-    _index--;
-    notifyListeners();
-    play(isSameSound: false);
+    if (_player.hasPrevious) {
+      _player.seekToPrevious();
+      _currentIndex--;
+    }
     notifyListeners();
   }
 }

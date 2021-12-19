@@ -57,15 +57,13 @@ class HomePage extends HookConsumerWidget {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: audioState.aoiSounds.length,
+                itemCount: audioState.sounds.length,
                 itemExtent: 70,
-                itemBuilder: (context, _currentIndex) {
-                  return buildAoiSoundListTile(
-                    context,
-                    audioState,
-                    _currentIndex,
-                  );
-                },
+                itemBuilder: (context, _currentIndex) => buildAoiSoundListTile(
+                  context,
+                  audioState,
+                  _currentIndex,
+                ),
               ),
             ),
           ),
@@ -85,10 +83,7 @@ class HomePage extends HookConsumerWidget {
   ) {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          audioState.initialIndex = _index;
-          audioState.play(isSameSound: false);
-        },
+        onTap: () => audioState.play(_index),
         child: Container(
           color: Colors.transparent,
           child: Row(
@@ -97,11 +92,13 @@ class HomePage extends HookConsumerWidget {
               SizedBox(
                 width: 24.0,
                 child: Visibility(
-                  visible: audioState.isPlaying && audioState.index == _index,
-                  child: Icon(
-                    CupertinoIcons.waveform,
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                  visible: _index == audioState.player.currentIndex,
+                  child: audioState.isInitialized
+                      ? Icon(
+                          CupertinoIcons.waveform,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        )
+                      : const CupertinoActivityIndicator(),
                 ),
               ),
               SizedBox(
@@ -111,7 +108,7 @@ class HomePage extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      audioState.aoiSounds[_index].title,
+                      audioState.sounds[_index].title,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
                       ),
@@ -127,7 +124,7 @@ class HomePage extends HookConsumerWidget {
                           size: 12.0,
                         ),
                         Text(
-                          '${audioState.aoiSounds[_index].city}, ${audioState.aoiSounds[_index].province}',
+                          '${audioState.sounds[_index].city}, ${audioState.sounds[_index].province}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onBackground,
                             fontSize: 10.0,
@@ -150,7 +147,7 @@ class HomePage extends HookConsumerWidget {
               SizedBox(
                 width: 32.0,
                 child: Text(
-                  '15:35',
+                  '${audioState.sounds[_index].length.inMinutes.toString().padLeft(2, '0')}:${audioState.sounds[_index].length.inSeconds.remainder(60).toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontSize: 12.0,
                     color: Theme.of(context).colorScheme.onBackground,
