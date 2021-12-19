@@ -10,8 +10,14 @@ import 'package:just_audio_background/just_audio_background.dart';
 
 final audioProvider = ChangeNotifierProvider<AudioState>((_) => AudioState());
 
+enum AudioStateInitStatus {
+  notInitialized,
+  inProgress,
+  initialized,
+}
+
 class AudioState extends ChangeNotifier {
-  bool _isInitialized = false;
+  AudioStateInitStatus _initStatus = AudioStateInitStatus.notInitialized;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = soundsMaster;
   late final ConcatenatingAudioSource _playList;
@@ -22,7 +28,7 @@ class AudioState extends ChangeNotifier {
   LoopMode _loopMode = LoopMode.off;
 
   bool get isPlaying => _player.playerState.playing;
-  bool get isInitialized => _isInitialized;
+  AudioStateInitStatus get initStatus => _initStatus;
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
   ConcatenatingAudioSource get playList => _playList;
@@ -33,6 +39,8 @@ class AudioState extends ChangeNotifier {
   LoopMode get loopMode => _loopMode;
 
   Future<bool> init(int initialIndex) async {
+    _initStatus = AudioStateInitStatus.inProgress;
+
     final AudioSession session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
     List<String> urls = [];
@@ -109,14 +117,14 @@ class AudioState extends ChangeNotifier {
       _currentIndex = initialIndex;
     }
 
-    _isInitialized = true;
+    _initStatus = AudioStateInitStatus.initialized;
     notifyListeners();
 
     return true;
   }
 
   Future<void> play(int selectedIndex) async {
-    if (!_isInitialized) {
+    if (_initStatus == AudioStateInitStatus.notInitialized) {
       log('Initializing AudioState...');
       await init(selectedIndex);
       log('Done');
@@ -126,14 +134,14 @@ class AudioState extends ChangeNotifier {
     log('selectedIndex: $selectedIndex');
 
     if (selectedIndex != _currentIndex) {
-      _player.seek(
+      await _player.seek(
         Duration.zero,
         index: selectedIndex,
       );
       _currentIndex = selectedIndex;
     }
 
-    _player.play();
+    await _player.play();
     notifyListeners();
   }
 

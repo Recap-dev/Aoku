@@ -3,9 +3,12 @@ import 'dart:ui';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/models/audio_state.dart';
+import 'package:aoku/pages/play_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -83,7 +86,14 @@ class HomePage extends HookConsumerWidget {
   ) {
     return Center(
       child: GestureDetector(
-        onTap: () => audioState.play(_index),
+        onTap: () async {
+          HapticFeedback.lightImpact();
+          showCupertinoModalBottomSheet(
+            context: context,
+            builder: (context) => const PlayPage(),
+          );
+          await audioState.play(_index);
+        },
         child: Container(
           color: Colors.transparent,
           child: Row(
@@ -93,12 +103,13 @@ class HomePage extends HookConsumerWidget {
                 width: 24.0,
                 child: Visibility(
                   visible: _index == audioState.player.currentIndex,
-                  child: audioState.isInitialized
-                      ? Icon(
-                          CupertinoIcons.waveform,
-                          color: Theme.of(context).colorScheme.onBackground,
-                        )
-                      : const CupertinoActivityIndicator(),
+                  child:
+                      audioState.initStatus == AudioStateInitStatus.initialized
+                          ? Icon(
+                              CupertinoIcons.waveform,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            )
+                          : const CupertinoActivityIndicator(),
                 ),
               ),
               SizedBox(

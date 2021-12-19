@@ -59,8 +59,11 @@ class PlayPage extends HookConsumerWidget {
                       thickness: 0.8,
                     ),
                     Text(
-                      audioState
-                          .sounds[audioState.player.currentIndex as int].title,
+                      audioState.initStatus == AudioStateInitStatus.initialized
+                          ? audioState
+                              .sounds[audioState.player.currentIndex as int]
+                              .title
+                          : 'Loading...',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground,
                         fontSize: 20.0,

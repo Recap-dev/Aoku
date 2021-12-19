@@ -16,12 +16,12 @@ class PlayButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: () => audioState.isInitialized
+      onPressed: () => audioState.initStatus == AudioStateInitStatus.initialized
           ? audioState.play(audioState.currentIndex)
           : null,
       icon: Icon(
         CupertinoIcons.play_fill,
-        color: audioState.isInitialized
+        color: audioState.initStatus == AudioStateInitStatus.initialized
             ? Theme.of(context).colorScheme.onBackground
             : Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
       ),
