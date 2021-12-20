@@ -15,11 +15,11 @@ class AoiProgressBar extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return ProgressBar(
-      progress: audioState.initStatus == AudioStateInitStatus.initialized &&
+      progress: audioState.initStatus == AudioStateInitStatus.done &&
               audioState.player.playerState.playing
           ? audioState.position
           : Duration.zero,
-      total: audioState.initStatus == AudioStateInitStatus.initialized &&
+      total: audioState.initStatus == AudioStateInitStatus.done &&
               audioState.player.playerState.processingState ==
                   ProcessingState.ready
           ? audioState.duration

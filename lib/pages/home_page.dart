@@ -103,13 +103,12 @@ class HomePage extends HookConsumerWidget {
                 width: 24.0,
                 child: Visibility(
                   visible: _index == audioState.player.currentIndex,
-                  child:
-                      audioState.initStatus == AudioStateInitStatus.initialized
-                          ? Icon(
-                              CupertinoIcons.waveform,
-                              color: Theme.of(context).colorScheme.onBackground,
-                            )
-                          : const CupertinoActivityIndicator(),
+                  child: audioState.initStatus == AudioStateInitStatus.done
+                      ? Icon(
+                          CupertinoIcons.waveform,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        )
+                      : const CupertinoActivityIndicator(),
                 ),
               ),
               SizedBox(
