@@ -68,8 +68,8 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(
       Theme.of(context).brightness == Brightness.dark
-          ? _MapUtils.darkMapStyle
-          : _MapUtils.lightMapStyle,
+          ? MapUtils.darkMapStyle
+          : MapUtils.lightMapStyle,
     );
 
     setState(
@@ -92,7 +92,7 @@ class _MapPageState extends State<MapPage> {
   }
 }
 
-class _MapUtils {
+class MapUtils {
   static String lightMapStyle = '''
   [
     {

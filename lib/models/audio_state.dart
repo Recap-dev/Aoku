@@ -79,7 +79,7 @@ class AudioState extends ChangeNotifier {
     final storage = firebase_storage.FirebaseStorage.instance;
 
     for (int i = 0; i < sounds.length; i++) {
-      log('sounds/${_sounds[i].fileName}');
+      log('fetching ${_sounds[i].fileName}');
 
       try {
         urls.add(
@@ -94,12 +94,15 @@ class AudioState extends ChangeNotifier {
     }
 
     _playList = ConcatenatingAudioSource(
-      children: List.generate(10, (index) {
+      children: List.generate(10, (i) {
         return AudioSource.uri(
-          Uri.parse(urls[index]),
+          Uri.parse(urls[i]),
           tag: MediaItem(
-            id: _sounds[index].fileName,
-            title: _sounds[index].title,
+            id: _sounds[i].fileName,
+            title: _sounds[i].title,
+            artUri: Uri(
+              path: 'images/icon.png',
+            ),
           ),
         );
       }),
@@ -138,6 +141,7 @@ class AudioState extends ChangeNotifier {
     }
 
     await _player.play();
+
     notifyListeners();
   }
 
