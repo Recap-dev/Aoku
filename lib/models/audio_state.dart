@@ -171,20 +171,28 @@ class AudioState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleShuffleMode() async {
-    _shuffleModeEnabled = !shuffleModeEnabled;
+  Future<void> toggleShuffleMode({bool? forceEnable}) async {
+    if (forceEnable == true) {
+      _shuffleModeEnabled = true;
+    } else {
+      _shuffleModeEnabled = !shuffleModeEnabled;
+    }
+
     await _player.setShuffleModeEnabled(_shuffleModeEnabled);
     notifyListeners();
   }
 
-  Future<void> toggleLoopMode() async {
-    if (_loopMode == LoopMode.off) {
+  Future<void> toggleLoopMode({bool? forceEnable}) async {
+    if (forceEnable == true) {
+      _loopMode = LoopMode.all;
+    } else if (_loopMode == LoopMode.off) {
       _loopMode = LoopMode.all;
     } else if (_loopMode == LoopMode.all) {
       _loopMode = LoopMode.one;
     } else {
       _loopMode = LoopMode.off;
     }
+
     await _player.setLoopMode(_loopMode);
     notifyListeners();
   }

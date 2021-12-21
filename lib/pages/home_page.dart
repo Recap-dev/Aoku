@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/profile_button.dart';
@@ -50,24 +51,49 @@ class HomePage extends HookConsumerWidget {
             filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
             child: Container(color: Colors.transparent),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 24.0,
-                bottom: 50.0,
-              ),
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: audioState.sounds.length,
-                itemExtent: 70,
-                itemBuilder: (context, _currentIndex) => buildAoiSoundListTile(
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16.0,
+              right: 24.0,
+            ),
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: audioState.sounds.length + 1,
+              itemExtent: 70,
+              itemBuilder: (context, _currentIndex) {
+                if (_currentIndex == 0) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          HapticFeedback.mediumImpact();
+                          await audioState.toggleShuffleMode(forceEnable: true);
+                          await audioState.toggleLoopMode(forceEnable: true);
+                          showCupertinoModalBottomSheet(
+                            context: context,
+                            builder: (context) => const PlayPage(),
+                          );
+                          audioState.play(
+                            Random().nextInt(audioState.sounds.length),
+                          );
+                        },
+                        icon: Icon(
+                          CupertinoIcons.shuffle,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return buildAoiSoundListTile(
                   context,
                   audioState,
-                  _currentIndex,
-                ),
-              ),
+                  _currentIndex - 1,
+                );
+              },
             ),
           ),
           const Align(
