@@ -108,7 +108,9 @@ class _AokuAppState extends State<AokuApp> {
               ),
             ),
             themeMode: ThemeMode.system,
-            home: const HomePage(title: '聞く'),
+            home: const HomePage(
+              title: '聞く',
+            ),
           );
         }
       },

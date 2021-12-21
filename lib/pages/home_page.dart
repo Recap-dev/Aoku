@@ -9,7 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -51,50 +53,74 @@ class HomePage extends HookConsumerWidget {
             filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
             child: Container(color: Colors.transparent),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 24.0,
-            ),
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: audioState.sounds.length + 1,
-              itemExtent: 70,
-              itemBuilder: (context, _currentIndex) {
-                if (_currentIndex == 0) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          HapticFeedback.mediumImpact();
-                          await audioState.toggleShuffleMode(forceEnable: true);
-                          await audioState.toggleLoopMode(forceEnable: true);
-                          showCupertinoModalBottomSheet(
-                            context: context,
-                            builder: (context) => const PlayPage(),
-                          );
-                          audioState.play(
-                            Random().nextInt(audioState.sounds.length),
-                          );
-                        },
-                        icon: Icon(
-                          CupertinoIcons.shuffle,
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
+          FutureBuilder(
+            future: audioState.init(0),
+            builder: (context, snapshot) {
+              if (snapshot.data != AudioStateInitStatus.done) {
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color:
+                      Theme.of(context).colorScheme.background.withOpacity(0.1),
+                  child: Center(
+                    child: Text(
+                      'Loading...',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
                       ),
-                    ],
-                  );
-                }
-
-                return buildAoiSoundListTile(
-                  context,
-                  audioState,
-                  _currentIndex - 1,
+                    ),
+                  ),
                 );
-              },
-            ),
+              }
+
+              return Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  right: 24.0,
+                ),
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: audioState.sounds.length + 1,
+                  itemExtent: 70,
+                  itemBuilder: (context, _currentIndex) {
+                    if (_currentIndex == 0) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              HapticFeedback.mediumImpact();
+                              await audioState.toggleShuffleMode(
+                                  forceEnable: true);
+                              await audioState.toggleLoopMode(
+                                  forceEnable: true);
+                              showCupertinoModalBottomSheet(
+                                context: context,
+                                builder: (context) => const PlayPage(),
+                              );
+                              audioState.play(
+                                Random().nextInt(audioState.sounds.length),
+                              );
+                            },
+                            icon: Icon(
+                              CupertinoIcons.shuffle,
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return buildAoiSoundListTile(
+                      context,
+                      audioState,
+                      _currentIndex - 1,
+                    );
+                  },
+                ),
+              );
+            },
           ),
           const Align(
             alignment: Alignment.bottomCenter,
@@ -129,12 +155,12 @@ class HomePage extends HookConsumerWidget {
                 width: 24.0,
                 child: Visibility(
                   visible: _index == audioState.player.currentIndex,
-                  child: audioState.initStatus == AudioStateInitStatus.done
+                  child: audioState.isPlaying
                       ? Icon(
                           CupertinoIcons.waveform,
                           color: Theme.of(context).colorScheme.onBackground,
                         )
-                      : const CupertinoActivityIndicator(),
+                      : const SizedBox(),
                 ),
               ),
               SizedBox(

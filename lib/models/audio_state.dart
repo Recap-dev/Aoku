@@ -24,6 +24,7 @@ class AudioState extends ChangeNotifier {
   int _currentIndex = 0;
   late Duration _duration;
   late Duration _position;
+  late Duration _buffered;
   bool _shuffleModeEnabled = false;
   LoopMode _loopMode = LoopMode.off;
 
@@ -34,14 +35,25 @@ class AudioState extends ChangeNotifier {
   int get currentIndex => _currentIndex;
   Duration get duration => _duration;
   Duration get position => _position;
+  Duration get buffered => _buffered;
   bool get shuffleModeEnabled => _shuffleModeEnabled;
   LoopMode get loopMode => _loopMode;
 
-  Future<void> init(int initialIndex) async {
+  Future<AudioStateInitStatus> init(int initialIndex) async {
+    if (_initStatus == AudioStateInitStatus.done) {
+      return _initStatus;
+    }
+
+    if (_initStatus == AudioStateInitStatus.inProgress) {
+      return _initStatus;
+    }
+
     _initStatus = AudioStateInitStatus.inProgress;
 
     final AudioSession session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.music());
+    await session.configure(
+      const AudioSessionConfiguration.music(),
+    );
     List<String> urls = [];
 
     _player.playbackEventStream.listen(
@@ -59,6 +71,11 @@ class AudioState extends ChangeNotifier {
 
     _player.positionStream.listen((position) {
       _position = position;
+      notifyListeners();
+    });
+
+    _player.bufferedPositionStream.listen((buffered) {
+      _buffered = buffered;
       notifyListeners();
     });
 
@@ -120,18 +137,11 @@ class AudioState extends ChangeNotifier {
 
     _initStatus = AudioStateInitStatus.done;
     notifyListeners();
+
+    return AudioStateInitStatus.done;
   }
 
   Future<void> play(int selectedIndex) async {
-    if (_initStatus == AudioStateInitStatus.notYet) {
-      log('Initializing AudioState...');
-      await init(selectedIndex);
-      log('Done');
-    }
-
-    log('currentIndex: $_currentIndex');
-    log('selectedIndex: $selectedIndex');
-
     if (selectedIndex != _currentIndex) {
       await _player.seek(
         Duration.zero,
@@ -140,8 +150,7 @@ class AudioState extends ChangeNotifier {
       _currentIndex = selectedIndex;
     }
 
-    await _player.play();
-
+    _player.play();
     notifyListeners();
   }
 
