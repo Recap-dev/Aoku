@@ -7,25 +7,56 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AlbumArt extends HookConsumerWidget {
-  AlbumArt({
+class AlbumArt extends ConsumerStatefulWidget {
+  const AlbumArt({
     Key? key,
   }) : super(key: key);
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _AlbumArtState();
+}
+
+class _AlbumArtState extends ConsumerState<AlbumArt>
+    with SingleTickerProviderStateMixin {
   late final GoogleMapController _mapController;
   final Set<Marker> _markers = {};
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    // "ref" can be used in all life-cycles of a StatefulWidget.
+    ref.read(audioProvider);
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    );
+    _animation = Tween(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(_controller);
+    _controller.forward();
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     log('onMapCreated.');
-    _mapController = controller;
 
+    _mapController = controller;
     _mapController.setMapStyle(
       MapUtils.lightMapStyle,
     );
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AudioState audioState = ref.watch(audioProvider);
 
     return ClipRRect(
@@ -40,9 +71,6 @@ class AlbumArt extends HookConsumerWidget {
               width: 1,
             ),
           ),
-          //child: Text(
-          //  audioState.sounds[audioState.player.currentIndex ?? 0].title,
-          //),
           child: Stack(
             children: [
               GoogleMap(
@@ -68,8 +96,16 @@ class AlbumArt extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                child: Container(
-                  color: Colors.white.withOpacity(0.4),
+                child: FadeTransition(
+                  opacity: _animation,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: const Color(0xFFFFFFFF),
+                    child: const Center(
+                      child: Text('Loading...'),
+                    ),
+                  ),
                 ),
               ),
             ],

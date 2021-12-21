@@ -53,7 +53,7 @@ class PlayPage extends HookConsumerWidget {
               children: [
                 Column(
                   children: [
-                    AlbumArt(),
+                    const AlbumArt(),
                     const SizedBox(height: 48.0),
                     Divider(
                       color: Theme.of(context).colorScheme.onBackground,
