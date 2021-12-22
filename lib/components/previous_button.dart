@@ -14,7 +14,7 @@ class PreviousButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: () => !audioState.player.hasPrevious ||
+      onPressed: () => !audioState.hasPrevious ||
               audioState.initStatus != AudioStateInitStatus.done ||
               audioState.processingState == ProcessingState.buffering ||
               audioState.processingState == ProcessingState.loading
@@ -22,7 +22,7 @@ class PreviousButton extends HookConsumerWidget {
           : audioState.previous(),
       icon: Icon(
         CupertinoIcons.backward_fill,
-        color: !audioState.player.hasPrevious ||
+        color: !audioState.hasPrevious ||
                 audioState.initStatus != AudioStateInitStatus.done ||
                 audioState.processingState == ProcessingState.buffering ||
                 audioState.processingState == ProcessingState.loading

@@ -37,7 +37,7 @@ class AoiSoundListTile extends StatelessWidget {
               SizedBox(
                 width: 24.0,
                 child: Visibility(
-                  visible: index == audioState.player.currentIndex,
+                  visible: index == audioState.currentIndex,
                   child: audioState.isPlaying
                       ? Icon(
                           CupertinoIcons.waveform,

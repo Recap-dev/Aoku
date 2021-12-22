@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:aoku/components/album_art.dart';
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -30,6 +32,8 @@ class AudioState extends ChangeNotifier {
   LoopMode _loopMode = LoopMode.off;
 
   bool get isPlaying => _player.playerState.playing;
+  bool get hasNext => _player.hasNext;
+  bool get hasPrevious => _player.hasPrevious;
   AudioStateInitStatus get initStatus => _initStatus;
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
@@ -59,6 +63,32 @@ class AudioState extends ChangeNotifier {
       const AudioSessionConfiguration.music(),
     );
     List<String> urls = [];
+
+    _player.sequenceStateStream.listen((sequenceState) {
+      log('sequenceStream changed.');
+
+      if (sequenceState == null) return;
+
+      if (smallMapController != null) {
+        smallMapController!.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            _sounds[_player.currentIndex as int].location,
+            12,
+          ),
+        );
+      } else {
+        log('Ignoring because smallMapController is null.');
+      }
+
+      _currentIndex = sequenceState.currentIndex;
+
+      notifyListeners();
+    });
+
+    _player.processingStateStream.listen((processingState) {
+      _processingState = processingState;
+      notifyListeners();
+    });
 
     _player.playbackEventStream.listen(
       (event) {},
@@ -140,6 +170,7 @@ class AudioState extends ChangeNotifier {
     }
 
     _initStatus = AudioStateInitStatus.done;
+    log('Initialized.');
     notifyListeners();
 
     return AudioStateInitStatus.done;

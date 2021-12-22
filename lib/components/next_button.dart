@@ -17,7 +17,7 @@ class NextButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: () => !audioState.player.hasNext ||
+      onPressed: () => !audioState.hasNext ||
               audioState.initStatus != AudioStateInitStatus.done ||
               audioState.processingState == ProcessingState.buffering ||
               audioState.processingState == ProcessingState.loading
@@ -25,7 +25,7 @@ class NextButton extends HookConsumerWidget {
           : audioState.player.seekToNext(),
       icon: Icon(
         CupertinoIcons.forward_fill,
-        color: !audioState.player.hasNext ||
+        color: !audioState.hasNext ||
                 audioState.initStatus != AudioStateInitStatus.done ||
                 audioState.processingState == ProcessingState.buffering ||
                 audioState.processingState == ProcessingState.loading

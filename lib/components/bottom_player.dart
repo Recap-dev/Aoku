@@ -63,9 +63,7 @@ class BottomPlayer extends HookConsumerWidget {
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Text(
                       audioState.initStatus == AudioStateInitStatus.done
-                          ? audioState
-                              .sounds[audioState.player.currentIndex as int]
-                              .title
+                          ? audioState.sounds[audioState.currentIndex].title
                           : '',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
