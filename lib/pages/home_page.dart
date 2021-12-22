@@ -1,16 +1,12 @@
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/profile_button.dart';
+import 'package:aoku/components/shuffle_to_play_button.dart';
 import 'package:aoku/models/audio_state.dart';
-import 'package:aoku/pages/play_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -84,31 +80,7 @@ class HomePage extends HookConsumerWidget {
                   itemExtent: 70,
                   itemBuilder: (context, _currentIndex) {
                     if (_currentIndex == 0) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () async {
-                              HapticFeedback.mediumImpact();
-                              await audioState.toggleShuffleMode(
-                                  forceEnable: true);
-                              await audioState.toggleLoopMode(
-                                  forceEnable: true);
-                              showCupertinoModalBottomSheet(
-                                context: context,
-                                builder: (context) => const PlayPage(),
-                              );
-                              audioState.play(
-                                Random().nextInt(audioState.sounds.length),
-                              );
-                            },
-                            icon: Icon(
-                              CupertinoIcons.shuffle,
-                              color: Theme.of(context).colorScheme.onBackground,
-                            ),
-                          ),
-                        ],
-                      );
+                      return ShuffleToPlayButton(audioState: audioState);
                     }
 
                     return AoiSoundListTile(
