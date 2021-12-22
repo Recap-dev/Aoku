@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:math';
 
+import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/models/audio_state.dart';
@@ -9,9 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -112,10 +111,10 @@ class HomePage extends HookConsumerWidget {
                       );
                     }
 
-                    return buildAoiSoundListTile(
-                      context,
-                      audioState,
-                      _currentIndex - 1,
+                    return AoiSoundListTile(
+                      context: context,
+                      audioState: audioState,
+                      index: _currentIndex - 1,
                     );
                   },
                 ),
@@ -127,98 +126,6 @@ class HomePage extends HookConsumerWidget {
             child: BottomPlayer(),
           ),
         ],
-      ),
-    );
-  }
-
-  Center buildAoiSoundListTile(
-    BuildContext context,
-    AudioState audioState,
-    int _index,
-  ) {
-    return Center(
-      child: GestureDetector(
-        onTap: () async {
-          HapticFeedback.lightImpact();
-          showCupertinoModalBottomSheet(
-            context: context,
-            builder: (context) => const PlayPage(),
-          );
-          await audioState.play(_index);
-        },
-        child: Container(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                width: 24.0,
-                child: Visibility(
-                  visible: _index == audioState.player.currentIndex,
-                  child: audioState.isPlaying
-                      ? Icon(
-                          CupertinoIcons.waveform,
-                          color: Theme.of(context).colorScheme.onBackground,
-                        )
-                      : const SizedBox(),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      audioState.sounds[_index].title,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          CupertinoIcons.map_pin,
-                          color: Theme.of(context).colorScheme.onBackground,
-                          size: 12.0,
-                        ),
-                        Text(
-                          '${audioState.sounds[_index].city}, ${audioState.sounds[_index].province}',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onBackground,
-                            fontSize: 10.0,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 12.0,
-                child: Icon(
-                  CupertinoIcons.heart_solid,
-                  color: Theme.of(context).colorScheme.onBackground,
-                  size: 16.0,
-                ),
-              ),
-              SizedBox(
-                width: 32.0,
-                child: Text(
-                  '${audioState.sounds[_index].length.inMinutes.toString().padLeft(2, '  ')}:${audioState.sounds[_index].length.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

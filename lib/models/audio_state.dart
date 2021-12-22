@@ -22,6 +22,7 @@ class AudioState extends ChangeNotifier {
   final List<AoiSound> _sounds = soundsMaster;
   late final ConcatenatingAudioSource _playList;
   int _currentIndex = 0;
+  ProcessingState? _processingState;
   late Duration _duration;
   late Duration _position;
   late Duration _buffered;
@@ -33,6 +34,7 @@ class AudioState extends ChangeNotifier {
   AudioPlayer get player => _player;
   List<AoiSound> get sounds => _sounds;
   int get currentIndex => _currentIndex;
+  ProcessingState? get processingState => _processingState;
   Duration get duration => _duration;
   Duration get position => _position;
   Duration get buffered => _buffered;
@@ -47,6 +49,8 @@ class AudioState extends ChangeNotifier {
     if (_initStatus == AudioStateInitStatus.inProgress) {
       return _initStatus;
     }
+
+    _processingState = _player.processingState;
 
     _initStatus = AudioStateInitStatus.inProgress;
 
