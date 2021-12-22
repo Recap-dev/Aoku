@@ -72,6 +72,8 @@ class HomePage extends HookConsumerWidget {
                 padding: const EdgeInsets.only(
                   left: 16.0,
                   right: 24.0,
+                  // Avoid to be hidden behind BottomPlayer (height: 90)
+                  bottom: 96.0,
                 ),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
