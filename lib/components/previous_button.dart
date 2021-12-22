@@ -2,6 +2,7 @@ import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:just_audio/just_audio.dart';
 
 class PreviousButton extends HookConsumerWidget {
   const PreviousButton({
@@ -13,12 +14,20 @@ class PreviousButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: audioState.player.hasPrevious ? audioState.previous : null,
+      onPressed: () => !audioState.player.hasPrevious ||
+              audioState.initStatus != AudioStateInitStatus.done ||
+              audioState.processingState == ProcessingState.buffering ||
+              audioState.processingState == ProcessingState.loading
+          ? null
+          : audioState.previous(),
       icon: Icon(
         CupertinoIcons.backward_fill,
-        color: audioState.player.hasPrevious
-            ? Theme.of(context).colorScheme.onBackground
-            : Theme.of(context).colorScheme.onBackground.withOpacity(0.4),
+        color: !audioState.player.hasPrevious ||
+                audioState.initStatus != AudioStateInitStatus.done ||
+                audioState.processingState == ProcessingState.buffering ||
+                audioState.processingState == ProcessingState.loading
+            ? Theme.of(context).colorScheme.onBackground.withOpacity(0.3)
+            : Theme.of(context).colorScheme.onBackground,
       ),
       iconSize: 40,
     );

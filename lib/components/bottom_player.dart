@@ -18,7 +18,7 @@ class BottomPlayer extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return GestureDetector(
-      onTap: audioState.initStatus != AudioStateInitStatus.initialized
+      onTap: audioState.initStatus != AudioStateInitStatus.done
           ? null
           : () => showCupertinoModalBottomSheet(
                 context: context,
@@ -47,8 +47,7 @@ class BottomPlayer extends HookConsumerWidget {
                 children: [
                   SizedBox(
                     width: 60.0,
-                    child: audioState.initStatus ==
-                            AudioStateInitStatus.initialized
+                    child: audioState.initStatus == AudioStateInitStatus.done
                         ? Icon(
                             CupertinoIcons.waveform,
                             color: audioState.isPlaying
@@ -63,7 +62,7 @@ class BottomPlayer extends HookConsumerWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: Text(
-                      audioState.initStatus == AudioStateInitStatus.initialized
+                      audioState.initStatus == AudioStateInitStatus.done
                           ? audioState
                               .sounds[audioState.player.currentIndex as int]
                               .title

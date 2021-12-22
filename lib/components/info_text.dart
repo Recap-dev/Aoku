@@ -35,7 +35,7 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                audioState.initStatus == AudioStateInitStatus.initialized
+                audioState.initStatus == AudioStateInitStatus.done
                     ? '${audioState.sounds[audioState.player.currentIndex as int].city}, ${audioState.sounds[audioState.player.currentIndex as int].province}'
                     : 'Loading...',
                 style: TextStyle(
@@ -55,7 +55,7 @@ class InfoText extends HookConsumerWidget {
               ),
               const SizedBox(width: 4.0),
               Text(
-                audioState.initStatus == AudioStateInitStatus.initialized
+                audioState.initStatus == AudioStateInitStatus.done
                     ? audioState
                         .sounds[audioState.player.currentIndex as int].time
                         .format(context)

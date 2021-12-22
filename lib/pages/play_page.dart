@@ -45,7 +45,8 @@ class PlayPage extends HookConsumerWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width * 0.12),
+              horizontal: MediaQuery.of(context).size.width * 0.12,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,7 +60,7 @@ class PlayPage extends HookConsumerWidget {
                       thickness: 0.8,
                     ),
                     Text(
-                      audioState.initStatus == AudioStateInitStatus.initialized
+                      audioState.initStatus == AudioStateInitStatus.done
                           ? audioState
                               .sounds[audioState.player.currentIndex as int]
                               .title
