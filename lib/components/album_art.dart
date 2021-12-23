@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/map_page.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,6 @@ class AlbumArt extends ConsumerStatefulWidget {
 
 class _AlbumArtState extends ConsumerState<AlbumArt>
     with SingleTickerProviderStateMixin {
-  final Set<Marker> _markers = {};
   late final AnimationController _controller;
   late final Animation<double> _animation;
 
@@ -41,11 +38,9 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
     _controller.forward();
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    log('onMapCreated.');
-
+  Future<void> _onMapCreated(GoogleMapController controller) async {
     smallMapController = controller;
-    smallMapController!.setMapStyle(
+    await smallMapController!.setMapStyle(
       Theme.of(context).brightness == Brightness.dark
           ? MapUtils.darkMapStyle
           : MapUtils.lightMapStyle,
@@ -76,7 +71,6 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
           children: [
             GoogleMap(
               mapType: MapType.normal,
-              markers: _markers,
               initialCameraPosition: CameraPosition(
                 target: audioState.sounds[audioState.currentIndex].location,
                 zoom: 12,
