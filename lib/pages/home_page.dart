@@ -1,9 +1,10 @@
-import 'dart:ui';
-
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
+import 'package:aoku/components/frosted_background.dart';
+import 'package:aoku/components/full_screen_loading.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/components/shuffle_to_play_button.dart';
+import 'package:aoku/components/sound_list_header.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -33,65 +34,66 @@ class HomePage extends HookConsumerWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.surface,
-                  Theme.of(context).colorScheme.primary,
-                ],
-              ),
-            ),
-          ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-            child: Container(color: Colors.transparent),
-          ),
+          const FrostedBackground(),
           FutureBuilder(
+            // 0 is a temporary index for init
+            // Index will be overriden when play() called
             future: audioState.init(0),
             builder: (context, snapshot) {
               if (snapshot.data != AudioStateInitStatus.done) {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color:
-                      Theme.of(context).colorScheme.background.withOpacity(0.1),
-                  child: Center(
-                    child: Text(
-                      'Loading...',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
+                return const FullScreenLoading();
+              }
+
+              return Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 160,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 24.0),
+                        child: ShuffleToPlayButton(audioState: audioState),
                       ),
                     ),
                   ),
-                );
-              }
-
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  right: 24.0,
-                  // Avoid to be hidden behind BottomPlayer (height: 90)
-                  bottom: 96.0,
-                ),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: audioState.sounds.length + 1,
-                  itemExtent: 70,
-                  itemBuilder: (context, _currentIndex) {
-                    if (_currentIndex == 0) {
-                      return ShuffleToPlayButton(audioState: audioState);
-                    }
-
-                    return AoiSoundListTile(
-                      context: context,
-                      audioState: audioState,
-                      index: _currentIndex - 1,
-                    );
-                  },
-                ),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      top: 16.0,
+                      left: 16.0,
+                      right: 24.0,
+                    ),
+                    child: SoundListHeader(),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 24.0,
+                        // Avoid to be hidden behind BottomPlayer (height: 90)
+                        bottom: 96.0,
+                      ),
+                      // Remove unnecessary top padding set by default
+                      // https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: audioState.sounds.length,
+                          itemExtent: 70,
+                          itemBuilder: (context, _currentIndex) =>
+                              AoiSoundListTile(
+                            context: context,
+                            audioState: audioState,
+                            index: _currentIndex,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),

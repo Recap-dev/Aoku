@@ -1,6 +1,7 @@
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 
 class RepeatButton extends StatelessWidget {
@@ -23,7 +24,10 @@ class RepeatButton extends StatelessWidget {
             : Colors.transparent,
       ),
       child: IconButton(
-        onPressed: audioState.toggleLoopMode,
+        onPressed: () {
+          HapticFeedback.lightImpact();
+          audioState.toggleLoopMode();
+        },
         icon: Icon(
           audioState.loopMode != LoopMode.one
               ? CupertinoIcons.repeat
