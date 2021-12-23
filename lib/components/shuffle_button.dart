@@ -1,6 +1,7 @@
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ShuffleButton extends StatelessWidget {
   const ShuffleButton({
@@ -23,7 +24,10 @@ class ShuffleButton extends StatelessWidget {
       ),
       child: Center(
         child: IconButton(
-          onPressed: audioState.toggleShuffleMode,
+          onPressed: () {
+            HapticFeedback.lightImpact();
+            audioState.toggleShuffleMode();
+          },
           icon: Icon(
             CupertinoIcons.shuffle,
             size: 16,

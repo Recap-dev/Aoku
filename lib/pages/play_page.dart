@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:aoku/components/album_art.dart';
 import 'package:aoku/components/aoi_progress_bar.dart';
+import 'package:aoku/components/frosted_background.dart';
 import 'package:aoku/components/heart_button.dart';
 import 'package:aoku/components/info_text.dart';
 import 'package:aoku/components/next_button.dart';
@@ -28,21 +27,7 @@ class PlayPage extends HookConsumerWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.surface,
-                  Theme.of(context).colorScheme.primary,
-                ],
-              ),
-            ),
-          ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-            child: Container(color: Colors.transparent),
-          ),
+          const FrostedBackground(),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: MediaQuery.of(context).size.width * 0.12,

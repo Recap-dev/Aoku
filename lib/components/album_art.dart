@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/map_page.dart';
@@ -64,54 +63,51 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
     final AudioState audioState = ref.watch(audioProvider);
 
     return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.onBackground,
-              width: 1,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.width * 0.8,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).colorScheme.onBackground,
+            width: 1,
+          ),
+        ),
+        child: Stack(
+          children: [
+            GoogleMap(
+              mapType: MapType.normal,
+              markers: _markers,
+              initialCameraPosition: CameraPosition(
+                target: audioState.sounds[audioState.currentIndex].location,
+                zoom: 12,
+              ),
+              onMapCreated: _onMapCreated,
+              myLocationButtonEnabled: false,
+              myLocationEnabled: false,
             ),
-          ),
-          child: Stack(
-            children: [
-              GoogleMap(
-                mapType: MapType.normal,
-                markers: _markers,
-                initialCameraPosition: CameraPosition(
-                  target: audioState.sounds[audioState.currentIndex].location,
-                  zoom: 12,
-                ),
-                onMapCreated: _onMapCreated,
-                myLocationButtonEnabled: false,
-                myLocationEnabled: false,
-              ),
-              GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MapPage(
-                      initialLocation:
-                          audioState.sounds[audioState.currentIndex].location,
-                    ),
-                  ),
-                ),
-                child: FadeTransition(
-                  opacity: _animation,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: const Color(0xFFFFFFFF),
-                    child: const Center(
-                      child: Text('Loading...'),
-                    ),
+            GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MapPage(
+                    initialLocation:
+                        audioState.sounds[audioState.currentIndex].location,
                   ),
                 ),
               ),
-            ],
-          ),
+              child: FadeTransition(
+                opacity: _animation,
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: const Color(0xFFFFFFFF),
+                  child: const Center(
+                    child: Text('Loading...'),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

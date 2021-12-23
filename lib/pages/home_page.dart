@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
+import 'package:aoku/components/frosted_background.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/components/shuffle_to_play_button.dart';
 import 'package:aoku/models/audio_state.dart';
@@ -33,21 +32,7 @@ class HomePage extends HookConsumerWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: SweepGradient(
-                colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.surface,
-                  Theme.of(context).colorScheme.primary,
-                ],
-              ),
-            ),
-          ),
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-            child: Container(color: Colors.transparent),
-          ),
+          const FrostedBackground(),
           FutureBuilder(
             future: audioState.init(0),
             builder: (context, snapshot) {
