@@ -1,6 +1,7 @@
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
+import 'package:aoku/components/full_screen_loading.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/components/shuffle_to_play_button.dart';
 import 'package:aoku/components/sound_list_header.dart';
@@ -40,20 +41,7 @@ class HomePage extends HookConsumerWidget {
             future: audioState.init(0),
             builder: (context, snapshot) {
               if (snapshot.data != AudioStateInitStatus.done) {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color:
-                      Theme.of(context).colorScheme.background.withOpacity(0.1),
-                  child: Center(
-                    child: Text(
-                      'Loading...',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                      ),
-                    ),
-                  ),
-                );
+                return const FullScreenLoading();
               }
 
               return Column(
