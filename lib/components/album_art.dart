@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+/// Will be accessed by AudioState when stream changes
+GoogleMapController? smallMapController;
+
 class AlbumArt extends ConsumerStatefulWidget {
   const AlbumArt({
     Key? key,
@@ -18,7 +21,6 @@ class AlbumArt extends ConsumerStatefulWidget {
 
 class _AlbumArtState extends ConsumerState<AlbumArt>
     with SingleTickerProviderStateMixin {
-  late final GoogleMapController _mapController;
   final Set<Marker> _markers = {};
   late final AnimationController _controller;
   late final Animation<double> _animation;
@@ -43,9 +45,11 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
   void _onMapCreated(GoogleMapController controller) {
     log('onMapCreated.');
 
-    _mapController = controller;
-    _mapController.setMapStyle(
-      MapUtils.lightMapStyle,
+    smallMapController = controller;
+    smallMapController!.setMapStyle(
+      Theme.of(context).brightness == Brightness.dark
+          ? MapUtils.darkMapStyle
+          : MapUtils.lightMapStyle,
     );
   }
 
@@ -77,9 +81,8 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
                 mapType: MapType.normal,
                 markers: _markers,
                 initialCameraPosition: CameraPosition(
-                  target: audioState
-                      .sounds[audioState.player.currentIndex ?? 0].location,
-                  zoom: 20,
+                  target: audioState.sounds[audioState.currentIndex].location,
+                  zoom: 12,
                 ),
                 onMapCreated: _onMapCreated,
                 myLocationButtonEnabled: false,
@@ -90,9 +93,8 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
                   context,
                   MaterialPageRoute(
                     builder: (context) => MapPage(
-                      initialLocation: audioState
-                          .sounds[audioState.player.currentIndex as int]
-                          .location,
+                      initialLocation:
+                          audioState.sounds[audioState.currentIndex].location,
                     ),
                   ),
                 ),

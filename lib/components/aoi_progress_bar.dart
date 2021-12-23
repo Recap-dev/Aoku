@@ -19,13 +19,11 @@ class AoiProgressBar extends HookConsumerWidget {
           ? Duration.zero
           : audioState.position,
       total: audioState.initStatus == AudioStateInitStatus.done &&
-              audioState.player.playerState.processingState ==
-                  ProcessingState.ready
+              audioState.processingState == ProcessingState.ready
           ? audioState.duration
           : Duration.zero,
       buffered: audioState.initStatus == AudioStateInitStatus.done &&
-              audioState.player.playerState.processingState ==
-                  ProcessingState.ready
+              audioState.processingState == ProcessingState.ready
           ? audioState.buffered
           : Duration.zero,
       barHeight: 2,

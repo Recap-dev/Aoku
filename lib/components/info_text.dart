@@ -18,8 +18,8 @@ class InfoText extends HookConsumerWidget {
         context,
         MaterialPageRoute(
           builder: (context) => MapPage(
-            initialLocation: audioState
-                .sounds[audioState.player.currentIndex as int].location,
+            initialLocation:
+                audioState.sounds[audioState.currentIndex].location,
           ),
         ),
       ),
@@ -36,7 +36,7 @@ class InfoText extends HookConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 audioState.initStatus == AudioStateInitStatus.done
-                    ? '${audioState.sounds[audioState.player.currentIndex as int].city}, ${audioState.sounds[audioState.player.currentIndex as int].province}'
+                    ? '${audioState.sounds[audioState.currentIndex].city}, ${audioState.sounds[audioState.currentIndex].province}'
                     : 'Loading...',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
@@ -56,8 +56,7 @@ class InfoText extends HookConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 audioState.initStatus == AudioStateInitStatus.done
-                    ? audioState
-                        .sounds[audioState.player.currentIndex as int].time
+                    ? audioState.sounds[audioState.currentIndex].time
                         .format(context)
                     : 'Loading...',
                 style: TextStyle(
