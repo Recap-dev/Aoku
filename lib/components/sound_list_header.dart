@@ -9,32 +9,43 @@ class SoundListHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        Stack(
           children: [
-            Text(
-              'Title & Place',
-              style: TextStyle(
-                fontSize: 12.0,
-                color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+            Center(
+              child: Text(
+                'Title & Place',
+                style: TextStyle(
+                  fontSize: 12.0,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onBackground
+                      .withOpacity(0.7),
+                ),
               ),
             ),
-            const SizedBox(width: 80),
-            Text(
-              'Length',
-              style: TextStyle(
-                fontSize: 12.0,
-                color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(
+                  'Length',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onBackground
+                        .withOpacity(0.7),
+                  ),
+                ),
               ),
             ),
-            const SizedBox(width: 10),
           ],
         ),
         Divider(
           height: 30,
           thickness: 0.6,
+          indent: 4.0,
+          endIndent: 4.0,
           color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
         ),
       ],
