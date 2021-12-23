@@ -68,30 +68,94 @@ class HomePage extends HookConsumerWidget {
                 );
               }
 
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  right: 24.0,
-                  // Avoid to be hidden behind BottomPlayer (height: 90)
-                  bottom: 96.0,
-                ),
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: audioState.sounds.length + 1,
-                  itemExtent: 70,
-                  itemBuilder: (context, _currentIndex) {
-                    if (_currentIndex == 0) {
-                      return ShuffleToPlayButton(audioState: audioState);
-                    }
-
-                    return AoiSoundListTile(
-                      context: context,
-                      audioState: audioState,
-                      index: _currentIndex - 1,
-                    );
-                  },
-                ),
+              return Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 160,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 24.0),
+                        child: ShuffleToPlayButton(audioState: audioState),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16.0,
+                      left: 16.0,
+                      right: 24.0,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Title & Place',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground
+                                    .withOpacity(0.7),
+                              ),
+                            ),
+                            const SizedBox(width: 80),
+                            Text(
+                              'Length',
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground
+                                    .withOpacity(0.7),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                        Divider(
+                          height: 30,
+                          thickness: 0.6,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withOpacity(0.7),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 24.0,
+                        // Avoid to be hidden behind BottomPlayer (height: 90)
+                        bottom: 96.0,
+                      ),
+                      // Remove unnecessary top padding set by default
+                      // https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: audioState.sounds.length,
+                          itemExtent: 70,
+                          itemBuilder: (context, _currentIndex) =>
+                              AoiSoundListTile(
+                            context: context,
+                            audioState: audioState,
+                            index: _currentIndex,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
