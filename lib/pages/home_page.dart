@@ -3,6 +3,7 @@ import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
 import 'package:aoku/components/profile_button.dart';
 import 'package:aoku/components/shuffle_to_play_button.dart';
+import 'package:aoku/components/sound_list_header.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -34,6 +35,8 @@ class HomePage extends HookConsumerWidget {
         children: [
           const FrostedBackground(),
           FutureBuilder(
+            // 0 is a temporary index for init
+            // Index will be overriden when play() called
             future: audioState.init(0),
             builder: (context, snapshot) {
               if (snapshot.data != AudioStateInitStatus.done) {
@@ -66,51 +69,13 @@ class HomePage extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
+                  const Padding(
+                    padding: EdgeInsets.only(
                       top: 16.0,
                       left: 16.0,
                       right: 24.0,
                     ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Title & Place',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onBackground
-                                    .withOpacity(0.7),
-                              ),
-                            ),
-                            const SizedBox(width: 80),
-                            Text(
-                              'Length',
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onBackground
-                                    .withOpacity(0.7),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                          ],
-                        ),
-                        Divider(
-                          height: 30,
-                          thickness: 0.6,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onBackground
-                              .withOpacity(0.7),
-                        ),
-                      ],
-                    ),
+                    child: SoundListHeader(),
                   ),
                   Expanded(
                     child: Padding(
