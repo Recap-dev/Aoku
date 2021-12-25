@@ -5,7 +5,6 @@ import 'package:flutterfire_ui/i10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'firebase_options.dart';
-import 'package:aoku/models/label_overrides.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,9 +60,9 @@ class _AokuAppState extends State<AokuApp> {
           return MaterialApp(
             localizationsDelegates: [
               // Creates an instance of FirebaseUILocalizationDelegate with overriden labels
-              FlutterFireUILocalizations.withDefaultOverrides(
-                const LabelOverrides(),
-              ),
+              //FlutterFireUILocalizations.withDefaultOverrides(
+              //  const LabelOverrides(),
+              //),
 
               // Delegates below take care of built-in flutter widgets
               GlobalMaterialLocalizations.delegate,
