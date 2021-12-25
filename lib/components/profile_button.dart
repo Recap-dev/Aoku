@@ -1,5 +1,5 @@
-import 'package:aoku/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aoku/pages/profile_page.dart';
+import 'package:aoku/pages/sign_in_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,104 +18,73 @@ class ProfileButton extends HookConsumerWidget {
 
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) => IconButton(
-        icon: snapshot.hasData &&
-                FirebaseAuth.instance.currentUser?.photoURL != null
-            ? CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  FirebaseAuth.instance.currentUser?.photoURL as String,
+      builder: (context, snapshot) {
+        return GestureDetector(
+          child: UserAvatar(
+            size: 32.0,
+            placeholderColor: Theme.of(context).colorScheme.onBackground,
+          ),
+          onTap: () => showCupertinoModalPopup(
+            context: context,
+            builder: (context) => CupertinoActionSheet(
+              actions: [
+                StreamBuilder(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    // If user is not signed in
+                    if (!snapshot.hasData) {
+                      return CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignInPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'サインイン',
+                          style: TextStyle(
+                            color: isDarkMode
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.surface,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return CupertinoActionSheetAction(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '設定',
+                          style: TextStyle(
+                            color: isDarkMode
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.surface,
+                          ),
+                        ),
+                      );
+                    }
+                  },
                 ),
-              )
-            : Icon(
-                CupertinoIcons.profile_circled,
-                color: Theme.of(context).colorScheme.onBackground,
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () => Navigator.pop(context),
+                child: const Text('キャンセル'),
               ),
-        iconSize: 24.0,
-        onPressed: () => showCupertinoModalPopup(
-          context: context,
-          builder: (context) => CupertinoActionSheet(
-            actions: [
-              StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  // If user is not signed in
-                  if (!snapshot.hasData) {
-                    return CupertinoActionSheetAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignInScreen(
-                              headerBuilder: (context, constraints, _) =>
-                                  Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: Image.asset(
-                                    'images/blue-blur-1.png',
-                                  ),
-                                ),
-                              ),
-                              providerConfigs: kProviderConfigs,
-                              actions: [
-                                AuthStateChangeAction<SignedIn>((context, _) {
-                                  Navigator.pop(context);
-                                }),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: isDarkMode
-                              ? Colors.white
-                              : Theme.of(context).colorScheme.surface,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return CupertinoActionSheetAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileScreen(
-                              actions: [
-                                SignedOutAction((context) {
-                                  Navigator.pop(context);
-                                }),
-                              ],
-                              providerConfigs: kProviderConfigs,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Profile',
-                        style: TextStyle(
-                          color: isDarkMode
-                              ? Colors.white
-                              : Theme.of(context).colorScheme.surface,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-            cancelButton: CupertinoActionSheetAction(
-              isDestructiveAction: true,
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
