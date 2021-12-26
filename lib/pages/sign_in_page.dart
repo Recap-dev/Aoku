@@ -46,12 +46,20 @@ class SignInPage extends StatelessWidget {
                 );
               }
 
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: GoogleSignInButton(
-                    clientId: kProviderConfigs[0].clientId,
-                  ),
+              // If not signed in
+              return SizedBox.expand(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      child: GoogleSignInButton(
+                        clientId:
+                            kProviderConfigs[AvailableOAuthProviders.google]
+                                .clientId,
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
