@@ -1,4 +1,5 @@
 import 'package:aoku/components/frosted_background.dart';
+import 'package:aoku/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +58,20 @@ class ProfilePage extends StatelessWidget {
                 );
               }
 
-              return Center(
-                child: CupertinoButton.filled(
-                  child: const Text('←'),
-                  onPressed: () => Navigator.pop(context),
+              // If not signed in
+              return SizedBox.expand(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      child: GoogleSignInButton(
+                        clientId:
+                            kProviderConfigs[AvailableOAuthProviders.google]
+                                .clientId,
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

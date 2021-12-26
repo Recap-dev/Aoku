@@ -64,10 +64,11 @@ class AoiSoundListTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(
-                          CupertinoIcons.map_pin,
+                          CupertinoIcons.map_pin_ellipse,
                           color: Theme.of(context).colorScheme.onBackground,
                           size: 12.0,
                         ),
+                        const SizedBox(width: 4.0),
                         Text(
                           '${audioState.sounds[index].city}, ${audioState.sounds[index].province}',
                           style: TextStyle(

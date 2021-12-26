@@ -48,7 +48,7 @@ class HomePage extends HookConsumerWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 160,
+                    height: 168,
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(

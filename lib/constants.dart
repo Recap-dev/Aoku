@@ -1,7 +1,11 @@
 import 'package:flutterfire_ui/auth.dart';
 
-const kProviderConfigs = [
-  GoogleProviderConfiguration(
+enum AvailableOAuthProviders {
+  google,
+}
+
+const Map<AvailableOAuthProviders, dynamic> kProviderConfigs = {
+  AvailableOAuthProviders.google: GoogleProviderConfiguration(
     clientId: 'aoku-recap',
   ),
-];
+};
