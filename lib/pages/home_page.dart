@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
@@ -38,7 +40,7 @@ class HomePage extends HookConsumerWidget {
           FutureBuilder(
             // 0 is a temporary index for init
             // Index will be overriden when play() called
-            future: audioState.init(0),
+            future: audioState.init(),
             builder: (context, snapshot) {
               if (snapshot.data != AudioStateInitStatus.done) {
                 return const FullScreenLoading();
@@ -78,16 +80,25 @@ class HomePage extends HookConsumerWidget {
                       child: MediaQuery.removePadding(
                         context: context,
                         removeTop: true,
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: audioState.sounds.length,
-                          itemExtent: 70,
-                          itemBuilder: (context, _currentIndex) =>
-                              AoiSoundListTile(
-                            context: context,
-                            audioState: audioState,
-                            index: _currentIndex,
+                        child: RefreshIndicator(
+                          onRefresh: () {
+                            log('onRefresh');
+                            return audioState.init(forceInit: true);
+                          },
+                          color: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onBackground,
+                          child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: audioState.sounds.length,
+                            itemExtent: 70,
+                            itemBuilder: (context, _currentIndex) =>
+                                AoiSoundListTile(
+                              context: context,
+                              audioState: audioState,
+                              index: _currentIndex,
+                            ),
                           ),
                         ),
                       ),

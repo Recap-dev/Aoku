@@ -23,7 +23,7 @@ class AudioState extends ChangeNotifier {
   AudioStateInitStatus _initStatus = AudioStateInitStatus.notYet;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = [];
-  late final ConcatenatingAudioSource _playList;
+  late ConcatenatingAudioSource _playList;
   int _currentIndex = 0;
   ProcessingState? _processingState;
   late Duration _duration;
@@ -46,14 +46,18 @@ class AudioState extends ChangeNotifier {
   bool get shuffleModeEnabled => _shuffleModeEnabled;
   LoopMode get loopMode => _loopMode;
 
-  Future<AudioStateInitStatus> init(int initialIndex) async {
-    if (_initStatus == AudioStateInitStatus.done) {
-      return _initStatus;
+  Future<AudioStateInitStatus> init({bool? forceInit}) async {
+    if (forceInit != true) {
+      if (_initStatus == AudioStateInitStatus.done) {
+        return _initStatus;
+      }
+
+      if (_initStatus == AudioStateInitStatus.inProgress) {
+        return _initStatus;
+      }
     }
 
-    if (_initStatus == AudioStateInitStatus.inProgress) {
-      return _initStatus;
-    }
+    int initialIndex = 0;
 
     _processingState = _player.processingState;
 
@@ -135,6 +139,8 @@ class AudioState extends ChangeNotifier {
     final List<QueryDocumentSnapshot> soundsOnFirestore = soundsDocuments.docs;
 
     log('There\'re ${soundsOnFirestore.length} sounds.');
+
+    sounds.clear();
 
     for (int i = 0; i < soundsOnFirestore.length; i++) {
       final Map<String, dynamic> fields =
