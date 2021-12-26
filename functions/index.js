@@ -12,10 +12,10 @@ exports.generateSoundInfo = functions.storage.object().onFinalize((object) => {
   doc.set({
     title: "",
     fileName: fileName,
-    location: "",
-    length: "",
-    city: "",
+    location: new admin.firestore.GeoPoint(0, 0),
+    lengthInSeconds: 0,
     province: "",
-    time: "",
+    city: "",
+    timestamp: admin.firestore.FieldValue.serverTimestamp(),
   });
 });
