@@ -9,13 +9,8 @@ exports.generateSoundInfo = functions.storage.object().onFinalize((object) => {
 
   const doc = admin.firestore().doc(`/sounds/${fileName}`);
 
-  doc.set({
-    title: "",
+  doc.update({
     fileName: fileName,
-    location: new admin.firestore.GeoPoint(0, 0),
     lengthInSeconds: 0,
-    province: "",
-    city: "",
-    timestamp: admin.firestore.FieldValue.serverTimestamp(),
   });
 });
