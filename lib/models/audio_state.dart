@@ -144,18 +144,18 @@ class AudioState extends ChangeNotifier {
     for (int i = 0; i < soundsOnFirestore.length; i++) {
       final Map<String, dynamic> fields =
           soundsOnFirestore[i].data() as Map<String, dynamic>;
-      final String fileName = fields['fileName'] as String;
-      final String title = fields['title'] as String;
-      final String city = fields['city'] as String;
+      final String fileName = fields['fileName'] ?? 'unknown';
+      final String title = fields['title'] ?? 'unknown';
+      final String city = fields['city'] ?? 'unknown';
       final Duration length = Duration(
-        seconds: (fields['lengthInSeconds'] as int),
+        seconds: (fields['lengthInSeconds'] ?? 0) as int,
       );
-      final String province = fields['province'] as String;
+      final String province = fields['province'] ?? 'unknown';
       final LatLng location = LatLng(
         (fields['location'] as GeoPoint).latitude,
         (fields['location'] as GeoPoint).longitude,
       );
-      final Timestamp timestamp = fields['timestamp'] as Timestamp;
+      final Timestamp timestamp = fields['timestamp'] ?? Timestamp.now();
       final TimeOfDay timeOfDay = TimeOfDay(
         hour: timestamp.toDate().hour,
         minute: timestamp.toDate().minute,
