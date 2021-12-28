@@ -26,7 +26,7 @@ class BottomPlayer extends HookConsumerWidget {
               ),
       child: Container(
         width: double.infinity,
-        height: 90.0,
+        height: 70.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -36,7 +36,10 @@ class BottomPlayer extends HookConsumerWidget {
               Theme.of(context).colorScheme.primary,
             ],
           ),
-          borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(12.0),
+            topRight: Radius.circular(12.0),
+          ),
         ),
         child: Stack(
           children: [

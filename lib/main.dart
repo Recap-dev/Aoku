@@ -88,6 +88,11 @@ class _AokuAppState extends State<AokuApp> {
                 onError: Colors.white,
                 brightness: Brightness.light,
               ),
+              textTheme: const TextTheme(
+                bodyText1: TextStyle(
+                  fontFamily: 'Noto-Serif-Japanese',
+                ),
+              ),
             ),
             darkTheme: ThemeData(
               brightness: Brightness.dark,
@@ -105,11 +110,14 @@ class _AokuAppState extends State<AokuApp> {
                 onError: Color(0xFFF5F5F5),
                 brightness: Brightness.dark,
               ),
+              textTheme: const TextTheme(
+                bodyText1: TextStyle(
+                  fontFamily: 'Noto-Serif-Japanese',
+                ),
+              ),
             ),
             themeMode: ThemeMode.system,
-            home: const HomePage(
-              title: '聞く',
-            ),
+            home: const HomePage(),
           );
         }
       },

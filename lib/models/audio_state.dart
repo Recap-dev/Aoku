@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:aoku/components/album_art.dart';
 import 'package:aoku/models/aoi_sound.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -21,8 +22,8 @@ enum AudioStateInitStatus {
 class AudioState extends ChangeNotifier {
   AudioStateInitStatus _initStatus = AudioStateInitStatus.notYet;
   final AudioPlayer _player = AudioPlayer();
-  final List<AoiSound> _sounds = soundsMaster;
-  late final ConcatenatingAudioSource _playList;
+  final List<AoiSound> _sounds = [];
+  late ConcatenatingAudioSource _playList;
   int _currentIndex = 0;
   ProcessingState? _processingState;
   late Duration _duration;
@@ -45,14 +46,18 @@ class AudioState extends ChangeNotifier {
   bool get shuffleModeEnabled => _shuffleModeEnabled;
   LoopMode get loopMode => _loopMode;
 
-  Future<AudioStateInitStatus> init(int initialIndex) async {
-    if (_initStatus == AudioStateInitStatus.done) {
-      return _initStatus;
+  Future<AudioStateInitStatus> init({bool? forceInit}) async {
+    if (forceInit != true) {
+      if (_initStatus == AudioStateInitStatus.done) {
+        return _initStatus;
+      }
+
+      if (_initStatus == AudioStateInitStatus.inProgress) {
+        return _initStatus;
+      }
     }
 
-    if (_initStatus == AudioStateInitStatus.inProgress) {
-      return _initStatus;
-    }
+    int initialIndex = 0;
 
     _processingState = _player.processingState;
 
@@ -62,7 +67,6 @@ class AudioState extends ChangeNotifier {
     await session.configure(
       const AudioSessionConfiguration.music(),
     );
-    List<String> urls = [];
 
     _player.sequenceStateStream.listen((sequenceState) {
       log('sequenceStream changed.');
@@ -128,26 +132,58 @@ class AudioState extends ChangeNotifier {
     });
 
     final storage = firebase_storage.FirebaseStorage.instance;
+    final firestore = FirebaseFirestore.instance;
 
-    for (int i = 0; i < sounds.length; i++) {
-      log('fetching ${_sounds[i].fileName}');
+    final CollectionReference soundsCollection = firestore.collection('sounds');
+    final QuerySnapshot soundsDocuments = await soundsCollection.get();
+    final List<QueryDocumentSnapshot> soundsOnFirestore = soundsDocuments.docs;
 
-      try {
-        urls.add(
-          // Read the sound file from Firebase Cloud Storage
-          await storage.ref('sounds/${_sounds[i].fileName}').getDownloadURL(),
-        );
-      } on firebase_storage.FirebaseException catch (e) {
-        log('Error getting download url: $e');
-      } on Exception catch (e) {
-        log('Error getting download url: $e');
-      }
+    log('There\'re ${soundsOnFirestore.length} sounds.');
+
+    sounds.clear();
+
+    for (int i = 0; i < soundsOnFirestore.length; i++) {
+      final Map<String, dynamic> fields =
+          soundsOnFirestore[i].data() as Map<String, dynamic>;
+      final String fileName = fields['fileName'] as String;
+      final String title = fields['title'] as String;
+      final String city = fields['city'] as String;
+      final Duration length = Duration(
+        seconds: (fields['lengthInSeconds'] as int),
+      );
+      final String province = fields['province'] as String;
+      final LatLng location = LatLng(
+        (fields['location'] as GeoPoint).latitude,
+        (fields['location'] as GeoPoint).longitude,
+      );
+      final Timestamp timestamp = fields['timestamp'] as Timestamp;
+      final TimeOfDay timeOfDay = TimeOfDay(
+        hour: timestamp.toDate().hour,
+        minute: timestamp.toDate().minute,
+      );
+      final String downloadURL =
+          await storage.ref('sounds/$fileName').getDownloadURL();
+
+      sounds.add(
+        AoiSound(
+          title: title,
+          fileName: fileName,
+          location: location,
+          length: length,
+          city: city,
+          province: province,
+          time: timeOfDay,
+          downloadURL: downloadURL,
+        ),
+      );
+
+      log('Got a sound: $title');
     }
 
     _playList = ConcatenatingAudioSource(
-      children: List.generate(10, (i) {
+      children: List.generate(soundsOnFirestore.length, (i) {
         return AudioSource.uri(
-          Uri.parse(urls[i]),
+          Uri.parse(sounds[i].downloadURL),
           tag: MediaItem(
             id: _sounds[i].fileName,
             title: _sounds[i].title,

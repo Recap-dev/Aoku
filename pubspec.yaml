@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.3+11
+version: 0.2.4+2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -31,6 +31,13 @@ dependencies:
   cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.5
   sn_progress_dialog: ^1.0.3
+  path_provider: ^2.0.8
+  file_picker: ^4.3.0
+  liquid_progress_indicator: ^0.4.0
+  map_picker: ^0.0.3
+  geolocator: ^8.0.1
+  geocoding: ^2.0.1
+  step_progress_indicator: ^1.0.1
 
 dev_dependencies:
   flutter_test:
