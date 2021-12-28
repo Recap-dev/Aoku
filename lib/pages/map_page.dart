@@ -54,7 +54,7 @@ class _MapPageState extends State<MapPage> {
             child: CupertinoButton(
               color: Colors.blueGrey.withOpacity(0.05),
               child: const Icon(
-                CupertinoIcons.map_pin_ellipse,
+                CupertinoIcons.placemark_fill,
                 color: Color(0xFF050A30),
               ),
               onPressed: _onBackToInitialLocationPressed,
