@@ -19,7 +19,7 @@ class _MapPageState extends State<MapPage> {
 
   late final CameraPosition _kGooglePlex = CameraPosition(
     target: widget.initialLocation,
-    zoom: 14.4746,
+    zoom: 8,
   );
   final Set<Marker> _markers = {};
   bool isOnInitialLocation = true;

@@ -73,7 +73,7 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
                 target: audioState.sounds[audioState.currentIndex].location,
-                zoom: 12,
+                zoom: 8,
               ),
               onMapCreated: _onMapCreated,
               myLocationButtonEnabled: false,

@@ -69,15 +69,14 @@ class AudioState extends ChangeNotifier {
     );
 
     _player.sequenceStateStream.listen((sequenceState) {
-      log('sequenceStream changed.');
-
       if (sequenceState == null) return;
 
+      // Anmate map when sequenceState changes
       if (smallMapController != null) {
         smallMapController!.animateCamera(
           CameraUpdate.newLatLngZoom(
             _sounds[_player.currentIndex as int].location,
-            12,
+            8,
           ),
         );
       } else {
