@@ -29,11 +29,6 @@ class _UploadPageStep3State extends State<UploadPageStep3> {
   Timestamp? timestamp;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -43,49 +38,23 @@ class _UploadPageStep3State extends State<UploadPageStep3> {
           currentStep: 3,
           size: 10,
           padding: 0,
-          selectedColor: Theme.of(context).colorScheme.background,
+          selectedColor: Theme.of(context).colorScheme.surface,
           unselectedColor: Colors.grey.shade300,
           roundedEdges: const Radius.circular(4),
         ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  CupertinoFormSection.insetGrouped(
-                    backgroundColor: Colors.transparent,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 150,
-                          child: CupertinoDatePicker(
-                            initialDateTime: DateTime.now(),
-                            mode: CupertinoDatePickerMode.time,
-                            onDateTimeChanged: (time) {
-                              HapticFeedback.selectionClick();
-                              setState(() {
-                                timestamp = Timestamp.fromDate(time);
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  //FullScreenUploadProgressIndicator(
-                  //  uploadProgress: uploadProgress,
-                  //),
-                ],
-              ),
-            ],
+      body: Center(
+        child: SizedBox(
+          height: 200,
+          child: CupertinoDatePicker(
+            initialDateTime: DateTime.now(),
+            mode: CupertinoDatePickerMode.time,
+            onDateTimeChanged: (time) {
+              HapticFeedback.selectionClick();
+              setState(() => timestamp = Timestamp.fromDate(time));
+            },
           ),
         ),
       ),

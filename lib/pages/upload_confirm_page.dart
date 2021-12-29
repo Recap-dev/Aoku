@@ -45,7 +45,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
           currentStep: 5,
           size: 10,
           padding: 0,
-          selectedColor: Theme.of(context).colorScheme.background,
+          selectedColor: Theme.of(context).colorScheme.surface,
           unselectedColor: Colors.grey.shade300,
           roundedEdges: const Radius.circular(4),
         ),
@@ -74,60 +74,42 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
           ),
           const SizedBox(height: 56.0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 56.0),
             child: Table(
               children: [
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'タイトル',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      'タイトル',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.title ?? '',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      widget.title ?? '',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        '場所',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      '場所',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget.city}, ${widget.province}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      '${widget.city}, ${widget.province}',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        '時刻',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      '時刻',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget.timestamp!.toDate().hour.toString()}:${widget.timestamp!.toDate().minute.toString()}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      '${widget.timestamp!.toDate().hour.toString()}:${widget.timestamp!.toDate().minute.toString()}',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
@@ -140,11 +122,11 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
       floatingActionButton: CupertinoButton.filled(
         child: const Text('アップロード'),
         onPressed: () async {
-          await _upload(
-            File(widget.filePickerResult!.files.single.path ?? ''),
-            widget.filePickerResult!.files.single.name,
-          );
-          await _updateSoundInfo(widget.filePickerResult!.files.single.name);
+          Future.wait([
+            _upload(widget.filePickerResult!),
+            _updateSoundInfo(widget.filePickerResult!.files.single.name),
+          ]);
+
           Navigator.popUntil(
             context,
             (route) => route.isFirst,
@@ -154,19 +136,27 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
     );
   }
 
-  Future<void> _upload(File file, String fileName) async {
+  Future<void> _upload(FilePickerResult filePickerResult) async {
     UploadTask task;
+    File file = File(filePickerResult.files.single.path as String);
+    String fileName = filePickerResult.files.single.name;
 
     try {
+      // Check if file is not empty
+      // https://stackoverflow.com/a/62845903/13676510
+      if (file.existsSync()) {
+        log('file doesn\'t exist. Creating a new one...');
+        file = await file.create();
+        log('Created.');
+      }
+
       task = FirebaseStorage.instance.ref('sounds/$fileName').putFile(file);
 
       task.snapshotEvents.listen((event) {
-        setState(() {
-          uploadProgress = ((event.bytesTransferred.toDouble() /
-                  event.totalBytes.toDouble() *
-                  100)
-              .roundToDouble());
-        });
+        setState(() => uploadProgress = ((event.bytesTransferred.toDouble() /
+                event.totalBytes.toDouble() *
+                100)
+            .roundToDouble()));
       });
     } on FirebaseException catch (e) {
       log('Error uploading a file: ${e.message}');
@@ -177,6 +167,8 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
     try {
       await FirebaseFirestore.instance.doc('sounds/$fileName').set(
         {
+          'fileName': fileName,
+          'lengthInSeconds': 0,
           'title': widget.title,
           'timestamp': widget.timestamp,
           'city': widget.city,

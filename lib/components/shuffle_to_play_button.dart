@@ -21,7 +21,7 @@ class ShuffleToPlayButton extends StatelessWidget {
       onPressed: () async {
         HapticFeedback.lightImpact();
         await audioState.toggleShuffleMode(forceEnable: true);
-        await audioState.toggleLoopMode(forceEnable: true);
+        await audioState.setLoopMode(forceEnable: true);
         showCupertinoModalBottomSheet(
           context: context,
           builder: (context) => const PlayPage(),

@@ -2,9 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HeartButton extends StatelessWidget {
-  const HeartButton({
+  final Color color;
+  final VoidCallback? onPressed;
+
+  const HeartButton._({
     Key? key,
+    required this.color,
+    required this.onPressed,
   }) : super(key: key);
+
+  // Enabled HeartButton constructor
+  factory HeartButton.enabled({required VoidCallback? onPressed}) =>
+      HeartButton._(
+        key: const Key('HeartButton.enabled'),
+        color: Colors.pink,
+        onPressed: onPressed,
+      );
+
+  // Disabled HeartButton constructor
+  factory HeartButton.disabled() => const HeartButton._(
+        key: Key('HeartButton.disabled'),
+        color: Colors.grey,
+        onPressed: null,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +33,7 @@ class HeartButton extends StatelessWidget {
         CupertinoIcons.heart_fill,
         color: Theme.of(context).colorScheme.onBackground,
       ),
-      onPressed: null,
+      onPressed: onPressed,
       iconSize: 24.0,
     );
   }

@@ -39,72 +39,51 @@ class _UploadPageStep4State extends State<UploadPageStep4> {
           currentStep: 4,
           size: 10,
           padding: 0,
-          selectedColor: Theme.of(context).colorScheme.background,
+          selectedColor: Theme.of(context).colorScheme.surface,
           unselectedColor: Colors.grey.shade300,
           roundedEdges: const Radius.circular(4),
         ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
+      body: Center(
+        child: title != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CupertinoFormSection.insetGrouped(
-                    backgroundColor: Colors.transparent,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: title != null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(title ?? ''),
-                                  IconButton(
-                                    onPressed: () => setState(() {
-                                      title = null;
-                                    }),
-                                    icon: const Icon(CupertinoIcons.clear),
-                                  ),
-                                ],
-                              )
-                            : CupertinoButton.filled(
-                                child: const Text('タイトル'),
-                                onPressed: () => showCupertinoDialog(
-                                  context: context,
-                                  builder: (context) => CupertinoAlertDialog(
-                                    content: CupertinoTextField(
-                                      autofocus: true,
-                                      onChanged: (value) {
-                                        setState(() => title = value);
-                                      },
-                                    ),
-                                    actions: [
-                                      CupertinoDialogAction(
-                                        child: const Text('キャンセル'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      CupertinoDialogAction(
-                                        child: const Text('OK'),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                  Text(title ?? ''),
+                  IconButton(
+                    onPressed: () => setState(() => title = null),
+                    icon: const Icon(CupertinoIcons.clear),
+                  ),
+                ],
+              )
+            : CupertinoButton.filled(
+                child: const Text('タイトル'),
+                onPressed: () => showCupertinoDialog(
+                  context: context,
+                  builder: (context) => CupertinoAlertDialog(
+                    content: CupertinoTextField(
+                      placeholder: 'タイトル',
+                      autofocus: true,
+                      onChanged: (value) => setState(() => title = value),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                    ),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: const Text('キャンセル'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      CupertinoDialogAction(
+                        child: const Text('OK'),
+                        onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ],
-          ),
-        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: CupertinoButton.filled(

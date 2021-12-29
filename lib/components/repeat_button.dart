@@ -26,7 +26,7 @@ class RepeatButton extends StatelessWidget {
       child: IconButton(
         onPressed: () {
           HapticFeedback.lightImpact();
-          audioState.toggleLoopMode();
+          audioState.setLoopMode();
         },
         icon: Icon(
           audioState.loopMode != LoopMode.one

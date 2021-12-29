@@ -64,7 +64,7 @@ class AoiSoundListTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Icon(
-                          CupertinoIcons.map_pin_ellipse,
+                          CupertinoIcons.placemark_fill,
                           color: Theme.of(context).colorScheme.onBackground,
                           size: 12.0,
                         ),

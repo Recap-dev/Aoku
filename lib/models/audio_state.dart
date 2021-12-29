@@ -20,6 +20,12 @@ enum AudioStateInitStatus {
 }
 
 class AudioState extends ChangeNotifier {
+  static final AudioState _instance = AudioState._internal();
+
+  factory AudioState() => _instance;
+
+  AudioState._internal();
+
   AudioStateInitStatus _initStatus = AudioStateInitStatus.notYet;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = [];
@@ -47,7 +53,9 @@ class AudioState extends ChangeNotifier {
   LoopMode get loopMode => _loopMode;
 
   Future<AudioStateInitStatus> init({bool? forceInit}) async {
-    if (forceInit != true) {
+    // forceInit is set to true when a user refreshes the app
+    // null is treated as false
+    if (!(forceInit ?? false)) {
       if (_initStatus == AudioStateInitStatus.done) {
         return _initStatus;
       }
@@ -56,8 +64,6 @@ class AudioState extends ChangeNotifier {
         return _initStatus;
       }
     }
-
-    int initialIndex = 0;
 
     _processingState = _player.processingState;
 
@@ -69,15 +75,14 @@ class AudioState extends ChangeNotifier {
     );
 
     _player.sequenceStateStream.listen((sequenceState) {
-      log('sequenceStream changed.');
-
       if (sequenceState == null) return;
 
+      // Anmate map when sequenceState changes
       if (smallMapController != null) {
         smallMapController!.animateCamera(
           CameraUpdate.newLatLngZoom(
             _sounds[_player.currentIndex as int].location,
-            12,
+            8,
           ),
         );
       } else {
@@ -85,49 +90,30 @@ class AudioState extends ChangeNotifier {
       }
 
       _currentIndex = sequenceState.currentIndex;
+      _shuffleModeEnabled = sequenceState.shuffleModeEnabled;
+      _loopMode = sequenceState.loopMode;
 
-      notifyListeners();
-    });
-
-    _player.processingStateStream.listen((processingState) {
-      _processingState = processingState;
       notifyListeners();
     });
 
     _player.playbackEventStream.listen(
-      (event) {},
+      (event) {
+        _duration = event.duration ?? Duration.zero;
+        _buffered = event.bufferedPosition;
+        _processingState = event.processingState;
+
+        notifyListeners();
+      },
       onError: (Object e, StackTrace stackTrace) {
         log('A stream error occured: $e');
+
         notifyListeners();
       },
     );
 
-    _player.durationStream.listen((duration) {
-      _duration = duration ?? Duration.zero;
-      notifyListeners();
-    });
-
     _player.positionStream.listen((position) {
       _position = position;
-      notifyListeners();
-    });
 
-    _player.bufferedPositionStream.listen((buffered) {
-      _buffered = buffered;
-      notifyListeners();
-    });
-
-    _player.playerStateStream.listen((state) {
-      notifyListeners();
-    });
-
-    _player.shuffleModeEnabledStream.listen((shuffleModeEnabled) {
-      _shuffleModeEnabled = shuffleModeEnabled;
-      notifyListeners();
-    });
-
-    _player.loopModeStream.listen((loopModeEnabled) {
-      _loopMode = loopModeEnabled;
       notifyListeners();
     });
 
@@ -138,25 +124,25 @@ class AudioState extends ChangeNotifier {
     final QuerySnapshot soundsDocuments = await soundsCollection.get();
     final List<QueryDocumentSnapshot> soundsOnFirestore = soundsDocuments.docs;
 
-    log('There\'re ${soundsOnFirestore.length} sounds.');
+    log('${soundsOnFirestore.length} sounds found.');
 
+    // Prepare for force init
     sounds.clear();
 
     for (int i = 0; i < soundsOnFirestore.length; i++) {
       final Map<String, dynamic> fields =
           soundsOnFirestore[i].data() as Map<String, dynamic>;
-      final String fileName = fields['fileName'] as String;
-      final String title = fields['title'] as String;
-      final String city = fields['city'] as String;
-      final Duration length = Duration(
-        seconds: (fields['lengthInSeconds'] as int),
-      );
-      final String province = fields['province'] as String;
+      final String fileName = fields['fileName'] ?? 'unknown';
+      final String title = fields['title'] ?? 'unknown';
+      final String city = fields['city'] ?? 'unknown';
+      final Duration length =
+          Duration(seconds: (fields['lengthInSeconds']) ?? Duration.zero);
+      final String province = fields['province'] ?? 'unknown';
       final LatLng location = LatLng(
         (fields['location'] as GeoPoint).latitude,
         (fields['location'] as GeoPoint).longitude,
       );
-      final Timestamp timestamp = fields['timestamp'] as Timestamp;
+      final Timestamp timestamp = fields['timestamp'] ?? Timestamp.now();
       final TimeOfDay timeOfDay = TimeOfDay(
         hour: timestamp.toDate().hour,
         minute: timestamp.toDate().minute,
@@ -197,16 +183,12 @@ class AudioState extends ChangeNotifier {
 
     await _player.setAudioSource(_playList);
 
-    if (initialIndex != _currentIndex) {
-      await _player.seek(
-        Duration.zero,
-        index: initialIndex,
-      );
-      _currentIndex = initialIndex;
-    }
+    await _player.seek(
+      Duration.zero,
+      index: _currentIndex,
+    );
 
     _initStatus = AudioStateInitStatus.done;
-    log('Initialized.');
     notifyListeners();
 
     return AudioStateInitStatus.done;
@@ -252,7 +234,8 @@ class AudioState extends ChangeNotifier {
   }
 
   Future<void> toggleShuffleMode({bool? forceEnable}) async {
-    if (forceEnable == true) {
+    // null is treated as false
+    if (forceEnable ?? false) {
       _shuffleModeEnabled = true;
     } else {
       _shuffleModeEnabled = !shuffleModeEnabled;
@@ -262,8 +245,9 @@ class AudioState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleLoopMode({bool? forceEnable}) async {
-    if (forceEnable == true) {
+  Future<void> setLoopMode({bool? forceEnable}) async {
+    // null is treated as false
+    if (forceEnable ?? false) {
       _loopMode = LoopMode.all;
     } else if (_loopMode == LoopMode.off) {
       _loopMode = LoopMode.all;

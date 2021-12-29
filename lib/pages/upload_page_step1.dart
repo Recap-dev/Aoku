@@ -32,52 +32,31 @@ class _UploadPageStep1State extends State<UploadPageStep1> {
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CupertinoFormSection.insetGrouped(
-                backgroundColor: Colors.transparent,
+      body: Center(
+        child: filePickerResult != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: filePickerResult != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(filePickerResult!.files.single.name),
-                              IconButton(
-                                onPressed: () => setState(() {
-                                  filePickerResult = null;
-                                }),
-                                icon: const Icon(CupertinoIcons.clear),
-                              ),
-                            ],
-                          )
-                        : CupertinoButton.filled(
-                            child: const Text('ファイル'),
-                            onPressed: () async {
-                              FilePickerResult? tmpResult =
-                                  await FilePicker.platform.pickFiles(
-                                allowMultiple: false,
-                                type: FileType.custom,
-                                allowedExtensions: ['m4a'],
-                              );
-
-                              setState(() {
-                                filePickerResult = tmpResult;
-                              });
-                            },
-                          ),
+                  Text(filePickerResult!.files.single.name),
+                  IconButton(
+                    onPressed: () => setState(() => filePickerResult = null),
+                    icon: const Icon(CupertinoIcons.clear),
                   ),
                 ],
+              )
+            : CupertinoButton.filled(
+                child: const Text('ファイル'),
+                onPressed: () async {
+                  FilePickerResult? tmpResult =
+                      await FilePicker.platform.pickFiles(
+                    allowMultiple: false,
+                    type: FileType.custom,
+                    allowedExtensions: ['m4a'],
+                  );
+
+                  setState(() => filePickerResult = tmpResult);
+                },
               ),
-            ],
-          ),
-        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: CupertinoButton.filled(

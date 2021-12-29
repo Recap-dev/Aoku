@@ -38,53 +38,32 @@ class _UploadPageStep2State extends State<UploadPageStep2> {
           currentStep: 2,
           size: 10,
           padding: 0,
-          selectedColor: Theme.of(context).colorScheme.background,
+          selectedColor: Theme.of(context).colorScheme.surface,
           unselectedColor: Colors.grey.shade300,
           roundedEdges: const Radius.circular(4),
         ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: SizedBox.expand(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
+      body: Center(
+        child: city != null || province != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CupertinoFormSection.insetGrouped(
-                    backgroundColor: Colors.transparent,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: city != null || province != null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('${city ?? ''}, ${province ?? ''}'),
-                                  IconButton(
-                                    onPressed: () => setState(() {
-                                      city = null;
-                                      province = null;
-                                    }),
-                                    icon: const Icon(CupertinoIcons.clear),
-                                  ),
-                                ],
-                              )
-                            : CupertinoButton.filled(
-                                child: const Text('場所'),
-                                onPressed: _showMapPicker,
-                              ),
-                      ),
-                    ],
+                  Text('${city ?? ''}, ${province ?? ''}'),
+                  IconButton(
+                    onPressed: () => setState(() {
+                      city = null;
+                      province = null;
+                    }),
+                    icon: const Icon(CupertinoIcons.clear),
                   ),
                 ],
+              )
+            : CupertinoButton.filled(
+                child: const Text('場所'),
+                onPressed: _showMapPicker,
               ),
-            ],
-          ),
-        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: CupertinoButton.filled(

@@ -18,7 +18,7 @@ class InfoText extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              CupertinoIcons.map_pin_ellipse,
+              CupertinoIcons.placemark_fill,
               size: 12.0,
               color: Theme.of(context).colorScheme.onBackground,
             ),
