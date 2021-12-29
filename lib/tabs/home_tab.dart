@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
