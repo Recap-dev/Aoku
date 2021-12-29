@@ -74,60 +74,42 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
           ),
           const SizedBox(height: 56.0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 56.0),
             child: Table(
               children: [
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'タイトル',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      'タイトル',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.title ?? '',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      widget.title ?? '',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        '場所',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      '場所',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget.city}, ${widget.province}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      '${widget.city}, ${widget.province}',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
                 TableRow(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        '時刻',
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    const Text(
+                      '時刻',
+                      style: TextStyle(fontSize: 20),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '${widget.timestamp!.toDate().hour.toString()}:${widget.timestamp!.toDate().minute.toString()}',
-                        style: const TextStyle(fontSize: 20),
-                      ),
+                    Text(
+                      '${widget.timestamp!.toDate().hour.toString()}:${widget.timestamp!.toDate().minute.toString()}',
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
