@@ -38,7 +38,7 @@ class _UploadPageStep2State extends State<UploadPageStep2> {
           currentStep: 2,
           size: 10,
           padding: 0,
-          selectedColor: Theme.of(context).colorScheme.background,
+          selectedColor: Theme.of(context).colorScheme.surface,
           unselectedColor: Colors.grey.shade300,
           roundedEdges: const Radius.circular(4),
         ),
