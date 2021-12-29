@@ -99,7 +99,6 @@ class AudioState extends ChangeNotifier {
     _player.playbackEventStream.listen(
       (event) {
         _duration = event.duration ?? Duration.zero;
-        _position = event.updatePosition;
         _buffered = event.bufferedPosition;
         _processingState = event.processingState;
 
@@ -111,6 +110,12 @@ class AudioState extends ChangeNotifier {
         notifyListeners();
       },
     );
+
+    _player.positionStream.listen((position) {
+      _position = position;
+
+      notifyListeners();
+    });
 
     final storage = firebase_storage.FirebaseStorage.instance;
     final firestore = FirebaseFirestore.instance;
