@@ -122,11 +122,11 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
       floatingActionButton: CupertinoButton.filled(
         child: const Text('アップロード'),
         onPressed: () async {
-          await _upload(
-            File(widget.filePickerResult!.files.single.path ?? ''),
-            widget.filePickerResult!.files.single.name,
-          );
-          await _updateSoundInfo(widget.filePickerResult!.files.single.name);
+          Future.wait([
+            _upload(widget.filePickerResult!),
+            _updateSoundInfo(widget.filePickerResult!.files.single.name),
+          ]);
+
           Navigator.popUntil(
             context,
             (route) => route.isFirst,
@@ -136,10 +136,20 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
     );
   }
 
-  Future<void> _upload(File file, String fileName) async {
+  Future<void> _upload(FilePickerResult filePickerResult) async {
     UploadTask task;
+    File file = File(filePickerResult.files.single.path as String);
+    String fileName = filePickerResult.files.single.name;
 
     try {
+      // Check if file is not empty
+      // https://stackoverflow.com/a/62845903/13676510
+      if (file.existsSync()) {
+        log('file doesn\'t exist. Creating a new one...');
+        file = await file.create();
+        log('Created.');
+      }
+
       task = FirebaseStorage.instance.ref('sounds/$fileName').putFile(file);
 
       task.snapshotEvents.listen((event) {
