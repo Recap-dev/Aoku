@@ -167,6 +167,8 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
     try {
       await FirebaseFirestore.instance.doc('sounds/$fileName').set(
         {
+          'fileName': fileName,
+          'lengthInSeconds': 0,
           'title': widget.title,
           'timestamp': widget.timestamp,
           'city': widget.city,
