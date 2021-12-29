@@ -87,12 +87,8 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
             GestureDetector(
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => MapPage(
-                    initialLocation:
-                        audioState.sounds[audioState.currentIndex].location,
-                  ),
-                ),
+                MapPage.route(
+                    audioState.sounds[audioState.currentIndex].location),
               ),
               child: FadeTransition(
                 opacity: _animation,
