@@ -48,13 +48,11 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedIndex,
           items: const [
             BottomNavigationBarItem(
-              //label: 'Home',
               icon: Icon(
                 CupertinoIcons.music_albums_fill,
               ),
             ),
             BottomNavigationBarItem(
-              //label: 'Settings',
               icon: Icon(
                 CupertinoIcons.settings,
               ),

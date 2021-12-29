@@ -119,8 +119,9 @@ class AudioState extends ChangeNotifier {
     final QuerySnapshot soundsDocuments = await soundsCollection.get();
     final List<QueryDocumentSnapshot> soundsOnFirestore = soundsDocuments.docs;
 
-    log('There\'re ${soundsOnFirestore.length} sounds.');
+    log('${soundsOnFirestore.length} sounds found.');
 
+    // Prepare for force init
     sounds.clear();
 
     for (int i = 0; i < soundsOnFirestore.length; i++) {
@@ -183,7 +184,6 @@ class AudioState extends ChangeNotifier {
     );
 
     _initStatus = AudioStateInitStatus.done;
-    log('Initialized.');
     notifyListeners();
 
     return AudioStateInitStatus.done;
