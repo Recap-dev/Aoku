@@ -64,7 +64,7 @@ class PlayPage extends HookConsumerWidget {
                           width: MediaQuery.of(context).size.width * 0.4,
                           child: const InfoText(),
                         ),
-                        const HeartButton(),
+                        HeartButton.enabled(onPressed: null),
                       ],
                     ),
                   ],
