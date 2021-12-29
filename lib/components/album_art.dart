@@ -1,8 +1,13 @@
-import 'package:aoku/models/audio_state.dart';
-import 'package:aoku/pages/map_page.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/models/audio_state.dart';
+import 'package:aoku/pages/map_page.dart';
 
 /// Will be accessed by AudioState when stream changes
 GoogleMapController? smallMapController;

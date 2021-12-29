@@ -1,3 +1,11 @@
+// 🐦 Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// 🌎 Project imports:
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
@@ -5,9 +13,6 @@ import 'package:aoku/components/full_screen_loading.dart';
 import 'package:aoku/components/shuffle_to_play_button.dart';
 import 'package:aoku/components/sound_list_header.dart';
 import 'package:aoku/models/audio_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeTab extends HookConsumerWidget {
   const HomeTab({Key? key}) : super(key: key);

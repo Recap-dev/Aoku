@@ -1,12 +1,17 @@
+// 🐦 Flutter imports:
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+// 🌎 Project imports:
 import 'package:aoku/components/next_button.dart';
 import 'package:aoku/components/pause_button.dart';
 import 'package:aoku/components/play_button.dart';
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class BottomPlayer extends HookConsumerWidget {
   const BottomPlayer({

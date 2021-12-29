@@ -1,9 +1,14 @@
-import 'package:aoku/pages/upload_page_step2.dart';
-import 'package:file_picker/file_picker.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:file_picker/file_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/pages/upload_page_step2.dart';
 
 class UploadPageStep1 extends StatefulWidget {
   const UploadPageStep1({Key? key}) : super(key: key);

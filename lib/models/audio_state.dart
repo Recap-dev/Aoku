@@ -1,15 +1,21 @@
+// 🎯 Dart imports:
 import 'dart:developer';
 
-import 'package:aoku/components/album_art.dart';
-import 'package:aoku/models/aoi_sound.dart';
+// 🐦 Flutter imports:
+import 'package:flutter/material.dart';
+
+// 📦 Package imports:
 import 'package:audio_session/audio_session.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/components/album_art.dart';
+import 'package:aoku/models/aoi_sound.dart';
 
 final audioProvider = ChangeNotifierProvider<AudioState>((_) => AudioState());
 

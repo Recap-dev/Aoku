@@ -1,9 +1,16 @@
-import 'package:aoku/pages/home_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutterfire_ui/i10n.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/gen/assets.gen.dart';
+import 'package:aoku/gen/fonts.gen.dart';
+import 'package:aoku/pages/home_page.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -51,7 +58,7 @@ class _AokuAppState extends State<AokuApp> {
             home: Scaffold(
               backgroundColor: const Color(0xFFF5F5F5),
               body: Center(
-                child: Image.asset('images/blue-blur-2.png'),
+                child: Image(image: Assets.images.blueBlur2),
               ),
             ),
           );
@@ -74,7 +81,7 @@ class _AokuAppState extends State<AokuApp> {
             title: 'Aoku',
             theme: ThemeData(
               brightness: Brightness.light,
-              fontFamily: 'Noto-Serif-Japanese',
+              fontFamily: FontFamily.notoSerifJapanese,
               colorScheme: const ColorScheme.light(
                 primary: Color(0xFF58BAB3),
                 secondary: Color(0xFFEBEBCF),
@@ -90,13 +97,13 @@ class _AokuAppState extends State<AokuApp> {
               ),
               textTheme: const TextTheme(
                 bodyText1: TextStyle(
-                  fontFamily: 'Noto-Serif-Japanese',
+                  fontFamily: FontFamily.notoSerifJapanese,
                 ),
               ),
             ),
             darkTheme: ThemeData(
               brightness: Brightness.dark,
-              fontFamily: 'Noto-Serif-Japanese',
+              fontFamily: FontFamily.notoSerifJapanese,
               colorScheme: const ColorScheme.dark(
                 primary: Color(0xFF17302F),
                 secondary: Color(0xFF192F40),
@@ -112,7 +119,7 @@ class _AokuAppState extends State<AokuApp> {
               ),
               textTheme: const TextTheme(
                 bodyText1: TextStyle(
-                  fontFamily: 'Noto-Serif-Japanese',
+                  fontFamily: FontFamily.notoSerifJapanese,
                 ),
               ),
             ),
