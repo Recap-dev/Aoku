@@ -1,9 +1,15 @@
-import 'package:aoku/models/audio_state.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// 📦 Package imports:
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/gen/fonts.gen.dart';
+import 'package:aoku/models/audio_state.dart';
 
 class AoiProgressBar extends HookConsumerWidget {
   const AoiProgressBar({
@@ -38,7 +44,7 @@ class AoiProgressBar extends HookConsumerWidget {
       thumbGlowRadius: 6,
       timeLabelTextStyle: TextStyle(
         color: Theme.of(context).colorScheme.onBackground,
-        fontFamily: 'Noto-Serif-Japanese',
+        fontFamily: FontFamily.notoSerifJapanese,
       ),
       timeLabelPadding: 10.0,
       onSeek: (Duration duration) {

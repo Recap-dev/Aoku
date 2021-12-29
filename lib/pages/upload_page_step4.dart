@@ -1,10 +1,15 @@
-import 'package:aoku/pages/upload_confirm_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/pages/upload_confirm_page.dart';
 
 class UploadPageStep4 extends StatefulWidget {
   const UploadPageStep4({

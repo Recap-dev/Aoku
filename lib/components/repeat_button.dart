@@ -1,8 +1,13 @@
-import 'package:aoku/models/audio_state.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// 📦 Package imports:
 import 'package:just_audio/just_audio.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/models/audio_state.dart';
 
 class RepeatButton extends StatelessWidget {
   const RepeatButton({

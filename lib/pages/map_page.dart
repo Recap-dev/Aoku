@@ -1,11 +1,21 @@
+// 🎯 Dart imports:
 import 'dart:async';
 
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// 📦 Package imports:
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
+  static Route route(LatLng initialLocation) => MaterialPageRoute(
+        builder: (_) => MapPage(
+          initialLocation: initialLocation,
+        ),
+      );
+
   const MapPage({Key? key, required this.initialLocation}) : super(key: key);
 
   final LatLng initialLocation;

@@ -1,9 +1,14 @@
-import 'package:aoku/components/frosted_background.dart';
-import 'package:aoku/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
+
+// 🌎 Project imports:
+import 'package:aoku/components/frosted_background.dart';
+import 'package:aoku/constants.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);

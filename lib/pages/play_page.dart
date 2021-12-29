@@ -1,3 +1,10 @@
+// 🐦 Flutter imports:
+import 'package:flutter/material.dart';
+
+// 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// 🌎 Project imports:
 import 'package:aoku/components/album_art.dart';
 import 'package:aoku/components/aoi_progress_bar.dart';
 import 'package:aoku/components/frosted_background.dart';
@@ -10,8 +17,6 @@ import 'package:aoku/components/previous_button.dart';
 import 'package:aoku/components/repeat_button.dart';
 import 'package:aoku/components/shuffle_button.dart';
 import 'package:aoku/models/audio_state.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class PlayPage extends HookConsumerWidget {
   const PlayPage({
