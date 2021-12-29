@@ -65,8 +65,6 @@ class AudioState extends ChangeNotifier {
       }
     }
 
-    int initialIndex = 0;
-
     _processingState = _player.processingState;
 
     _initStatus = AudioStateInitStatus.inProgress;
@@ -203,13 +201,10 @@ class AudioState extends ChangeNotifier {
 
     await _player.setAudioSource(_playList);
 
-    if (initialIndex != _currentIndex) {
-      await _player.seek(
-        Duration.zero,
-        index: initialIndex,
-      );
-      _currentIndex = initialIndex;
-    }
+    await _player.seek(
+      Duration.zero,
+      index: _currentIndex,
+    );
 
     _initStatus = AudioStateInitStatus.done;
     log('Initialized.');
