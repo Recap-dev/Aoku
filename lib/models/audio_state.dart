@@ -53,7 +53,9 @@ class AudioState extends ChangeNotifier {
   LoopMode get loopMode => _loopMode;
 
   Future<AudioStateInitStatus> init({bool? forceInit}) async {
-    if (forceInit != true) {
+    // forceInit is set to true when a user refreshes the app
+    // null is treated as false
+    if (!(forceInit ?? false)) {
       if (_initStatus == AudioStateInitStatus.done) {
         return _initStatus;
       }
@@ -153,9 +155,8 @@ class AudioState extends ChangeNotifier {
       final String fileName = fields['fileName'] ?? 'unknown';
       final String title = fields['title'] ?? 'unknown';
       final String city = fields['city'] ?? 'unknown';
-      final Duration length = Duration(
-        seconds: (fields['lengthInSeconds'] ?? 0) as int,
-      );
+      final Duration length =
+          Duration(seconds: (fields['lengthInSeconds']) ?? Duration.zero);
       final String province = fields['province'] ?? 'unknown';
       final LatLng location = LatLng(
         (fields['location'] as GeoPoint).latitude,
@@ -257,7 +258,8 @@ class AudioState extends ChangeNotifier {
   }
 
   Future<void> toggleShuffleMode({bool? forceEnable}) async {
-    if (forceEnable == true) {
+    // null is treated as false
+    if (forceEnable ?? false) {
       _shuffleModeEnabled = true;
     } else {
       _shuffleModeEnabled = !shuffleModeEnabled;
@@ -267,8 +269,9 @@ class AudioState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleLoopMode({bool? forceEnable}) async {
-    if (forceEnable == true) {
+  Future<void> setLoopMode({bool? forceEnable}) async {
+    // null is treated as false
+    if (forceEnable ?? false) {
       _loopMode = LoopMode.all;
     } else if (_loopMode == LoopMode.off) {
       _loopMode = LoopMode.all;
