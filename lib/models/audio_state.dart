@@ -20,6 +20,12 @@ enum AudioStateInitStatus {
 }
 
 class AudioState extends ChangeNotifier {
+  static final AudioState _instance = AudioState._internal();
+
+  factory AudioState() => _instance;
+
+  AudioState._internal();
+
   AudioStateInitStatus _initStatus = AudioStateInitStatus.notYet;
   final AudioPlayer _player = AudioPlayer();
   final List<AoiSound> _sounds = [];
