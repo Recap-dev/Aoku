@@ -90,51 +90,27 @@ class AudioState extends ChangeNotifier {
       }
 
       _currentIndex = sequenceState.currentIndex;
+      _shuffleModeEnabled = sequenceState.shuffleModeEnabled;
+      _loopMode = sequenceState.loopMode;
 
-      notifyListeners();
-    });
-
-    _player.processingStateStream.listen((processingState) {
-      _processingState = processingState;
       notifyListeners();
     });
 
     _player.playbackEventStream.listen(
-      (event) {},
+      (event) {
+        _duration = event.duration ?? Duration.zero;
+        _position = event.updatePosition;
+        _buffered = event.bufferedPosition;
+        _processingState = event.processingState;
+
+        notifyListeners();
+      },
       onError: (Object e, StackTrace stackTrace) {
         log('A stream error occured: $e');
+
         notifyListeners();
       },
     );
-
-    _player.durationStream.listen((duration) {
-      _duration = duration ?? Duration.zero;
-      notifyListeners();
-    });
-
-    _player.positionStream.listen((position) {
-      _position = position;
-      notifyListeners();
-    });
-
-    _player.bufferedPositionStream.listen((buffered) {
-      _buffered = buffered;
-      notifyListeners();
-    });
-
-    _player.playerStateStream.listen((state) {
-      notifyListeners();
-    });
-
-    _player.shuffleModeEnabledStream.listen((shuffleModeEnabled) {
-      _shuffleModeEnabled = shuffleModeEnabled;
-      notifyListeners();
-    });
-
-    _player.loopModeStream.listen((loopModeEnabled) {
-      _loopMode = loopModeEnabled;
-      notifyListeners();
-    });
 
     final storage = firebase_storage.FirebaseStorage.instance;
     final firestore = FirebaseFirestore.instance;
