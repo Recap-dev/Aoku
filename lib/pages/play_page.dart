@@ -80,15 +80,15 @@ class PlayPage extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ShuffleButton(audioState: audioState),
+                    const ShuffleButton(),
                     const SizedBox(width: 5),
-                    const PreviousButton(),
+                    PreviousButton.large(),
                     audioState.isPlaying
-                        ? const PauseButton()
-                        : const PlayButton(),
-                    const NextButton(),
+                        ? PauseButton.large()
+                        : PlayButton.large(),
+                    NextButton.large(),
                     const SizedBox(width: 5),
-                    RepeatButton(audioState: audioState),
+                    const RepeatButton(),
                   ],
                 ),
                 const SizedBox(height: 64),

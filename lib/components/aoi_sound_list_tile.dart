@@ -4,26 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 // 🌎 Project imports:
 import 'package:aoku/models/audio_state.dart';
 import 'package:aoku/pages/play_page.dart';
 
-class AoiSoundListTile extends StatelessWidget {
+class AoiSoundListTile extends HookConsumerWidget {
   const AoiSoundListTile({
     Key? key,
-    required this.context,
-    required this.audioState,
     required this.index,
   }) : super(key: key);
 
-  final BuildContext context;
-  final AudioState audioState;
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AudioState audioState = ref.watch(audioProvider);
+
     return Center(
       child: GestureDetector(
         onTap: () async {

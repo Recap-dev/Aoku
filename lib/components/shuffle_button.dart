@@ -3,19 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 // 🌎 Project imports:
 import 'package:aoku/models/audio_state.dart';
 
-class ShuffleButton extends StatelessWidget {
+class ShuffleButton extends HookConsumerWidget {
   const ShuffleButton({
     Key? key,
-    required this.audioState,
   }) : super(key: key);
 
-  final AudioState audioState;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return Container(
       width: 36,
       height: 30,

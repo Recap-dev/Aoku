@@ -48,14 +48,14 @@ class HomeTab extends HookConsumerWidget {
                 physics: const ScrollPhysics(),
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: double.infinity,
                       height: 168,
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: const EdgeInsets.only(right: 24.0),
-                          child: ShuffleToPlayButton(audioState: audioState),
+                          padding: EdgeInsets.only(right: 24.0),
+                          child: ShuffleToPlayButton(),
                         ),
                       ),
                     ),
@@ -86,11 +86,7 @@ class HomeTab extends HookConsumerWidget {
                           itemCount: audioState.sounds.length,
                           itemExtent: 70,
                           itemBuilder: (context, _currentIndex) =>
-                              AoiSoundListTile(
-                            context: context,
-                            audioState: audioState,
-                            index: _currentIndex,
-                          ),
+                              AoiSoundListTile(index: _currentIndex),
                         ),
                       ),
                     ),

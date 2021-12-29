@@ -11,9 +11,16 @@ import 'package:just_audio/just_audio.dart';
 import 'package:aoku/models/audio_state.dart';
 
 class PreviousButton extends HookConsumerWidget {
-  const PreviousButton({
+  const PreviousButton._({
     Key? key,
+    required this.size,
   }) : super(key: key);
+
+  factory PreviousButton.small() => const PreviousButton._(size: 30);
+
+  factory PreviousButton.large() => const PreviousButton._(size: 40);
+
+  final double size;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,9 +41,7 @@ class PreviousButton extends HookConsumerWidget {
       icon: Icon(
         CupertinoIcons.backward_fill,
         color: !audioState.hasPrevious ||
-                audioState.initStatus != AudioStateInitStatus.done ||
-                audioState.processingState == ProcessingState.buffering ||
-                audioState.processingState == ProcessingState.loading
+                audioState.initStatus != AudioStateInitStatus.done
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.3)
             : Theme.of(context).colorScheme.onBackground,
       ),
