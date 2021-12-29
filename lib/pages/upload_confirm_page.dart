@@ -161,12 +161,10 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
       task = FirebaseStorage.instance.ref('sounds/$fileName').putFile(file);
 
       task.snapshotEvents.listen((event) {
-        setState(() {
-          uploadProgress = ((event.bytesTransferred.toDouble() /
-                  event.totalBytes.toDouble() *
-                  100)
-              .roundToDouble());
-        });
+        setState(() => uploadProgress = ((event.bytesTransferred.toDouble() /
+                event.totalBytes.toDouble() *
+                100)
+            .roundToDouble()));
       });
     } on FirebaseException catch (e) {
       log('Error uploading a file: ${e.message}');

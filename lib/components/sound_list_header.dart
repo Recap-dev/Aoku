@@ -41,12 +41,15 @@ class SoundListHeader extends StatelessWidget {
             ),
           ],
         ),
-        Divider(
-          height: 30,
-          thickness: 0.6,
-          indent: 4.0,
-          endIndent: 4.0,
-          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Divider(
+            height: 0.6,
+            thickness: 0.6,
+            indent: 4.0,
+            endIndent: 4.0,
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+          ),
         ),
       ],
     );

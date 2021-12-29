@@ -26,7 +26,7 @@ class BottomPlayer extends HookConsumerWidget {
               ),
       child: Container(
         width: double.infinity,
-        height: 70.0,
+        height: 60.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -37,51 +37,53 @@ class BottomPlayer extends HookConsumerWidget {
             ],
           ),
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(12.0),
-            topRight: Radius.circular(12.0),
+            topLeft: Radius.circular(8.0),
+            topRight: Radius.circular(8.0),
           ),
         ),
         child: Stack(
           children: [
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 60.0,
-                    child: audioState.initStatus == AudioStateInitStatus.done
-                        ? Icon(
-                            CupertinoIcons.waveform,
-                            color: audioState.isPlaying
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : Theme.of(context)
-                                    .colorScheme
-                                    .onPrimary
-                                    .withOpacity(0.1),
-                          )
-                        : null,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Text(
-                      audioState.initStatus == AudioStateInitStatus.done
-                          ? audioState.sounds[audioState.currentIndex].title
-                          : '',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onBackground,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 60.0,
+                      child: audioState.initStatus == AudioStateInitStatus.done
+                          ? Icon(
+                              CupertinoIcons.waveform,
+                              color: audioState.isPlaying
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withOpacity(0.1),
+                            )
+                          : null,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        audioState.initStatus == AudioStateInitStatus.done
+                            ? audioState.sounds[audioState.currentIndex].title
+                            : '',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
                       ),
                     ),
-                  ),
-                  audioState.isPlaying
-                      ? const PauseButton(size: 30.0)
-                      : const PlayButton(size: 30.0),
-                  const NextButton(size: 30.0),
-                  const SizedBox(width: 12.0),
-                ],
+                    audioState.isPlaying
+                        ? const PauseButton(size: 30.0)
+                        : const PlayButton(size: 30.0),
+                    const NextButton(size: 30.0),
+                  ],
+                ),
               ),
             ),
           ],

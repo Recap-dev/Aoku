@@ -37,29 +37,24 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.transparent,
       body: _tabList[_selectedIndex],
       bottomNavigationBar: SizedBox(
-        height: 89,
-        child: BottomNavigationBar(
+        height: 84,
+        child: CupertinoTabBar(
           backgroundColor: Theme.of(context).colorScheme.background,
-          selectedItemColor: Theme.of(context).colorScheme.onBackground,
-          unselectedItemColor:
+          activeColor: Theme.of(context).colorScheme.onBackground,
+          inactiveColor:
               Theme.of(context).colorScheme.onBackground.withOpacity(0.3),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          onTap: (value) {
-            setState(() {
-              _selectedIndex = value;
-            });
-          },
+          iconSize: 28,
+          onTap: (value) => setState(() => _selectedIndex = value),
           currentIndex: _selectedIndex,
           items: const [
             BottomNavigationBarItem(
-              label: 'Home',
+              //label: 'Home',
               icon: Icon(
                 CupertinoIcons.music_albums_fill,
               ),
             ),
             BottomNavigationBarItem(
-              label: 'Settings',
+              //label: 'Settings',
               icon: Icon(
                 CupertinoIcons.settings,
               ),
@@ -67,18 +62,16 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Align(
-        alignment: const Alignment(0, 0.96),
+        alignment: const Alignment(0, 0.99),
         child: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           child: const Icon(CupertinoIcons.up_arrow),
-          onPressed: () async {
-            showCupertinoModalBottomSheet(
-              context: context,
-              builder: (context) => const UploadPageStep1(),
-            );
-          },
+          onPressed: () async => showCupertinoModalBottomSheet(
+            context: context,
+            builder: (context) => const UploadPageStep1(),
+          ),
         ),
       ),
     );
