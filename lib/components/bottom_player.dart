@@ -84,9 +84,9 @@ class BottomPlayer extends HookConsumerWidget {
                       ),
                     ),
                     audioState.isPlaying
-                        ? const PauseButton(size: 30.0)
-                        : const PlayButton(size: 30.0),
-                    const NextButton(size: 30.0),
+                        ? PauseButton.small()
+                        : PlayButton.small(),
+                    NextButton.small(),
                   ],
                 ),
               ),

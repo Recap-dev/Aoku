@@ -32,7 +32,7 @@ class HeartButton extends StatelessWidget {
     return IconButton(
       icon: Icon(
         CupertinoIcons.heart_fill,
-        color: Theme.of(context).colorScheme.onBackground,
+        color: color,
       ),
       onPressed: onPressed,
       iconSize: 24.0,

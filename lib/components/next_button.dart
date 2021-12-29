@@ -11,10 +11,14 @@ import 'package:just_audio/just_audio.dart';
 import 'package:aoku/models/audio_state.dart';
 
 class NextButton extends HookConsumerWidget {
-  const NextButton({
+  const NextButton._({
     Key? key,
-    this.size = 40,
+    required this.size,
   }) : super(key: key);
+
+  factory NextButton.small() => const NextButton._(size: 30);
+
+  factory NextButton.large() => const NextButton._(size: 40);
 
   final double size;
 
@@ -23,7 +27,7 @@ class NextButton extends HookConsumerWidget {
     AudioState audioState = ref.watch(audioProvider);
 
     return IconButton(
-      onPressed: () {
+      onPressed: () async {
         if (!audioState.hasNext ||
             audioState.initStatus != AudioStateInitStatus.done ||
             audioState.processingState == ProcessingState.buffering ||
@@ -31,15 +35,14 @@ class NextButton extends HookConsumerWidget {
           null;
         } else {
           HapticFeedback.lightImpact();
-          audioState.player.seekToNext();
+          await audioState.player.seekToNext();
+          audioState.play(audioState.currentIndex);
         }
       },
       icon: Icon(
         CupertinoIcons.forward_fill,
         color: !audioState.hasNext ||
-                audioState.initStatus != AudioStateInitStatus.done ||
-                audioState.processingState == ProcessingState.buffering ||
-                audioState.processingState == ProcessingState.loading
+                audioState.initStatus != AudioStateInitStatus.done
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.3)
             : Theme.of(context).colorScheme.onBackground,
       ),

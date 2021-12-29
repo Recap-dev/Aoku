@@ -11,10 +11,14 @@ import 'package:just_audio/just_audio.dart';
 import 'package:aoku/models/audio_state.dart';
 
 class PlayButton extends HookConsumerWidget {
-  const PlayButton({
+  const PlayButton._({
     Key? key,
-    this.size = 56.0,
+    required this.size,
   }) : super(key: key);
+
+  factory PlayButton.large({Key? key}) => PlayButton._(key: key, size: 56);
+
+  factory PlayButton.small({Key? key}) => PlayButton._(key: key, size: 30);
 
   final double size;
 
@@ -35,9 +39,7 @@ class PlayButton extends HookConsumerWidget {
       },
       icon: Icon(
         CupertinoIcons.play_fill,
-        color: audioState.initStatus != AudioStateInitStatus.done ||
-                audioState.processingState == ProcessingState.buffering ||
-                audioState.processingState == ProcessingState.loading
+        color: audioState.initStatus != AudioStateInitStatus.done
             ? Theme.of(context).colorScheme.onBackground.withOpacity(0.3)
             : Theme.of(context).colorScheme.onBackground,
       ),

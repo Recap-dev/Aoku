@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // 📦 Package imports:
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 
 // 🌎 Project imports:
 import 'package:aoku/models/audio_state.dart';
 
-class RepeatButton extends StatelessWidget {
+class RepeatButton extends HookConsumerWidget {
   const RepeatButton({
     Key? key,
-    required this.audioState,
   }) : super(key: key);
 
-  final AudioState audioState;
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    AudioState audioState = ref.watch(audioProvider);
+
     return Container(
       width: 36,
       height: 30,
