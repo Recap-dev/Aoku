@@ -50,9 +50,8 @@ class _UploadPageStep1State extends State<UploadPageStep1> {
                             children: [
                               Text(filePickerResult!.files.single.name),
                               IconButton(
-                                onPressed: () => setState(() {
-                                  filePickerResult = null;
-                                }),
+                                onPressed: () =>
+                                    setState(() => filePickerResult = null),
                                 icon: const Icon(CupertinoIcons.clear),
                               ),
                             ],
@@ -67,9 +66,7 @@ class _UploadPageStep1State extends State<UploadPageStep1> {
                                 allowedExtensions: ['m4a'],
                               );
 
-                              setState(() {
-                                filePickerResult = tmpResult;
-                              });
+                              setState(() => filePickerResult = tmpResult);
                             },
                           ),
                   ),

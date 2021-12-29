@@ -66,9 +66,8 @@ class _UploadPageStep4State extends State<UploadPageStep4> {
                                 children: [
                                   Text(title ?? ''),
                                   IconButton(
-                                    onPressed: () => setState(() {
-                                      title = null;
-                                    }),
+                                    onPressed: () =>
+                                        setState(() => title = null),
                                     icon: const Icon(CupertinoIcons.clear),
                                   ),
                                 ],
@@ -80,9 +79,8 @@ class _UploadPageStep4State extends State<UploadPageStep4> {
                                   builder: (context) => CupertinoAlertDialog(
                                     content: CupertinoTextField(
                                       autofocus: true,
-                                      onChanged: (value) {
-                                        setState(() => title = value);
-                                      },
+                                      onChanged: (value) =>
+                                          setState(() => title = value),
                                     ),
                                     actions: [
                                       CupertinoDialogAction(

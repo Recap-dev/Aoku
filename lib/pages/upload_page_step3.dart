@@ -71,9 +71,8 @@ class _UploadPageStep3State extends State<UploadPageStep3> {
                             mode: CupertinoDatePickerMode.time,
                             onDateTimeChanged: (time) {
                               HapticFeedback.selectionClick();
-                              setState(() {
-                                timestamp = Timestamp.fromDate(time);
-                              });
+                              setState(
+                                  () => timestamp = Timestamp.fromDate(time));
                             },
                           ),
                         ),
