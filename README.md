@@ -1,4 +1,6 @@
-# aoku
+# aoku 
+
+[![Codemagic build status](https://api.codemagic.io/apps/61cc61d9def86039c320243f/61cc61d9def86039c320243e/status_badge.svg)](https://codemagic.io/apps/61cc61d9def86039c320243f/61cc61d9def86039c320243e/latest_build)
 
 A new Flutter project.
 
