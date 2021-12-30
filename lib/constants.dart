@@ -10,3 +10,5 @@ const Map<AvailableOAuthProviders, dynamic> kProviderConfigs = {
     clientId: 'aoku-recap',
   ),
 };
+
+const String kGoogleMapsApiKey = 'AIzaSyCMqyHLwmc2ZeJHaQ8poJMjltg4dmrTdds';

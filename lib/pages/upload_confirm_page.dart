@@ -11,7 +11,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class UploadConfirmPage extends StatefulWidget {
   const UploadConfirmPage({
@@ -19,6 +18,7 @@ class UploadConfirmPage extends StatefulWidget {
     required this.filePickerResult,
     required this.geoPoint,
     required this.title,
+    required this.length,
     required this.city,
     required this.province,
     required this.timestamp,
@@ -27,6 +27,7 @@ class UploadConfirmPage extends StatefulWidget {
   final FilePickerResult? filePickerResult;
   final GeoPoint? geoPoint;
   final String? title;
+  final int? length;
   final String? city;
   final String? province;
   final Timestamp? timestamp;
@@ -36,29 +37,40 @@ class UploadConfirmPage extends StatefulWidget {
 }
 
 class _UploadConfirmPageState extends State<UploadConfirmPage> {
-  // 0.0 ~ 100.0
+  FilePickerResult? _filePickerResult;
+  GeoPoint? _geoPoint;
+  String? _title;
+  int? _lengthInSeconds;
+  String? _city;
+  String? _province;
+  Timestamp? _timestamp;
+
   double uploadProgress = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _filePickerResult = widget.filePickerResult;
+    _geoPoint = widget.geoPoint;
+    _title = widget.title;
+    _lengthInSeconds = widget.length;
+    _city = widget.city;
+    _province = widget.province;
+    _timestamp = widget.timestamp;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: StepProgressIndicator(
-          totalSteps: 5,
-          currentStep: 5,
-          size: 10,
-          padding: 0,
-          selectedColor: Theme.of(context).colorScheme.surface,
-          unselectedColor: Colors.grey.shade300,
-          roundedEdges: const Radius.circular(4),
-        ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const SizedBox(height: 100),
           SizedBox(
             height: 150,
             width: 150,
@@ -76,7 +88,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
               ),
             ),
           ),
-          const SizedBox(height: 56.0),
+          const SizedBox(height: 80.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 56.0),
             child: Table(
@@ -88,7 +100,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      widget.title ?? '',
+                      _title ?? '',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ],
@@ -100,7 +112,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      '${widget.city}, ${widget.province}',
+                      '$_city, $_province',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ],
@@ -112,7 +124,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      '${widget.timestamp!.toDate().hour.toString()}:${widget.timestamp!.toDate().minute.toString()}',
+                      '${_timestamp!.toDate().hour.toString()}:${_timestamp!.toDate().minute.toString()}',
                       style: const TextStyle(fontSize: 20),
                     ),
                   ],
@@ -126,10 +138,8 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
       floatingActionButton: CupertinoButton.filled(
         child: const Text('アップロード'),
         onPressed: () async {
-          Future.wait([
-            _upload(widget.filePickerResult!),
-            _updateSoundInfo(widget.filePickerResult!.files.single.name),
-          ]);
+          await _upload(_filePickerResult!);
+          await _updateSoundInfo(_filePickerResult!.files.single.name);
 
           Navigator.popUntil(
             context,
@@ -148,7 +158,7 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
     try {
       // Check if file is not empty
       // https://stackoverflow.com/a/62845903/13676510
-      if (file.existsSync()) {
+      if (!file.existsSync()) {
         log('file doesn\'t exist. Creating a new one...');
         file = await file.create();
         log('Created.');
@@ -172,12 +182,12 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
       await FirebaseFirestore.instance.doc('sounds/$fileName').set(
         {
           'fileName': fileName,
-          'lengthInSeconds': 0,
-          'title': widget.title,
-          'timestamp': widget.timestamp,
-          'city': widget.city,
-          'province': widget.province,
-          'location': widget.geoPoint,
+          'lengthInSeconds': _lengthInSeconds,
+          'title': _title,
+          'timestamp': _timestamp,
+          'city': _city,
+          'province': _province,
+          'location': _geoPoint,
         },
         SetOptions(merge: true),
       );
