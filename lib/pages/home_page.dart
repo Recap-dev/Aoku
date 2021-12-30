@@ -7,12 +7,11 @@ import 'package:file_picker/file_picker.dart';
 
 // 🌎 Project imports:
 import 'package:aoku/components/profile_button.dart';
-import 'package:aoku/pages/input_basic_info_page.dart';
+import 'package:aoku/pages/upload_page.dart';
 import 'package:aoku/tabs/home_tab.dart';
 import 'package:aoku/tabs/settings_tab.dart';
 
 // 📦 Package imports:
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -85,7 +84,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => InputBasicInfoPage(result: tmpResult),
+                  builder: (context) => UploadPage(result: tmpResult),
                 ),
               );
             }
