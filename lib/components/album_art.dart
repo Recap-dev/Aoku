@@ -85,11 +85,16 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
               myLocationEnabled: false,
             ),
             GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MapPage.route(
-                    audioState.sounds[audioState.currentIndex].location),
-              ),
+              onTap: () async {
+                var page = await buildPageAsync(
+                  audioState.sounds[audioState.currentIndex].location,
+                );
+                var route = MaterialPageRoute(builder: (_) => page);
+                Navigator.push(
+                  context,
+                  route,
+                );
+              },
               child: FadeTransition(
                 opacity: _animation,
                 child: Container(
@@ -107,4 +112,7 @@ class _AlbumArtState extends ConsumerState<AlbumArt>
       ),
     );
   }
+
+  Future<Widget> buildPageAsync(LatLng initialLoaction) async =>
+      Future.microtask(() => MapPage(initialLocation: initialLoaction));
 }
