@@ -61,91 +61,116 @@ class _UploadConfirmPageState extends State<UploadConfirmPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 100),
-          SizedBox(
-            height: 150,
-            width: 150,
-            child: LiquidCircularProgressIndicator(
-              value: uploadProgress / 100,
-              valueColor: AlwaysStoppedAnimation(
-                Theme.of(context).colorScheme.surface,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              borderColor: Theme.of(context).colorScheme.primary,
-              borderWidth: 0.3,
-              direction: Axis.vertical,
-              center: Text(
-                uploadProgress == 0.0 ? 'Waiting...' : '$uploadProgress%',
+    return WillPopScope(
+      onWillPop: () async => showCupertinoDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+          title: const Text('アップロードを中止しますか？'),
+          actions: [
+            CupertinoDialogAction(
+              child: const Text('キャンセル'),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            CupertinoDialogAction(
+              child: const Text('OK'),
+              onPressed: () => Navigator.of(context).pop(true),
+            ),
+          ],
+        ),
+      ) as Future<bool>,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 100),
+            SizedBox(
+              height: 150,
+              width: 150,
+              child: LiquidCircularProgressIndicator(
+                value: uploadProgress / 100,
+                valueColor: AlwaysStoppedAnimation(
+                  Theme.of(context).colorScheme.surface,
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                borderColor: Theme.of(context).colorScheme.primary,
+                borderWidth: 0.3,
+                direction: Axis.vertical,
+                center: Text(
+                  uploadProgress == 0.0 ? 'Waiting...' : '$uploadProgress%',
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 80.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 56.0),
-            child: Table(
-              children: [
-                TableRow(
-                  children: [
-                    const Text(
-                      'タイトル',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      _title ?? '',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Text(
-                      '場所',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '$_city, $_province',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    const Text(
-                      '時刻',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '${_timestamp!.toDate().hour.toString()}:${_timestamp!.toDate().minute.toString()}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ],
+            const SizedBox(height: 80.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 56.0),
+              child: Table(
+                children: [
+                  TableRow(
+                    children: [
+                      const Text(
+                        'タイトル',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        _title ?? '',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text(
+                        '場所',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        '$_city, $_province',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      const Text(
+                        '時刻',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        '${_timestamp!.toDate().hour.toString()}:${_timestamp!.toDate().minute.toString().padLeft(2, '0')}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: CupertinoButton.filled(
-        child: const Text('アップロード'),
-        onPressed: () async {
-          await _upload(_filePickerResult!);
-          await _updateSoundInfo(_filePickerResult!.files.single.name);
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: CupertinoButton.filled(
+          child: const Text('アップロード'),
+          onPressed: () async {
+            await _upload(_filePickerResult!);
+            await _updateSoundInfo(_filePickerResult!.files.single.name);
 
-          Navigator.popUntil(
-            context,
-            (route) => route.isFirst,
-          );
-        },
+            Navigator.popUntil(
+              context,
+              (route) => route.isFirst,
+            );
+          },
+        ),
       ),
     );
   }

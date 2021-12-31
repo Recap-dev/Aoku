@@ -48,6 +48,18 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: widget.homeScaffoldKey,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +112,13 @@ class _UploadPageState extends State<UploadPage> {
                   ),
                   readOnly: true,
                   padding: const EdgeInsets.all(16),
-                  placeholder: '${_city ?? '読み込み中…'}, ${_province ?? ''}',
+                  placeholder: '${_city ?? '読み込み中…'} ${_province ?? ''}',
+                  suffix: const Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: Icon(
+                      CupertinoIcons.arrow_right_circle_fill,
+                    ),
+                  ),
                   onTap: () async {
                     void onError(PlacesAutocompleteResponse response) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -175,6 +193,10 @@ class _UploadPageState extends State<UploadPage> {
 
     setState(() {
       _currentPosition = _currentPosition;
+      _geoPoint = GeoPoint(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+      );
       _city = _placemark!.locality;
       _province = _placemark!.administrativeArea;
     });
