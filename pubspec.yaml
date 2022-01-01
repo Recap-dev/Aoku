@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.2.5+3
+version: 0.2.5+9
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -12,32 +12,28 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  google_fonts: ^2.1.0
   firebase_core: ^1.10.0
   firebase_storage: ^10.1.0
   google_maps_flutter: ^2.1.1
   audio_video_progress_bar: ^0.10.0
-  flutter_hooks: ^0.18.1
   hooks_riverpod: ^1.0.1
-  truncate: ^3.0.1
   firebase_auth: ^3.3.0
-  firebase_analytics: ^8.3.4
+  firebase_analytics: ^9.0.4
   modal_bottom_sheet: ^2.0.0
-  flutterfire_ui: ^0.2.0+1
+  flutterfire_ui: ^0.3.0
   just_audio: ^0.9.18
   audio_session: ^0.1.6+1
   just_audio_background: ^0.0.1-beta.2
   cloud_functions: ^3.2.4
-  cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.5
-  sn_progress_dialog: ^1.0.3
   path_provider: ^2.0.8
   file_picker: ^4.3.0
   liquid_progress_indicator: ^0.4.0
-  map_picker: ^0.0.3
   geolocator: ^8.0.1
   geocoding: ^2.0.1
-  step_progress_indicator: ^1.0.1
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  google_api_headers: ^1.1.1
+  flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
 
 dev_dependencies:
   flutter_test:

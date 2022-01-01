@@ -3,13 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 📦 Package imports:
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:file_picker/file_picker.dart';
 
 // 🌎 Project imports:
 import 'package:aoku/components/profile_button.dart';
-import 'package:aoku/pages/upload_page_step1.dart';
+import 'package:aoku/pages/upload_page.dart';
 import 'package:aoku/tabs/home_tab.dart';
 import 'package:aoku/tabs/settings_tab.dart';
+
+// 📦 Package imports:
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -71,10 +73,22 @@ class _HomePageState extends State<HomePage> {
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).colorScheme.surface,
           child: const Icon(CupertinoIcons.up_arrow),
-          onPressed: () async => showCupertinoModalBottomSheet(
-            context: context,
-            builder: (context) => const UploadPageStep1(),
-          ),
+          onPressed: () async {
+            FilePickerResult? tmpResult = await FilePicker.platform.pickFiles(
+              allowMultiple: false,
+              type: FileType.custom,
+              allowedExtensions: ['m4a'],
+            );
+
+            if (tmpResult != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UploadPage(result: tmpResult),
+                ),
+              );
+            }
+          },
         ),
       ),
     );

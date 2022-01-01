@@ -9,8 +9,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
-import 'package:aoku/components/full_screen_loading.dart';
-import 'package:aoku/components/shuffle_to_play_button.dart';
 import 'package:aoku/components/sound_list_header.dart';
 import 'package:aoku/models/audio_state.dart';
 
@@ -27,15 +25,9 @@ class HomeTab extends HookConsumerWidget {
       children: [
         const FrostedBackground(),
         FutureBuilder(
-          // 0 is a temporary index for init
-          // Index will be overriden when play() called
           future: audioState.init(),
           builder: (context, snapshot) {
-            if (snapshot.data != AudioStateInitStatus.done) {
-              return const FullScreenLoading();
-            }
-
-            // Placing Listview.builder() into scroll view with other widgets
+            // Placing Listview.separated() into scroll view with other widgets
             // requires some tricks: https://stackoverflow.com/a/58725480/13676510
             return RefreshIndicator(
               onRefresh: () {
@@ -45,51 +37,36 @@ class HomeTab extends HookConsumerWidget {
               color: Theme.of(context).colorScheme.primary,
               backgroundColor: Theme.of(context).colorScheme.onBackground,
               child: SingleChildScrollView(
-                physics: const ScrollPhysics(),
+                physics: snapshot.data != AudioStateInitStatus.done
+                    ? null
+                    : const ScrollPhysics(),
                 child: Column(
                   children: [
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 168,
-                      child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 24.0),
-                          child: ShuffleToPlayButton(),
+                    const SoundListHeader(),
+                    const SizedBox(height: 16),
+                    MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: ListView.separated(
+                        physics: snapshot.data != AudioStateInitStatus.done
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data != AudioStateInitStatus.done
+                            ? 20
+                            : audioState.sounds.length,
+                        separatorBuilder: (_, __) => const SizedBox(
+                          height: 24.0,
                         ),
+                        itemBuilder: (_, currentIndex) =>
+                            snapshot.data != AudioStateInitStatus.done
+                                // Show shimmering ListTile while initializing
+                                ? AoiSoundListTile.skelton()
+                                : AoiSoundListTile(index: currentIndex),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
-                        top: 16.0,
-                        left: 16.0,
-                        right: 24.0,
-                      ),
-                      child: SoundListHeader(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16.0,
-                        right: 24.0,
-                        // Avoid to be hidden behind BottomPlayer (height: 90)
-                        bottom: 60.0,
-                      ),
-                      // Remove unnecessary top padding set by default
-                      // https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: audioState.sounds.length,
-                          itemExtent: 70,
-                          itemBuilder: (context, _currentIndex) =>
-                              AoiSoundListTile(index: _currentIndex),
-                        ),
-                      ),
-                    ),
+                    const SizedBox(height: 96),
                   ],
                 ),
               ),
