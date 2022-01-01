@@ -61,6 +61,7 @@ class HomeTab extends HookConsumerWidget {
                         ),
                         itemBuilder: (_, currentIndex) =>
                             snapshot.data != AudioStateInitStatus.done
+                                // Show shimmering ListTile while initializing
                                 ? AoiSoundListTile.skelton()
                                 : AoiSoundListTile(index: currentIndex),
                       ),
