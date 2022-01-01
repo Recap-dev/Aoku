@@ -18,9 +18,9 @@ dependencies:
   audio_video_progress_bar: ^0.10.0
   hooks_riverpod: ^1.0.1
   firebase_auth: ^3.3.0
-  firebase_analytics: ^8.3.4
+  firebase_analytics: ^9.0.4
   modal_bottom_sheet: ^2.0.0
-  flutterfire_ui: ^0.2.0+1
+  flutterfire_ui: ^0.3.0
   just_audio: ^0.9.18
   audio_session: ^0.1.6+1
   just_audio_background: ^0.0.1-beta.2

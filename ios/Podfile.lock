@@ -428,7 +428,7 @@ PODS:
   - Firebase/Storage (8.9.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.9.0)
-  - firebase_analytics (8.3.4):
+  - firebase_analytics (9.0.4):
     - Firebase/Analytics (= 8.9.0)
     - firebase_core
     - Flutter
@@ -762,7 +762,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: e993f97c7cc794c5da4056d8aec3c3d66033a727
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: 13d8d96499e2635428d5bf0ec675df21f95d9a95
-  firebase_analytics: 7a7528bb2abf4ca22cff7a57bbf909dcab73e13d
+  firebase_analytics: cc1ab30e479b7089c0a952c0cae7ba286d464c68
   firebase_auth: e875a50b81aefb20f305dfede425647e9675c19e
   firebase_core: c263d7daf1dc92fcd9895e6abdc04872b0ee07ff
   firebase_database: 7538bfd20724e08e710f43b6fd2059b88b30b5c9
