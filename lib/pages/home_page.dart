@@ -1,15 +1,22 @@
+// 🎯 Dart imports:
+import 'dart:async';
+
 // 🐦 Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 📦 Package imports:
-import 'package:file_picker/file_picker.dart';
+import 'package:battery_plus/battery_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 // 🌎 Project imports:
+import 'package:aoku/components/error_dialog.dart';
 import 'package:aoku/components/profile_button.dart';
-import 'package:aoku/pages/upload_page.dart';
+import 'package:aoku/components/upload_button.dart';
 import 'package:aoku/tabs/home_tab.dart';
 import 'package:aoku/tabs/settings_tab.dart';
+
+// 📦 Package imports:
 
 // 📦 Package imports:
 
@@ -26,6 +33,41 @@ class _HomePageState extends State<HomePage> {
     HomeTab(),
     SettingsTab(),
   ];
+  late StreamSubscription<ConnectivityResult> _connectivitySub;
+  late StreamSubscription<BatteryState> _batterySub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((result) {
+      if (result == ConnectivityResult.none) {
+        showCupertinoDialog(
+          context: context,
+          builder: (_) => ErrorDialog.connectionError(),
+        );
+      }
+    });
+
+    _batterySub = Battery().onBatteryStateChanged.listen((state) async {
+      if (state == BatteryState.charging) return;
+
+      if (await Battery().batteryLevel < 50) {
+        showCupertinoDialog(
+          context: context,
+          builder: (_) => ErrorDialog.lowBatteryError(),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySub.cancel();
+    _batterySub.cancel();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,41 +97,18 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedIndex,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.music_albums_fill,
-              ),
+              icon: Icon(CupertinoIcons.music_albums_fill),
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                CupertinoIcons.settings,
-              ),
+              icon: Icon(CupertinoIcons.settings),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Align(
-        alignment: const Alignment(0, 0.99),
-        child: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          child: const Icon(CupertinoIcons.up_arrow),
-          onPressed: () async {
-            FilePickerResult? tmpResult = await FilePicker.platform.pickFiles(
-              allowMultiple: false,
-              type: FileType.custom,
-              allowedExtensions: ['m4a'],
-            );
-
-            if (tmpResult != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UploadPage(result: tmpResult),
-                ),
-              );
-            }
-          },
-        ),
+      floatingActionButton: const Align(
+        alignment: Alignment(0, 0.99),
+        child: UploadButton(),
       ),
     );
   }
