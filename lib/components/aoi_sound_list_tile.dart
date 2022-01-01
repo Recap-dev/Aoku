@@ -19,10 +19,12 @@ class AoiSoundListTile extends HookConsumerWidget {
     this.isSkelton = false,
   }) : super(key: key);
 
-  factory AoiSoundListTile.skelton() => const AoiSoundListTile(
-        index: 0,
-        isSkelton: true,
-      );
+  factory AoiSoundListTile.skelton() {
+    return const AoiSoundListTile(
+      index: 0,
+      isSkelton: true,
+    );
+  }
 
   final int index;
   final bool? isSkelton;

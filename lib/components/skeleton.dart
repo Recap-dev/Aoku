@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // 🌎 Project imports:
-import 'package:aoku/components/shimmer_loading.dart';
 
 class Skeleton extends StatelessWidget {
   const Skeleton({
@@ -16,14 +15,12 @@ class Skeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShimmerLoading(
-      isLoading: true,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4.0),
-        ),
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+        color: Colors.black.withOpacity(0.05),
       ),
     );
   }

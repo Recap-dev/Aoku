@@ -9,9 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:aoku/components/aoi_sound_list_tile.dart';
 import 'package:aoku/components/bottom_player.dart';
 import 'package:aoku/components/frosted_background.dart';
-import 'package:aoku/components/shimmer.dart';
 import 'package:aoku/components/sound_list_header.dart';
-import 'package:aoku/constants.dart';
 import 'package:aoku/models/audio_state.dart';
 
 class HomeTab extends HookConsumerWidget {
@@ -39,41 +37,32 @@ class HomeTab extends HookConsumerWidget {
               color: Theme.of(context).colorScheme.primary,
               backgroundColor: Theme.of(context).colorScheme.onBackground,
               child: SingleChildScrollView(
-                physics: const ScrollPhysics(),
+                physics: snapshot.data != AudioStateInitStatus.done
+                    ? null
+                    : const ScrollPhysics(),
                 child: Column(
                   children: [
                     const SoundListHeader(),
                     const SizedBox(height: 16),
-                    Shimmer(
-                      linearGradient: kShimmerGradient,
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: snapshot.data != AudioStateInitStatus.done
-                            // While initializing AudioState
-                            ? ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: 20,
-                                separatorBuilder: (_, __) => const SizedBox(
-                                  height: 24.0,
-                                ),
-                                itemBuilder: (_, currentIndex) =>
-                                    AoiSoundListTile.skelton(),
-                              )
-                            // After initialized AudioState
-                            : ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: audioState.sounds.length,
-                                separatorBuilder: (_, __) => const SizedBox(
-                                  height: 24.0,
-                                ),
-                                itemBuilder: (_, currentIndex) =>
-                                    AoiSoundListTile(index: currentIndex),
-                              ),
+                    MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: ListView.separated(
+                        physics: snapshot.data != AudioStateInitStatus.done
+                            ? null
+                            : const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data != AudioStateInitStatus.done
+                            ? 20
+                            : audioState.sounds.length,
+                        separatorBuilder: (_, __) => const SizedBox(
+                          height: 24.0,
+                        ),
+                        itemBuilder: (_, currentIndex) =>
+                            snapshot.data != AudioStateInitStatus.done
+                                ? AoiSoundListTile.skelton()
+                                : AoiSoundListTile(index: currentIndex),
                       ),
                     ),
                     const SizedBox(height: 96),
